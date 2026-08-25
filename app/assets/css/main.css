@@ -1,0 +1,61 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+:root {
+  --color-primary: #3a6b73;
+  --color-secondary: #e6dfd0;
+  --color-neutral: #ffffff;
+  --color-accent: #b8925a;
+  --color-background: #f5f0e8;
+  --color-foreground: #1c2b2a;
+  --color-muted: #ede7dc;
+  --color-muted-foreground: #6b7470;
+
+  --ui-primary: var(--color-primary);
+  --ui-secondary: var(--color-secondary);
+  --ui-neutral: var(--color-neutral);
+  --ui-accent: var(--color-accent);
+  --ui-background: var(--color-background);
+  --ui-foreground: var(--color-foreground);
+  --ui-muted: var(--color-muted);
+  --ui-muted-foreground: var(--color-muted-foreground);
+}
+
+@theme {
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-neutral: var(--color-neutral);
+  --color-accent: var(--color-accent);
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('../fonts/PlayfairDisplay-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('../fonts/PlayfairDisplay-Italic.ttf');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+h1 {
+  line-height: 1 !important;
+}
