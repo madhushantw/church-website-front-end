@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { CButton, CSection, CSectionHeading } from "../common";
 
+defineProps<{ hideNavigationButton?: boolean }>()
+
 interface GalleryItem {
   image: string;
   title: string;
@@ -174,11 +176,12 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div class="mt-10 flex justify-center">
+    <div v-if="!hideNavigationButton" class="mt-10 flex justify-center">
       <CButton
         title="View Full Gallery"
         outlined
         append-icon="lucide:arrow-right"
+        @on-click="navigateTo('/gallery')"
       />
     </div>
   </CSection>

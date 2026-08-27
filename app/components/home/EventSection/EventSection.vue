@@ -1,50 +1,58 @@
 <script setup lang="ts">
-import { CSection, CSectionHeading } from '~/components/common'
-import EventCard from './EventCard.vue'
+import { CSection, CSectionHeading } from "~/components/common";
+import EventCard from "./EventCard.vue";
 
+defineProps<{ hideNavigationButton?: boolean }>();
 
 interface Event {
-  title: string
-  subTitle: string
-  date: Date
-  time: string
-  location: string
+  title: string;
+  subTitle: string;
+  date: Date;
+  time: string;
+  location: string;
 }
 
 const events: Event[] = [
   {
-    title: 'Family Picnic & Fellowship',
+    title: "Family Picnic & Fellowship",
     subTitle:
-      'Join us for an afternoon of food, games, and community. All families welcome.',
+      "Join us for an afternoon of food, games, and community. All families welcome.",
     date: new Date(2026, 6, 12),
-    time: '2:00 PM',
-    location: 'Church Grounds',
+    time: "2:00 PM",
+    location: "Church Grounds",
   },
   {
-    title: 'Sunday Morning Worship',
+    title: "Sunday Morning Worship",
     subTitle:
-      'Come together as a church family for worship, prayer, and fellowship.',
+      "Come together as a church family for worship, prayer, and fellowship.",
     date: new Date(2026, 6, 19),
-    time: '9:00 AM',
-    location: 'Main Sanctuary',
+    time: "9:00 AM",
+    location: "Main Sanctuary",
   },
   {
-    title: 'Youth Fellowship',
+    title: "Youth Fellowship",
     subTitle:
-      'An evening of fellowship, worship, and activities for our young people.',
+      "An evening of fellowship, worship, and activities for our young people.",
     date: new Date(2026, 6, 25),
-    time: '6:30 PM',
-    location: 'Youth Hall',
+    time: "6:30 PM",
+    location: "Youth Hall",
   },
-]
+];
 </script>
 
 <template>
   <CSection id="events">
-    <CSectionHeading
-      label="Calendar"
-      title="Upcoming Events"
-    />
+    <div class="flex justify-between items-center">
+      <CSectionHeading label="Calendar" title="Upcoming Events" />
+      <button
+        v-if="!hideNavigationButton"
+        class="mb-6 flex items-center gap-2 whitespace-nowrap text-[14px] font-medium text-primary transition-colors hover:text-primary/70"
+        @click="navigateTo('events')"
+      >
+        Full Calendar
+        <UIcon name="lucide:chevron-right" size="16" />
+      </button>
+    </div>
 
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
       <EventCard
