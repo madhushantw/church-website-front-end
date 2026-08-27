@@ -15,21 +15,21 @@ const sermons = [
     duration: "42 min",
   },
   {
-    title: "Walking in Faith Through Uncertainty",
+    title: "The Abundant Life: More Than We Can Ask",
     image:
-      "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=600&h=380&fit=crop&auto=format",
-    scripture: "Hebrews 11:1–6",
+      "https://images.unsplash.com/photo-1477281765962-ef34e8bb0967?w=600&h=380&fit=crop&auto=format",
+    scripture: "John 10:10",
     date: "June 29, 2025",
     preacher: "Fr. James Callahan",
     duration: "42 min",
   },
   {
-    title: "Walking in Faith Through Uncertainty",
+    title: "Rooted in Love: Building Community",
     image:
-      "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=600&h=380&fit=crop&auto=format",
-    scripture: "Hebrews 11:1–6",
+      "https://images.unsplash.com/photo-1522158637959-30385a09e0da?w=600&h=380&fit=crop&auto=format",
+    scripture: "Ephesians 3:14–21",
     date: "June 29, 2025",
-    preacher: "Fr. James Callahan",
+    preacher: "Deacon Michael Torres",
     duration: "42 min",
   },
 ];
