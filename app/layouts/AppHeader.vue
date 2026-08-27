@@ -8,9 +8,9 @@ const items = computed<NavigationMenuItem[]>(() => [
   { label: "About", href: "#about" },
   { label: "Gospel", href: "#gospel" },
   { label: "Sermons", href: "#sermons" },
-  { label: "Events" },
-  { label: "Ministries" },
-  { label: "Gallery" },
+  { label: "Events", href: "#events" },
+  { label: "Ministries", href: "#ministries" },
+  { label: "Gallery", href: "#gallery" },
   { label: "Contact" },
 ]);
 
@@ -66,15 +66,5 @@ onUnmounted(() => {
           : 'text-white/60 hover:text-white',
       }"
     />
-
-    <template #right>
-      <UColorModeButton
-        :class="
-          scrolled
-            ? 'text-primary! [&_svg]:text-primary!'
-            : 'text-white! [&_svg]:text-white!'
-        "
-      />
-    </template>
   </UHeader>
 </template>

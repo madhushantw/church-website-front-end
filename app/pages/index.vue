@@ -2,8 +2,11 @@
 import CGatheringSection from "~/components/common/CGatheringSection.vue";
 import AboutUs from "~/components/home/AboutUs.vue";
 import Daily from "~/components/home/Daily/Daily.vue";
+import EventSection from "~/components/home/EventSection/EventSection.vue";
+import GallerySection from "~/components/home/GallerySection.vue";
 import GospelSection from "~/components/home/GospelSection.vue";
 import HeroSection from "~/components/home/HeroSection.vue";
+import MinistrySection from "~/components/home/MinistrySection/MinistrySection.vue";
 import SermonsSection from "~/components/home/SermonsSection/SermonsSection.vue";
 import WelcomeSection from "~/components/home/WelcomeSection.vue";
 </script>
@@ -20,5 +23,8 @@ import WelcomeSection from "~/components/home/WelcomeSection.vue";
       text="For where two or three gather in my name, there am I with them."
     />
     <SermonsSection />
+    <EventSection />
+    <MinistrySection />
+    <GallerySection />
   </div>
 </template>
