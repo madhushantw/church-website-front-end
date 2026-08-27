@@ -40,7 +40,7 @@ const events: Event[] = [
 </script>
 
 <template>
-  <CSection id="events" background-color="muted">
+  <CSection id="events">
     <CSectionHeading
       label="Calendar"
       title="Upcoming Events"

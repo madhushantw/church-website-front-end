@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    // import AppFooter from './AppFooter.vue';
+    import AppFooter from './AppFooter.vue';
     import AppHeader from './AppHeader.vue'
 
 </script>
@@ -10,6 +10,6 @@
     <main>
       <slot />
     </main>
-    <!-- <AppFooter /> -->
+    <AppFooter />
   </div>
 </template>

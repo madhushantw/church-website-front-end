@@ -56,7 +56,7 @@ const ministries: Ministry[] = [
 </script>
 
 <template>
-  <CSection id="ministries">
+  <CSection id="ministries" background-color="muted">
     <CSectionHeading
       label="Ministries"
       title="Growing Together in Faith"

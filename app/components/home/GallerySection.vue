@@ -113,7 +113,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <CSection id="gallery" background-color="muted">
+  <CSection id="gallery">
     <CSectionHeading
       label="Our Community"
       title="Moments of Faith & Fellowship"

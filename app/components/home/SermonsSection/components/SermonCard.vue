@@ -15,7 +15,7 @@ withDefaults(defineProps<Props>(), {
 
 <template>
   <article
-    class="group cursor-pointer overflow-hidden rounded-lg bg-card shadow-sm transition-shadow hover:shadow-md"
+    class="group cursor-pointer overflow-hidden rounded-lg bg-card shadow-sm transition-shadow hover:shadow-md bg-white"
   >
     <div class="relative overflow-hidden">
       <img

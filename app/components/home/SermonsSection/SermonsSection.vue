@@ -33,7 +33,7 @@ const sermons = [
 </script>
 
 <template>
-  <CSection id="sermons">
+  <CSection id="sermons" background-color="muted">
     <CSectionHeading label="Messages" title="Latest Sermons" />
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <SermonCard

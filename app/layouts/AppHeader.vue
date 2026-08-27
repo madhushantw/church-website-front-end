@@ -11,7 +11,7 @@ const items = computed<NavigationMenuItem[]>(() => [
   { label: "Events", href: "#events" },
   { label: "Ministries", href: "#ministries" },
   { label: "Gallery", href: "#gallery" },
-  { label: "Contact" },
+  { label: "Contact", href: "#contact" },
 ]);
 
 const handleScroll = () => {
