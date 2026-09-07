@@ -3,6 +3,9 @@ interface Props {
   label?: string
   placeholder?: string
   textarea?: boolean
+  type?: string
+  required?: boolean
+  icon?: string
 }
 
 defineProps<Props>()
@@ -33,6 +36,9 @@ const model = defineModel<string>({ default: '' })
       v-else
       v-model="model"
       :placeholder="placeholder"
+      :type="type"
+      :required="required"
+      :icon="icon"
       size="xl"
       variant="soft"
       class="w-full [&_input]:h-12 [&_input]:border [&_input]:border-primary/20"

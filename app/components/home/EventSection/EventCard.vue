@@ -1,29 +1,30 @@
 <script setup lang="ts">
-interface Event {
-  title: string;
-  subTitle: string;
-  date: Date;
-  time: string;
-  location: string;
-}
+import type { EventItem } from "~/services/events.service";
 
 interface Props {
-  event: Event;
+  event: EventItem;
 }
 
 defineProps<Props>();
 
-const formatMonth = (date: Date) =>
+const formatMonth = (dateStr: string) =>
   new Intl.DateTimeFormat("en-US", {
     month: "short",
   })
-    .format(date)
+    .format(new Date(dateStr))
     .toUpperCase();
 
-const formatDay = (date: Date) =>
+const formatDay = (dateStr: string) =>
   new Intl.DateTimeFormat("en-US", {
     day: "numeric",
-  }).format(date);
+  }).format(new Date(dateStr));
+
+const formatTime = (dateStr: string) =>
+  new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(new Date(dateStr));
 </script>
 
 <template>
@@ -34,13 +35,13 @@ const formatDay = (date: Date) =>
       <div
         class="rounded-t-md bg-primary py-1.5 text-[11px] font-medium uppercase tracking-widest text-white"
       >
-        {{ formatMonth(event.date) }}
+        {{ formatMonth(event.startDate) }}
       </div>
 
       <div
         class="rounded-b-md bg-secondary py-2 font-['Playfair_Display'] text-2xl font-bold text-foreground"
       >
-        {{ formatDay(event.date) }}
+        {{ formatDay(event.startDate) }}
       </div>
     </div>
 
@@ -52,7 +53,7 @@ const formatDay = (date: Date) =>
       </h3>
 
       <p class="mb-3 text-[13px] leading-relaxed text-muted-foreground">
-        {{ event.subTitle }}
+        {{ event.description }}
       </p>
 
       <div class="flex flex-wrap gap-x-4 gap-y-2">
@@ -60,10 +61,11 @@ const formatDay = (date: Date) =>
           class="flex items-center gap-1.5 text-[12px] text-muted-foreground"
         >
           <UIcon name="lucide:clock" size="14" />
-          <span>{{ event.time }}</span>
+          <span>{{ formatTime(event.startDate) }}</span>
         </div>
 
         <div
+          v-if="event.location"
           class="flex items-center gap-1.5 text-[12px] text-muted-foreground"
         >
           <UIcon name="lucide:map-pin" size="14" />

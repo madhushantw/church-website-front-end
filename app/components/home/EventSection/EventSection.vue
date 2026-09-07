@@ -1,43 +1,27 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { CSection, CSectionHeading } from "~/components/common";
 import EventCard from "./EventCard.vue";
+import { EventsService, type EventItem } from "~/services/events.service";
 
 defineProps<{ hideNavigationButton?: boolean }>();
 
-interface Event {
-  title: string;
-  subTitle: string;
-  date: Date;
-  time: string;
-  location: string;
-}
+const events = ref<EventItem[]>([]);
+const loading = ref(true);
+const error = ref<string | null>(null);
 
-const events: Event[] = [
-  {
-    title: "Family Picnic & Fellowship",
-    subTitle:
-      "Join us for an afternoon of food, games, and community. All families welcome.",
-    date: new Date(2026, 6, 12),
-    time: "2:00 PM",
-    location: "Church Grounds",
-  },
-  {
-    title: "Sunday Morning Worship",
-    subTitle:
-      "Come together as a church family for worship, prayer, and fellowship.",
-    date: new Date(2026, 6, 19),
-    time: "9:00 AM",
-    location: "Main Sanctuary",
-  },
-  {
-    title: "Youth Fellowship",
-    subTitle:
-      "An evening of fellowship, worship, and activities for our young people.",
-    date: new Date(2026, 6, 25),
-    time: "6:30 PM",
-    location: "Youth Hall",
-  },
-];
+onMounted(async () => {
+  try {
+    loading.value = true;
+    const response = await EventsService.getAll();
+    events.value = response.data;
+  } catch (err) {
+    console.error('Failed to fetch events:', err);
+    error.value = 'Failed to load events';
+  } finally {
+    loading.value = false;
+  }
+});
 </script>
 
 <template>
@@ -54,12 +38,24 @@ const events: Event[] = [
       </button>
     </div>
 
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+    <div v-if="loading" class="text-center py-8">
+      Loading events...
+    </div>
+
+    <div v-else-if="error" class="text-center py-8 text-red-500">
+      {{ error }}
+    </div>
+
+    <div v-else-if="events.length > 0" class="grid grid-cols-1 gap-6 md:grid-cols-2">
       <EventCard
         v-for="event in events"
-        :key="event.date.getTime() + event.title"
+        :key="event.id"
         :event="event"
       />
+    </div>
+
+    <div v-else class="text-center py-8">
+      No events found
     </div>
   </CSection>
 </template>

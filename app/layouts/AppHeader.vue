@@ -1,9 +1,27 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from "@nuxt/ui";
+import LogoutConfirmModal from "~/components/auth/LogoutConfirmModal.vue";
+import SignInModal from "~/components/auth/SignInModal.vue";
+import { useUserStore } from "~/stores/user.store";
 
 const route = useRoute();
 
 const scrolled = ref(false);
+const menuOpen = ref(false);
+const signInOpen = ref(false);
+const logoutOpen = ref(false);
+const userStore = useUserStore();
+const isAuthenticated = computed(() => !!userStore.user);
+
+const openSignIn = () => {
+  menuOpen.value = false;
+  signInOpen.value = true;
+};
+
+const openLogout = () => {
+  menuOpen.value = false;
+  logoutOpen.value = true;
+};
 
 const items = computed<NavigationMenuItem[]>(() => {
   const isHome = route.path === "/";
@@ -57,7 +75,13 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <UHeader
+  <div>
+    <UHeader
+    v-model:open="menuOpen"
+    mode="slideover"
+    :menu="{
+      inset: true,
+    }"
     class="fixed left-0 right-0 top-0 z-50 transition-colors duration-300 h-20 border-b-0!"
     :class="
       scrolled
@@ -68,7 +92,7 @@ onUnmounted(() => {
     <template #title>
       <div
         class="flex gap-2 items-center justify-center"
-        :class="scrolled ? 'text-primary' : 'text-white'"
+        :class="scrolled || menuOpen ? 'text-primary' : 'text-white'"
       >
         <div
           class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-3xl text-white"
@@ -86,6 +110,17 @@ onUnmounted(() => {
       </div>
     </template>
 
+    <template #right>
+      <UButton
+        :label="isAuthenticated ? 'Logout' : 'Login'"
+        size="sm"
+        color="primary"
+        :variant="isAuthenticated ? 'ghost' : 'solid'"
+        class="rounded-full px-4"
+        @click="isAuthenticated ? openLogout() : openSignIn()"
+      />
+    </template>
+
     <UNavigationMenu
       :items="items"
       variant="link"
@@ -95,5 +130,21 @@ onUnmounted(() => {
           : 'text-white/60 hover:text-white',
       }"
     />
-  </UHeader>
+
+    <template #body>
+      <UNavigationMenu
+        :items="items"
+        orientation="vertical"
+        variant="link"
+        class="w-full"
+        :ui="{
+          link: 'rounded-xl px-4 py-3 text-base font-medium text-primary transition-colors hover:bg-primary/10 hover:text-primary',
+        }"
+      />
+    </template>
+    </UHeader>
+
+    <SignInModal v-model:open="signInOpen" />
+    <LogoutConfirmModal v-model:open="logoutOpen" />
+  </div>
 </template>
