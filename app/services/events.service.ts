@@ -1,4 +1,5 @@
 import { HTTP } from './http'
+import type { CResponse } from './interfaces/Response.interface'
 
 export interface EventItem {
   id: string
@@ -24,20 +25,24 @@ export interface CreateEvent {
 }
 
 export const EventsService = {
-  getAll() {
-    return HTTP.get<EventItem[]>('/events')
+  async getAll(): Promise<CResponse<EventItem[]>> {
+    const response = await HTTP.get<CResponse<EventItem[]>>('/events')
+    return response.data
   },
 
-  getById(id: string) {
-    return HTTP.get<EventItem>(`/events/${id}`)
+  async getById(id: string): Promise<CResponse<EventItem>> {
+    const response = await HTTP.get<CResponse<EventItem>>(`/events/${id}`)
+    return response.data
   },
 
-  create(data: CreateEvent) {
-    return HTTP.post<EventItem>('/events', data)
+  async create(data: CreateEvent): Promise<CResponse<EventItem>> {
+    const response = await HTTP.post<CResponse<EventItem>>('/events', data)
+    return response.data
   },
 
-  update(id: string, data: Partial<CreateEvent>) {
-    return HTTP.put<EventItem>(`/events/${id}`, data)
+  async update(id: string, data: Partial<CreateEvent>): Promise<CResponse<EventItem>> {
+    const response = await HTTP.put<CResponse<EventItem>>(`/events/${id}`, data)
+    return response.data
   },
 
   delete(id: string) {

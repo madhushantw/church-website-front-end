@@ -1,4 +1,5 @@
 import { HTTP } from './http'
+import type { CResponse } from './interfaces/Response.interface'
 
 export enum UserRole {
   ROOT = 'ROOT',
@@ -17,17 +18,21 @@ export interface LoginData {
   password: string
 }
 
-export interface LoginResponse {
+export interface LoginDataResponse {
   accessToken: string
   user: User
 }
 
+export type LoginResponse = CResponse<LoginDataResponse>
+
 export const AuthService = {
-  login(data: LoginData) {
-    return HTTP.post<LoginResponse>('/auth/login', data)
+  async login(data: LoginData): Promise<LoginResponse> {
+    const response = await HTTP.post<LoginResponse>('/auth/login', data)
+    return response.data
   },
 
-  loginWithAccessToken(accessToken: string) {
-    return HTTP.post<LoginResponse>('/auth/login/access-token', { accessToken })
+  async loginWithAccessToken(accessToken: string): Promise<LoginResponse> {
+    const response = await HTTP.post<LoginResponse>('/auth/login/access-token', { accessToken })
+    return response.data
   },
 }

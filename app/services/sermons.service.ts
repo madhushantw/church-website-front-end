@@ -1,4 +1,5 @@
 import { HTTP } from './http'
+import type { CResponse } from './interfaces/Response.interface'
 
 export interface SermonItem {
   id: string
@@ -28,20 +29,24 @@ export interface CreateSermon {
 export type UpdateSermon = Partial<CreateSermon>
 
 export const SermonsService = {
-  getAll() {
-    return HTTP.get<SermonItem[]>('/sermons')
+  async getAll(): Promise<CResponse<SermonItem[]>> {
+    const response = await HTTP.get<CResponse<SermonItem[]>>('/sermons')
+    return response.data
   },
 
-  getById(id: string) {
-    return HTTP.get<SermonItem>(`/sermons/${id}`)
+  async getById(id: string): Promise<CResponse<SermonItem>> {
+    const response = await HTTP.get<CResponse<SermonItem>>(`/sermons/${id}`)
+    return response.data
   },
 
-  create(data: CreateSermon) {
-    return HTTP.post<SermonItem>('/sermons', data)
+  async create(data: CreateSermon): Promise<CResponse<SermonItem>> {
+    const response = await HTTP.post<CResponse<SermonItem>>('/sermons', data)
+    return response.data
   },
 
-  update(id: string, data: UpdateSermon) {
-    return HTTP.put<SermonItem>(`/sermons/${id}`, data)
+  async update(id: string, data: UpdateSermon): Promise<CResponse<SermonItem>> {
+    const response = await HTTP.put<CResponse<SermonItem>>(`/sermons/${id}`, data)
+    return response.data
   },
 
   delete(id: string) {

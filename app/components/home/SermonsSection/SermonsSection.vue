@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from "vue";
 import { CSection, CSectionHeading } from "../../common";
 import SermonCard from "./components/SermonCard.vue";
 import { SermonsService, type SermonItem } from "~/services/sermons.service";
@@ -13,11 +13,11 @@ const error = ref<string | null>(null);
 onMounted(async () => {
   try {
     loading.value = true;
-    const response = await SermonsService.getAll();
-    sermons.value = response.data;
+    const { data } = await SermonsService.getAll();
+    sermons.value = data;
   } catch (err) {
-    console.error('Failed to fetch sermons:', err);
-    error.value = 'Failed to load sermons';
+    console.error("Failed to fetch sermons:", err);
+    error.value = "Failed to load sermons";
   } finally {
     loading.value = false;
   }
@@ -38,20 +38,19 @@ onMounted(async () => {
       </button>
     </div>
 
-    <div v-if="loading" class="text-center py-8">
-      Loading sermons...
-    </div>
+    <div v-if="loading" class="text-center py-8">Loading sermons...</div>
 
     <div v-else-if="error" class="text-center py-8 text-red-500">
       {{ error }}
     </div>
 
-    <div v-else-if="sermons.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div
+      v-else-if="sermons.length > 0"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+    >
       <SermonCard v-for="sermon in sermons" :key="sermon.id" :sermon="sermon" />
     </div>
 
-    <div v-else class="text-center py-8">
-      No sermons found
-    </div>
+    <div v-else class="text-center py-8">No sermons found</div>
   </CSection>
 </template>
