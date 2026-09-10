@@ -6,6 +6,6 @@ import EventsHero from "./EventsHero.vue";
 <template>
   <div>
     <EventsHero />
-    <EventSection hide-navigation-button />
+    <EventSection hide-navigation-button allow-create />
   </div>
 </template>

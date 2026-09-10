@@ -1,14 +1,26 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useUserStore } from "~/stores/user.store";
 import { CSection, CSectionHeading } from "~/components/common";
 import EventCard from "./EventCard.vue";
+import EventDialog from "./EventDialog.vue";
 import { EventsService, type EventItem } from "~/services/events.service";
 
-defineProps<{ hideNavigationButton?: boolean }>();
+const props = defineProps<{
+  hideNavigationButton?: boolean
+  allowCreate?: boolean
+}>();
+
+const userStore = useUserStore();
 
 const events = ref<EventItem[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
+const isEventDialogOpen = ref(false);
+
+const addEvent = (event: EventItem) => {
+  events.value = [event, ...events.value];
+};
 
 onMounted(async () => {
   try {
@@ -28,14 +40,24 @@ onMounted(async () => {
   <CSection id="events">
     <div class="flex justify-between items-center">
       <CSectionHeading label="Calendar" title="Upcoming Events" />
-      <button
-        v-if="!hideNavigationButton"
-        class="mb-6 flex items-center gap-2 whitespace-nowrap text-[14px] font-medium text-primary transition-colors hover:text-primary/70"
-        @click="navigateTo('events')"
-      >
-        Full Calendar
-        <UIcon name="lucide:chevron-right" size="16" />
-      </button>
+      <div class="mb-6 flex items-center gap-4">
+        <button
+          v-if="props.allowCreate && userStore.user"
+          class="flex items-center gap-2 whitespace-nowrap text-[14px] font-medium text-primary transition-colors hover:text-primary/70"
+          @click="isEventDialogOpen = true"
+        >
+          <UIcon name="lucide:calendar-plus" size="16" />
+          Add event
+        </button>
+        <button
+          v-if="!hideNavigationButton"
+          class="flex items-center gap-2 whitespace-nowrap text-[14px] font-medium text-primary transition-colors hover:text-primary/70"
+          @click="navigateTo('events')"
+        >
+          Full Calendar
+          <UIcon name="lucide:chevron-right" size="16" />
+        </button>
+      </div>
     </div>
 
     <div v-if="loading" class="text-center py-8">
@@ -57,5 +79,7 @@ onMounted(async () => {
     <div v-else class="text-center py-8">
       No events found
     </div>
+
+    <EventDialog v-model:open="isEventDialogOpen" @created="addEvent" />
   </CSection>
 </template>

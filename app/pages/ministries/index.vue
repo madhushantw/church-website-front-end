@@ -6,6 +6,6 @@ import MinistriesHero from "./MinistriesHero.vue"
 <template>
   <div>
     <MinistriesHero />
-    <MinistrySection hide-navigation-button />
+    <MinistrySection hide-navigation-button allow-create />
   </div>
 </template>

@@ -1,24 +1,53 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useUserStore } from "~/stores/user.store";
+import { UserRole } from "~/services/auth.service";
 import { CSection, CSectionHeading } from "../../common";
 import {
   MinistriesService,
   type MinistryItem,
 } from "~/services/ministries.service";
 import MinistryCard from "./MinistryCard.vue";
+import MinistryDialog from "./MinistryDialog.vue";
 
 interface Ministry {
+  id: string;
   title: string;
   subtitle: string;
   icon?: string;
   iconColor?: string;
 }
 
-defineProps<{ hideNavigationButton?: boolean }>();
+const props = defineProps<{
+  hideNavigationButton?: boolean
+  allowCreate?: boolean
+}>();
+
+const userStore = useUserStore();
 
 const ministries = ref<Ministry[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
+const isMinistryDialogOpen = ref(false);
+
+const canCreateMinistry = computed(
+  () => props.allowCreate && userStore.user?.role === UserRole.ROOT,
+);
+
+const addMinistry = (ministry: MinistryItem) => {
+  ministries.value = [
+    {
+      id: ministry.id,
+      title: ministry.name,
+      subtitle:
+        ministry.description ||
+        "Join us as we grow together in faith and service.",
+      icon: ministryIcons[ministry.type],
+      iconColor: ministryColors[ministry.type],
+    },
+    ...ministries.value,
+  ];
+};
 
 const ministryIcons: Record<MinistryItem["type"], string> = {
   general: "lucide:church",
@@ -48,6 +77,7 @@ onMounted(async () => {
   try {
     const response = await MinistriesService.getAll();
     ministries.value = response.data.map((ministry) => ({
+      id: ministry.id,
       title: ministry.name,
       subtitle:
         ministry.description ||
@@ -72,6 +102,15 @@ onMounted(async () => {
       sub-title="Find where your gifts, passions, and calling intersect with the life of our church."
       centered
     />
+    <div v-if="canCreateMinistry" class="mb-6 flex justify-center">
+      <button
+        class="flex items-center gap-2 whitespace-nowrap text-[14px] font-medium text-primary transition-colors hover:text-primary/70"
+        @click="isMinistryDialogOpen = true"
+      >
+        <UIcon name="lucide:plus" size="16" />
+        Add ministry
+      </button>
+    </div>
     <div v-if="!hideNavigationButton" class="mb-6 flex justify-center">
       <button
         class="flex items-center gap-2 whitespace-nowrap text-[14px] font-medium text-primary transition-colors hover:text-primary/70"
@@ -94,11 +133,17 @@ onMounted(async () => {
     >
       <MinistryCard
         v-for="ministry in ministries"
-        :key="ministry.title"
+        :key="ministry.id"
         :ministry="ministry"
       />
     </div>
 
     <div v-else class="py-8 text-center">No ministries found</div>
+
+    <MinistryDialog
+      v-if="canCreateMinistry"
+      v-model:open="isMinistryDialogOpen"
+      @created="addMinistry"
+    />
   </CSection>
 </template>

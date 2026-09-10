@@ -60,7 +60,7 @@ onMounted(getHeroData)
         {{ hero?.subtitle || fallbackHero.subtitle }}
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <CButton title="Discover Our Church" @on-click="getHeroData" />
+        <CButton title="Discover Our Church" />
         <CButton title="Watch a Sermon" outlined color="neutral" prepend-icon="solar:play-outline" />
       </div>
     </UContainer>
