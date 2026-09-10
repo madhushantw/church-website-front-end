@@ -43,16 +43,16 @@ const ministryIcons: Record<MinistryType, string> = {
   [MinistryType.PRAYER]: "lucide:hand-heart",
   [MinistryType.MEDIA]: "lucide:video",
 };
-const ministryColors: Record<MinistryType, string> = {
-  [MinistryType.GENERAL]: "primary",
-  [MinistryType.CHILDREN]: "primary",
-  [MinistryType.YOUTH]: "primary",
-  [MinistryType.WOMEN]: "accent",
-  [MinistryType.MEN]: "primary",
-  [MinistryType.WORSHIP]: "primary",
-  [MinistryType.OUTREACH]: "accent",
-  [MinistryType.PRAYER]: "primary",
-  [MinistryType.MEDIA]: "primary",
+const ministryColors: Record<MinistryType, { background: string; icon: string }> = {
+  [MinistryType.GENERAL]: { background: "bg-teal-600/10", icon: "text-teal-600" },
+  [MinistryType.CHILDREN]: { background: "bg-orange-400/10", icon: "text-orange-500" },
+  [MinistryType.YOUTH]: { background: "bg-sky-600/10", icon: "text-sky-600" },
+  [MinistryType.WOMEN]: { background: "bg-rose-500/10", icon: "text-rose-500" },
+  [MinistryType.MEN]: { background: "bg-slate-600/10", icon: "text-slate-600" },
+  [MinistryType.WORSHIP]: { background: "bg-amber-500/10", icon: "text-amber-600" },
+  [MinistryType.OUTREACH]: { background: "bg-emerald-600/10", icon: "text-emerald-600" },
+  [MinistryType.PRAYER]: { background: "bg-violet-500/10", icon: "text-violet-500" },
+  [MinistryType.MEDIA]: { background: "bg-orange-600/10", icon: "text-orange-600" },
 };
 
 const ministryLabel = (type: MinistryType) =>
@@ -142,18 +142,16 @@ const createMinistry = async () => {
               >
                 <span
                   class="flex h-14 w-14 items-center justify-center rounded-lg border-2 transition-colors"
-                  :class="form.type === type ? 'border-2 border-primary' : 'border-transparent'"
-                  :style="{
-                    backgroundColor: `color-mix(in srgb, var(--color-${ministryColors[type]}) 10%, transparent)`,
-                  }"
+                  :class="[
+                    ministryColors[type].background,
+                    form.type === type ? 'border-primary' : 'border-transparent',
+                  ]"
                   @click="form.type = type"
                 >
                   <UIcon
                     :name="ministryIcons[type]"
                     size="26"
-                    :style="{
-                      color: `var(--color-${ministryColors[type]})`,
-                    }"
+                    :class="ministryColors[type].icon"
                   />
                 </span>
                 <span>{{ ministryLabel(type) }}</span>
