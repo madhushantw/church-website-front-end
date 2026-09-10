@@ -1,14 +1,22 @@
 <script setup lang="ts">
-import { EventsService, type CreateEvent } from '~/services/events.service'
-import type { EventItem } from '~/services/events.service'
+import { EventsService, type EventItem } from '~/services/events.service'
 import { CInput } from '~/components/common'
+
+interface EventForm {
+  title: string
+  description: string
+  startDate: string
+  endDate: string
+  location: string
+  isFeatured: boolean
+}
 
 const open = defineModel<boolean>('open', { default: false })
 const emit = defineEmits<{
   created: [event: EventItem]
 }>()
 
-const initialForm = (): CreateEvent => ({
+const initialForm = (): EventForm => ({
   title: '',
   description: '',
   startDate: '',
@@ -17,7 +25,7 @@ const initialForm = (): CreateEvent => ({
   isFeatured: false,
 })
 
-const form = ref<CreateEvent>(initialForm())
+const form = ref<EventForm>(initialForm())
 const isLoading = ref(false)
 const error = ref('')
 
