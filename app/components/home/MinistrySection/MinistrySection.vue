@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useUserStore } from "~/stores/user.store";
-import { UserRole } from "~/services/auth.service";
+import { UserRole } from "~/services/users.service";
 import { CSection, CSectionHeading } from "../../common";
 import {
   MinistriesService,

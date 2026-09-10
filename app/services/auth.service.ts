@@ -1,10 +1,6 @@
 import { HTTP } from './http'
 import type { CResponse } from './interfaces/Response.interface'
-
-export enum UserRole {
-  ROOT = 'ROOT',
-  USER = 'USER',
-}
+import type { UserRole } from './users.service'
 
 export interface User {
   id: string

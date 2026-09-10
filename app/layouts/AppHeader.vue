@@ -2,6 +2,8 @@
 import type { NavigationMenuItem } from "@nuxt/ui";
 import LogoutConfirmModal from "~/components/auth/LogoutConfirmModal.vue";
 import SignInModal from "~/components/auth/SignInModal.vue";
+import UsersSidebar from "~/components/users/UsersSidebar.vue";
+import { UserRole } from "~/services/users.service";
 import { useUserStore } from "~/stores/user.store";
 
 const route = useRoute();
@@ -10,8 +12,10 @@ const scrolled = ref(false);
 const menuOpen = ref(false);
 const signInOpen = ref(false);
 const logoutOpen = ref(false);
+const usersSidebarOpen = ref(false);
 const userStore = useUserStore();
 const isAuthenticated = computed(() => !!userStore.user);
+const canManageUsers = computed(() => userStore.user?.role === UserRole.ROOT);
 
 const openSignIn = () => {
   menuOpen.value = false;
@@ -112,6 +116,16 @@ onUnmounted(() => {
 
     <template #right>
       <UButton
+        v-if="canManageUsers"
+        label="Users"
+        icon="i-lucide-users"
+        size="sm"
+        color="primary"
+        variant="ghost"
+        class="rounded-full"
+        @click="usersSidebarOpen = true"
+      />
+      <UButton
         :label="isAuthenticated ? 'Logout' : 'Login'"
         size="sm"
         color="primary"
@@ -146,5 +160,6 @@ onUnmounted(() => {
 
     <SignInModal v-model:open="signInOpen" />
     <LogoutConfirmModal v-model:open="logoutOpen" />
+    <UsersSidebar v-if="canManageUsers" v-model:open="usersSidebarOpen" />
   </div>
 </template>

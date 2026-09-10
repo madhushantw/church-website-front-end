@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { HeroService, type Hero } from '~/services/hero.service'
-import { UserRole } from '~/services/auth.service'
+import { UserRole } from '~/services/users.service'
 import { useUserStore } from '~/stores/user.store'
 import { CButton } from '../common'
 import HeroEditDialog from './HeroEditDialog.vue'
