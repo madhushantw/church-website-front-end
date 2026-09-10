@@ -1,16 +1,24 @@
 import { HTTP } from './http'
 import type { CResponse } from './interfaces/Response.interface'
 
+export enum SermonPdfType {
+  PEWSHEET = 'Pewsheet',
+  READINGS = 'Readings',
+  SERMON = 'sermon',
+}
+
+export interface SermonPdfFile {
+  type: SermonPdfType
+  url: string
+}
+
 export interface SermonItem {
   id: string
   title: string
   description: string | null
-  image: string | null
   preacher: string
   sermonDate: string
-  videoUrl: string | null
-  audioUrl: string | null
-  bibleReference: string | null
+  pdfFiles: SermonPdfFile[]
   createdAt: string
   updatedAt: string
 }
@@ -18,12 +26,9 @@ export interface SermonItem {
 export interface CreateSermon {
   title: string
   description?: string | null
-  image?: string | null
   preacher: string
   sermonDate: string
-  videoUrl?: string | null
-  audioUrl?: string | null
-  bibleReference?: string | null
+  pdfFiles?: SermonPdfFile[]
 }
 
 export type UpdateSermon = Partial<CreateSermon>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SermonItem } from '~/services/sermons.service'
+import { SermonPdfType, type SermonItem } from '~/services/sermons.service'
 
 interface Props {
   sermon: SermonItem
@@ -13,40 +13,22 @@ const formatDate = (dateStr: string) =>
     month: 'short',
     day: 'numeric',
   }).format(new Date(dateStr))
+
+const pdfLabel = (type: SermonPdfType) => {
+  if (type === SermonPdfType.SERMON) return 'Sermon'
+  return type
+}
 </script>
 
 <template>
   <article
-    class="group cursor-pointer overflow-hidden rounded-lg bg-card shadow-sm transition-shadow hover:shadow-md bg-white"
+    class="group overflow-hidden rounded-lg bg-card shadow-sm transition-shadow hover:shadow-md bg-white"
   >
-    <div class="relative overflow-hidden">
-      <img
-        v-if="sermon.image"
-        :src="sermon.image"
-        :alt="sermon.title"
-        class="h-52 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-      >
-      <div v-else class="h-52 w-full bg-muted" />
-      <div
-        class="absolute inset-0 bg-foreground/30 transition-colors group-hover:bg-foreground/20"
-      />
-      <div class="absolute inset-0 flex items-center justify-center">
-        <div
-          class="flex h-20 w-20 cursor-pointer items-center justify-center rounded-full bg-white/95 shadow-xl transition-transform duration-200 hover:bg-white group-hover:scale-105"
-        >
-          <UIcon name="line-md:play-filled" size="44" class="text-primary" />
-        </div>
-      </div>
+    <div class="flex h-52 items-center justify-center bg-muted">
+      <UIcon name="lucide:file-text" size="64" class="text-primary/60" />
     </div>
     <div class="p-6">
       <div class="mb-3 flex items-center justify-between gap-4">
-        <span
-          v-if="sermon.bibleReference"
-          class="text-[11px] font-medium uppercase tracking-widest text-accent"
-        >
-          {{ sermon.bibleReference }}
-        </span>
-
         <span class="whitespace-nowrap text-[12px] text-muted-foreground">
           {{ formatDate(sermon.sermonDate) }}
         </span>
@@ -61,6 +43,24 @@ const formatDate = (dateStr: string) =>
       <p class="text-[13px] text-muted-foreground">
         {{ sermon.preacher }}
       </p>
+
+      <p v-if="sermon.description" class="mt-3 line-clamp-3 text-[13px] leading-relaxed text-muted-foreground">
+        {{ sermon.description }}
+      </p>
+
+      <div v-if="sermon.pdfFiles.length" class="mt-5 flex flex-wrap gap-2">
+        <a
+          v-for="pdf in sermon.pdfFiles"
+          :key="`${pdf.type}-${pdf.url}`"
+          :href="pdf.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 rounded-md border border-primary/30 px-3 py-2 text-[12px] font-medium text-primary transition-colors hover:bg-primary hover:text-white"
+        >
+          <UIcon name="lucide:file-down" size="14" />
+          {{ pdfLabel(pdf.type) }}
+        </a>
+      </div>
     </div>
   </article>
 </template>
