@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { UserRole, UsersService, type UserItem } from '~/services/users.service'
 import UserDialog from './UserDialog.vue'
+import ConfirmationDialog from '../common/ConfirmationDialog.vue'
 
 const open = defineModel<boolean>('open', { default: false })
 const users = ref<UserItem[]>([])
@@ -172,51 +173,16 @@ const deleteUser = async () => {
       </div>
     </template>
   </USlideover>
-
   <UserDialog
     v-model:open="userDialogOpen"
     :user="selectedUser"
     @saved="upsertUser"
   />
-
-  <UModal
-    v-model:open="deleteDialogOpen"
-    :ui="{
-      overlay: 'bg-foreground/30 backdrop-blur-sm',
-      content: 'max-w-sm rounded-3xl border border-primary/10 bg-background shadow-2xl',
-    }"
-  >
-    <template #content>
-      <div class="p-6">
-        <div class="mb-6 flex items-start justify-between gap-4">
-          <div>
-            <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">User management</p>
-            <h2 class="font-['Playfair_Display'] text-2xl text-foreground">Delete user?</h2>
-            <p class="mt-2 text-sm text-muted-foreground">
-              This will permanently remove {{ selectedUser?.name }}.
-            </p>
-          </div>
-          <UButton
-            icon="i-lucide-x"
-            color="neutral"
-            variant="ghost"
-            aria-label="Close delete dialog"
-            class="rounded-full"
-            @click="deleteDialogOpen = false"
-          />
-        </div>
-        <div class="flex justify-end gap-3">
-          <UButton label="Cancel" color="neutral" variant="soft" class="rounded-xl" @click="deleteDialogOpen = false" />
-          <UButton
-            label="Delete user"
-            icon="i-lucide-trash-2"
-            color="error"
-            class="rounded-xl"
-            :loading="isDeleting"
-            @click="deleteUser"
-          />
-        </div>
-      </div>
-    </template>
-  </UModal>
+  <ConfirmationDialog
+    v-model="deleteDialogOpen"
+    type="delete"
+    title="Delete user?"
+    :subtitle="`This will permanently remove ${selectedUser?.name}.`"
+    @confirm="deleteUser"
+  />
 </template>

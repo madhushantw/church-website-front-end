@@ -3,9 +3,14 @@ import type { EventItem } from "~/services/events.service";
 
 interface Props {
   event: EventItem;
+  canEdit?: boolean
 }
 
 defineProps<Props>();
+const emit = defineEmits<{
+  edit: [event: EventItem]
+  delete: [event: EventItem]
+}>()
 </script>
 
 <template>
@@ -49,13 +54,27 @@ defineProps<Props>();
         </div>
       </div>
     </div>
-    <!-- Arrow -->
-    <div class="hidden shrink-0 self-center sm:block">
-      <UIcon
-        name="lucide:arrow-right"
-        size="20"
-        class="text-primary transition-transform duration-200 group-hover:translate-x-1"
-      />
+    <div class="hidden shrink-0 sm:block">
+      <div v-if="canEdit" class="flex items-center gap-1">
+        <UButton
+          icon="i-lucide-pencil"
+          color="neutral"
+          variant="ghost"
+          size="xs"
+          aria-label="Edit sermon"
+          class="rounded-full"
+          @click="emit('edit', event)"
+        />
+        <UButton
+          icon="i-lucide-trash-2"
+          color="error"
+          variant="ghost"
+          size="xs"
+          aria-label="Delete sermon"
+          class="rounded-full"
+          @click="emit('delete', event)"
+        />
+      </div>
     </div>
   </div>
 </template>

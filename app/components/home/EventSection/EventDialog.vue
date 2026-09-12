@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { EventsService, type EventItem } from '~/services/events.service'
 import { CInput } from '~/components/common'
+import dayjs from 'dayjs'
 
 interface EventForm {
   title: string
@@ -11,9 +12,12 @@ interface EventForm {
   isFeatured: boolean
 }
 
-const open = defineModel<boolean>('open', { default: false })
+const open = defineModel<boolean>({ default: false })
+const props = defineProps<{
+  event?: EventItem | null;
+}>();
 const emit = defineEmits<{
-  created: [event: EventItem]
+  saved: [event: EventItem]
 }>()
 
 const initialForm = (): EventForm => ({
@@ -28,14 +32,29 @@ const initialForm = (): EventForm => ({
 const form = ref<EventForm>(initialForm())
 const isLoading = ref(false)
 const error = ref('')
+const isEditing = computed(() => !!props.event)
 
 const resetForm = () => {
   form.value = initialForm()
   error.value = ''
 }
 
+const loadItem = (item: EventItem) => {
+  form.value = {
+    title: item.title,
+    description: item.description || '',
+    startDate: dayjs(item.startDate).format('YYYY-MM-DDTHH:mm'),
+    endDate: dayjs(item.endDate).format('YYYY-MM-DDTHH:mm'),
+    location: item.location || '',
+    isFeatured: item.isFeatured,
+  };
+  error.value = "";
+};
+
 const close = () => {
-  if (!isLoading.value) open.value = false
+  if (isLoading.value) return
+  open.value = false
+  resetForm()
 }
 
 const createEvent = async () => {
@@ -49,16 +68,32 @@ const createEvent = async () => {
   isLoading.value = true
 
   try {
-    const response = await EventsService.create(form.value)
-    emit('created', response.data)
+    const response = props.event
+      ? await EventsService.update(props.event.id, form.value)
+      : await EventsService.create(form.value);
+    
+    emit('saved', response.data)
     open.value = false
     resetForm()
   } catch {
-    error.value = 'Unable to create the event. Please try again.'
+    error.value = isEditing.value
+      ? 'Unable to update the event. Please try again.'
+      : 'Unable to create the event. Please try again.'
   } finally {
     isLoading.value = false
   }
 }
+
+watch(open, (isOpen) => {
+  if (isOpen) {
+    if (props.event) loadItem(props.event);
+    else resetForm();
+  }
+});
+
+watch(() => props.event, (item) => {
+  if (open.value && item) loadItem(item);
+});
 </script>
 
 <template>
@@ -77,10 +112,12 @@ const createEvent = async () => {
               Community calendar
             </p>
             <h2 class="font-['Playfair_Display'] text-3xl text-foreground">
-              Add an event
+              {{ isEditing ? 'Edit event' : 'Add an event' }}
             </h2>
             <p class="mt-2 text-sm text-muted-foreground">
-              Share a gathering with the church community.
+              {{ isEditing
+                ? 'Update this gathering in the church calendar.'
+                : 'Share a gathering with the church community.' }}
             </p>
           </div>
           <UButton
@@ -149,8 +186,8 @@ const createEvent = async () => {
           />
           <UButton
             type="submit"
-            label="Create event"
-            icon="i-lucide-calendar-plus"
+            :label="isEditing ? 'Save changes' : 'Create event'"
+            :icon="isEditing ? 'i-lucide-save' : 'i-lucide-calendar-plus'"
             color="primary"
             class="rounded-xl"
             :loading="isLoading"

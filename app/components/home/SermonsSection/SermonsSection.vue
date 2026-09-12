@@ -5,6 +5,7 @@ import SermonCard from "./components/SermonCard.vue";
 import { SermonsService, type SermonItem } from "~/services/sermons.service";
 import { UserRole } from "~/services/users.service";
 import { useUserStore } from "~/stores/user.store";
+import ConfirmationDialog from "~/components/common/ConfirmationDialog.vue";
 
 const props = defineProps<{
   hideNavigationButton?: boolean
@@ -106,7 +107,6 @@ const handleSermonSaved = async () => {
         @delete="openDeleteSermon"
       />
     </div>
-
     <div v-else class="text-center py-8">No sermons found</div>
     <CreateSermonSlideover
       v-if="canManageSermons"
@@ -114,58 +114,12 @@ const handleSermonSaved = async () => {
       :sermon="selectedSermon"
       @saved="handleSermonSaved"
     />
-
-    <UModal
-      v-model:open="deleteDialogOpen"
-      :ui="{
-        overlay: 'bg-foreground/30 backdrop-blur-sm',
-        content: 'max-w-sm rounded-3xl border border-primary/10 bg-background shadow-2xl',
-      }"
-    >
-      <template #content>
-        <div class="p-6">
-          <div class="mb-6 flex items-start justify-between gap-4">
-            <div>
-              <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                Sermon library
-              </p>
-              <h2 class="font-['Playfair_Display'] text-2xl text-foreground">
-                Delete sermon?
-              </h2>
-              <p class="mt-2 text-sm text-muted-foreground">
-                This will permanently remove {{ sermonToDelete?.title }}.
-              </p>
-            </div>
-            <UButton
-              icon="i-lucide-x"
-              color="neutral"
-              variant="ghost"
-              aria-label="Close delete sermon dialog"
-              class="rounded-full"
-              @click="deleteDialogOpen = false"
-            />
-          </div>
-          <p v-if="deleteError" class="mb-4 text-sm text-red-600">{{ deleteError }}</p>
-          <div class="flex justify-end gap-3">
-            <UButton
-              label="Cancel"
-              color="neutral"
-              variant="soft"
-              class="rounded-xl"
-              :disabled="isDeleting"
-              @click="deleteDialogOpen = false"
-            />
-            <UButton
-              label="Delete sermon"
-              icon="i-lucide-trash-2"
-              color="error"
-              class="rounded-xl"
-              :loading="isDeleting"
-              @click="deleteSermon"
-            />
-          </div>
-        </div>
-      </template>
-    </UModal>
+    <ConfirmationDialog
+      v-model="deleteDialogOpen"
+      type="delete"
+      title="Delete sermon?"
+      :subtitle="`This will permanently remove ${sermonToDelete?.title}.`"
+      @confirm="deleteSermon"
+    />
   </CSection>
 </template>

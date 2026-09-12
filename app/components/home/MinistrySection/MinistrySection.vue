@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from "~/stores/user.store";
 import { UserRole } from "~/services/users.service";
-import { CSection, CSectionHeading } from "../../common";
+import { CSection, CSectionHeading, ConfirmationDialog } from  "~/components/common";
 import {
   MinistriesService,
   type MinistryItem,
@@ -67,7 +67,6 @@ const saveMinistry = (ministry: MinistryItem) => {
   const index = ministryItems.value.findIndex((item) => item.id === ministry.id);
   if (index !== -1) ministryItems.value[index] = ministry;
   else ministryItems.value = [ministry, ...ministryItems.value];
-  console.log(ministryItems.value[index])
   selectedMinistry.value = null;
 };
 
@@ -149,13 +148,10 @@ const ministryColors: Record<MinistryItem["type"], string> = {
         <UIcon name="lucide:chevron-right" size="16" />
       </button>
     </div>
-
     <div v-if="loading" class="py-8 text-center">Loading ministries...</div>
-
     <div v-else-if="error" class="py-8 text-center text-red-500">
       {{ error }}
     </div>
-
     <div
       v-else-if="ministries.length > 0"
       class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
@@ -170,67 +166,19 @@ const ministryColors: Record<MinistryItem["type"], string> = {
         @edit="openEditMinistry"
       />
     </div>
-
     <div v-else class="py-8 text-center">No ministries found</div>
-
     <MinistryDialog
       v-if="canCreateMinistry"
       v-model:open="isMinistryDialogOpen"
       :ministry="selectedMinistry"
       @saved="saveMinistry"
     />
-
-    <UModal
-      v-model:open="deleteDialogOpen"
-      :ui="{
-        overlay: 'bg-foreground/30 backdrop-blur-sm',
-        content: 'max-w-sm rounded-3xl border border-primary/10 bg-background shadow-2xl',
-      }"
-    >
-      <template #content>
-        <div class="p-6">
-          <div class="mb-6 flex items-start justify-between gap-4">
-            <div>
-              <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                Church community
-              </p>
-              <h2 class="font-['Playfair_Display'] text-2xl text-foreground">
-                Delete ministry?
-              </h2>
-              <p class="mt-2 text-sm text-muted-foreground">
-                This will permanently remove {{ ministryToDelete?.title }}.
-              </p>
-            </div>
-            <UButton
-              icon="i-lucide-x"
-              color="neutral"
-              variant="ghost"
-              aria-label="Close delete ministry dialog"
-              class="rounded-full"
-              @click="deleteDialogOpen = false"
-            />
-          </div>
-          <p v-if="deleteError" class="mb-4 text-sm text-red-600">{{ deleteError }}</p>
-          <div class="flex justify-end gap-3">
-            <UButton
-              label="Cancel"
-              color="neutral"
-              variant="soft"
-              class="rounded-xl"
-              :disabled="isDeleting"
-              @click="deleteDialogOpen = false"
-            />
-            <UButton
-              label="Delete ministry"
-              icon="i-lucide-trash-2"
-              color="error"
-              class="rounded-xl"
-              :loading="isDeleting"
-              @click="deleteMinistry"
-            />
-          </div>
-        </div>
-      </template>
-    </UModal>
+    <ConfirmationDialog
+      v-model="deleteDialogOpen"
+      type="delete"
+      title="Delete ministry?"
+      :subtitle="`This will permanently remove ${ministryToDelete?.title}.`"
+      @confirm="deleteMinistry"
+    />
   </CSection>
 </template>

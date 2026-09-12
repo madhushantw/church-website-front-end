@@ -41,7 +41,7 @@ export const EventsService = {
   },
 
   async update(id: string, data: Partial<CreateEvent>): Promise<CResponse<EventItem>> {
-    const response = await HTTP.put<CResponse<EventItem>>(`/events/${id}`, data)
+    const response = await HTTP.patch<CResponse<EventItem>>(`/events/${id}`, data)
     return response.data
   },
 

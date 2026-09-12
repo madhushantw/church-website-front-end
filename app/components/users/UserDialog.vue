@@ -99,7 +99,6 @@ const saveUser = async () => {
             @click="close"
           />
         </div>
-
         <div class="space-y-4">
           <CInput
             v-model="form.name"
@@ -125,9 +124,7 @@ const saveUser = async () => {
             class="w-full"
           />
         </div>
-
         <p v-if="error" class="mt-4 text-sm text-red-600">{{ error }}</p>
-
         <div class="mt-6 flex justify-end gap-3">
           <UButton
             type="button"

@@ -5,4 +5,15 @@ import CStat from "./CStat.vue";
 import CBiblePassageCard from "./CBiblePassageCard.vue";
 import CInput from "./CInput.vue";
 import CPageHero from "./CPageHero.vue";
-export { CButton, CSection, CSectionHeading, CStat, CBiblePassageCard, CInput, CPageHero }
+import ConfirmationDialog from "./ConfirmationDialog.vue";
+
+export {
+  CButton,
+  CSection,
+  CSectionHeading,
+  CStat,
+  CBiblePassageCard,
+  CInput,
+  CPageHero,
+  ConfirmationDialog
+};
