@@ -20,8 +20,7 @@ const signIn = async () => {
       password: password.value,
     });
 
-    localStorage.setItem("accessToken", response.data.accessToken);
-    userStore.user = response.data.user;
+    userStore.setSession(response.data.accessToken, response.data.user);
     open.value = false;
     password.value = "";
   } catch {

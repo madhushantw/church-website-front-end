@@ -3,9 +3,7 @@ import { useUserStore } from "~/stores/user.store";
 
 const userStore = useUserStore();
 
-onMounted(() => {
-  userStore.restoreSession();
-});
+await userStore.restoreSession();
 </script>
 
 <template>

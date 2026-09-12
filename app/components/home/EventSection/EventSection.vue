@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { useUserStore } from "~/stores/user.store";
 import { CSection, CSectionHeading } from "~/components/common";
 import EventCard from "./EventCard.vue";
@@ -13,27 +12,17 @@ const props = defineProps<{
 
 const userStore = useUserStore();
 
-const events = ref<EventItem[]>([]);
-const loading = ref(true);
-const error = ref<string | null>(null);
+const { items: events, loading, error } = useApiList<EventItem>(
+  "events",
+  EventsService.getAll,
+  "Failed to load events",
+);
 const isEventDialogOpen = ref(false);
 
 const addEvent = (event: EventItem) => {
   events.value = [event, ...events.value];
 };
 
-onMounted(async () => {
-  try {
-    loading.value = true;
-    const response = await EventsService.getAll();
-    events.value = response.data;
-  } catch (err) {
-    console.error('Failed to fetch events:', err);
-    error.value = 'Failed to load events';
-  } finally {
-    loading.value = false;
-  }
-});
 </script>
 
 <template>

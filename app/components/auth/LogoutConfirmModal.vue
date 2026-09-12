@@ -5,8 +5,7 @@ const open = defineModel<boolean>("open", { default: false });
 const userStore = useUserStore();
 
 const logout = () => {
-  localStorage.removeItem("accessToken");
-  userStore.user = null;
+  userStore.signOut();
   open.value = false;
 };
 </script>

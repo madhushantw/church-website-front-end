@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 import { useUserStore } from "~/stores/user.store";
 import { UserRole } from "~/services/users.service";
 import { CSection, CSectionHeading } from "../../common";
@@ -25,28 +24,31 @@ const props = defineProps<{
 
 const userStore = useUserStore();
 
-const ministries = ref<Ministry[]>([]);
-const loading = ref(true);
-const error = ref<string | null>(null);
+const { items: ministryItems, loading, error } = useApiList<MinistryItem>(
+  "ministries",
+  MinistriesService.getAll,
+  "Failed to load ministries",
+);
 const isMinistryDialogOpen = ref(false);
+
+const ministries = computed<Ministry[]>(() =>
+  ministryItems.value.map((ministry) => ({
+    id: ministry.id,
+    title: ministry.name,
+    subtitle:
+      ministry.description ||
+      "Join us as we grow together in faith and service.",
+    icon: ministryIcons[ministry.type],
+    iconColor: ministryColors[ministry.type],
+  })),
+);
 
 const canCreateMinistry = computed(
   () => props.allowCreate && userStore.user?.role === UserRole.ROOT,
 );
 
 const addMinistry = (ministry: MinistryItem) => {
-  ministries.value = [
-    {
-      id: ministry.id,
-      title: ministry.name,
-      subtitle:
-        ministry.description ||
-        "Join us as we grow together in faith and service.",
-      icon: ministryIcons[ministry.type],
-      iconColor: ministryColors[ministry.type],
-    },
-    ...ministries.value,
-  ];
+  ministryItems.value = [ministry, ...ministryItems.value];
 };
 
 const ministryIcons: Record<MinistryItem["type"], string> = {
@@ -73,25 +75,6 @@ const ministryColors: Record<MinistryItem["type"], string> = {
   media: "primary",
 };
 
-onMounted(async () => {
-  try {
-    const response = await MinistriesService.getAll();
-    ministries.value = response.data.map((ministry) => ({
-      id: ministry.id,
-      title: ministry.name,
-      subtitle:
-        ministry.description ||
-        "Join us as we grow together in faith and service.",
-      icon: ministryIcons[ministry.type],
-      iconColor: ministryColors[ministry.type],
-    }));
-  } catch (err) {
-    console.error("Failed to fetch ministries:", err);
-    error.value = "Failed to load ministries";
-  } finally {
-    loading.value = false;
-  }
-});
 </script>
 
 <template>

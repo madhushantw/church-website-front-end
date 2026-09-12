@@ -1,27 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
 import { CSection, CSectionHeading } from "../../common";
 import SermonCard from "./components/SermonCard.vue";
 import { SermonsService, type SermonItem } from "~/services/sermons.service";
 
 defineProps<{ hideNavigationButton?: boolean }>();
 
-const sermons = ref<SermonItem[]>([]);
-const loading = ref(true);
-const error = ref<string | null>(null);
-
-onMounted(async () => {
-  try {
-    loading.value = true;
-    const { data } = await SermonsService.getAll();
-    sermons.value = data;
-  } catch (err) {
-    console.error("Failed to fetch sermons:", err);
-    error.value = "Failed to load sermons";
-  } finally {
-    loading.value = false;
-  }
-});
+const { items: sermons, loading, error } = useApiList<SermonItem>(
+  "sermons",
+  SermonsService.getAll,
+  "Failed to load sermons",
+);
 </script>
 
 <template>
