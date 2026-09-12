@@ -3,9 +3,14 @@ import { SermonPdfType, type SermonItem } from '~/services/sermons.service'
 
 interface Props {
   sermon: SermonItem
+  canEdit?: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+const emit = defineEmits<{
+  edit: [sermon: SermonItem]
+  delete: [sermon: SermonItem]
+}>()
 
 const formatDate = (dateStr: string) =>
   new Intl.DateTimeFormat('en-US', {
@@ -24,30 +29,43 @@ const pdfLabel = (type: SermonPdfType) => {
   <article
     class="group overflow-hidden rounded-lg bg-card shadow-sm transition-shadow hover:shadow-md bg-white"
   >
-    <div class="flex h-52 items-center justify-center bg-muted">
-      <UIcon name="lucide:file-text" size="64" class="text-primary/60" />
-    </div>
     <div class="p-6">
       <div class="mb-3 flex items-center justify-between gap-4">
         <span class="whitespace-nowrap text-[12px] text-muted-foreground">
           {{ formatDate(sermon.sermonDate) }}
         </span>
+        <div v-if="props.canEdit" class="flex items-center gap-1">
+          <UButton
+            icon="i-lucide-pencil"
+            color="neutral"
+            variant="ghost"
+            size="xs"
+            aria-label="Edit sermon"
+            class="rounded-full"
+            @click="emit('edit', sermon)"
+          />
+          <UButton
+            icon="i-lucide-trash-2"
+            color="error"
+            variant="ghost"
+            size="xs"
+            aria-label="Delete sermon"
+            class="rounded-full"
+            @click="emit('delete', sermon)"
+          />
+        </div>
       </div>
-
       <h3
         class="mb-2 font-['Playfair_Display'] text-[18px] font-medium leading-snug text-foreground transition-colors group-hover:text-primary"
       >
         {{ sermon.title }}
       </h3>
-
       <p class="text-[13px] text-muted-foreground">
         {{ sermon.preacher }}
       </p>
-
       <p v-if="sermon.description" class="mt-3 line-clamp-3 text-[13px] leading-relaxed text-muted-foreground">
         {{ sermon.description }}
       </p>
-
       <div v-if="sermon.pdfFiles.length" class="mt-5 flex flex-wrap gap-2">
         <a
           v-for="pdf in sermon.pdfFiles"

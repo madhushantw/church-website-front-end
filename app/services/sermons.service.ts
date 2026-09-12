@@ -50,7 +50,25 @@ export const SermonsService = {
   },
 
   async update(id: string, data: UpdateSermon): Promise<CResponse<SermonItem>> {
-    const response = await HTTP.put<CResponse<SermonItem>>(`/sermons/${id}`, data)
+    const response = await HTTP.patch<CResponse<SermonItem>>(`/sermons/${id}`, data)
+    return response.data
+  },
+
+  async uploadPdf(
+    id: string,
+    file: File,
+    type: SermonPdfType,
+  ): Promise<CResponse<SermonItem>> {
+    const formData = new FormData()
+
+    formData.append('file', file)
+    formData.append('type', type)
+
+    const response = await HTTP.post<CResponse<SermonItem>>(
+      `/sermons/${id}/pdf`,
+      formData,
+    )
+
     return response.data
   },
 

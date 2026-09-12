@@ -6,6 +6,7 @@ interface Props {
   highlighted?: string
   headerClass?: string
   centered?: boolean
+  towRowTitle?: boolean
 }
 
 defineProps<Props>()
@@ -33,7 +34,7 @@ defineProps<Props>()
         :class="headerClass"
       >
         {{ title }}
-
+        <br v-if="towRowTitle">
         <span
           v-if="highlighted"
           class="italic text-primary"

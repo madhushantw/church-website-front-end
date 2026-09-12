@@ -165,12 +165,6 @@ const createMinistry = async () => {
             class="sm:col-span-2"
           />
           <CInput
-            v-model="form.image"
-            label="Image URL"
-            placeholder="https://example.com/ministry.jpg"
-            class="sm:col-span-2"
-          />
-          <CInput
             v-model="form.description"
             label="Description"
             placeholder="Describe this ministry"

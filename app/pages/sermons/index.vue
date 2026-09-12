@@ -6,6 +6,6 @@ import SermonsHero from "./SermonsHero.vue";
 <template>
   <div>
     <SermonsHero />
-    <SermonsSection hide-navigation-button />
+    <SermonsSection hide-navigation-button allow-create />
   </div>
 </template>

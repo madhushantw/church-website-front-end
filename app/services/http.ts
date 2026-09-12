@@ -9,6 +9,10 @@ export const HTTP = axios.create({
 HTTP.interceptors.request.use(config => {
   const runtimeConfig = useRuntimeConfig()
 
+  if (typeof FormData !== 'undefined' && config.data instanceof FormData) {
+    config.headers.delete('Content-Type')
+  }
+
   if (runtimeConfig.public.apiBaseUrl) {
     config.baseURL = runtimeConfig.public.apiBaseUrl
   }
