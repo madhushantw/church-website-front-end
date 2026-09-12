@@ -15,6 +15,7 @@ interface SermonForm {
   preacher: string
   sermonDate: string
   description: string
+  reflection: string
 }
 
 interface PdfSlot {
@@ -58,6 +59,7 @@ const initialForm = (): SermonForm => ({
   preacher: '',
   sermonDate: '',
   description: '',
+  reflection: ''
 })
 
 const form = ref<SermonForm>(initialForm())
@@ -110,6 +112,7 @@ const loadSermon = (sermon: SermonItem) => {
     preacher: sermon.preacher,
     sermonDate: sermon.sermonDate.slice(0, 10),
     description: sermon.description || '',
+    reflection: sermon.reflection || ''
   }
   selectedFiles.value = {}
   previewUrls.value = {}
@@ -177,6 +180,7 @@ const saveSermon = async () => {
         preacher: form.value.preacher.trim(),
         sermonDate: form.value.sermonDate,
         description: form.value.description.trim() || null,
+        reflection: form.value.reflection.trim() || null,
       })
       savedSermon = response.data
       createdSermonId.value = response.data.id
@@ -186,6 +190,7 @@ const saveSermon = async () => {
         preacher: form.value.preacher.trim(),
         sermonDate: form.value.sermonDate,
         description: form.value.description.trim() || null,
+        reflection: form.value.reflection.trim() || null,
       })
       savedSermon = response.data
       createdSermonId.value = response.data.id
@@ -288,8 +293,15 @@ onUnmounted(() => {
             />
             <CInput
               v-model="form.description"
-              label="Description"
-              placeholder="A short introduction to this message"
+              label="Gospel"
+              placeholder="Gospel"
+              textarea
+              class="sm:col-span-2"
+            />
+            <CInput
+              v-model="form.reflection"
+              label="Priest's Reflection"
+              placeholder="Priest's Reflection"
               textarea
               class="sm:col-span-2"
             />

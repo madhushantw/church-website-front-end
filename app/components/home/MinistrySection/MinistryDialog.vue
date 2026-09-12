@@ -15,8 +15,11 @@ interface MinistryForm {
 }
 
 const open = defineModel<boolean>("open", { default: false });
+const props = defineProps<{
+  ministry?: MinistryItem | null;
+}>();
 const emit = defineEmits<{
-  created: [ministry: MinistryItem];
+  saved: [ministry: MinistryItem];
 }>();
 
 const initialForm = (): MinistryForm => ({
@@ -30,6 +33,7 @@ const initialForm = (): MinistryForm => ({
 const form = ref<MinistryForm>(initialForm());
 const isLoading = ref(false);
 const error = ref("");
+const isEditing = computed(() => !!props.ministry);
 
 const ministryTypes = Object.values(MinistryType);
 const ministryIcons: Record<MinistryType, string> = {
@@ -63,25 +67,51 @@ const resetForm = () => {
   error.value = "";
 };
 
+const loadMinistry = (ministry: MinistryItem) => {
+  form.value = {
+    name: ministry.name,
+    type: ministry.type,
+    description: ministry.description || "",
+    image: ministry.image || "",
+    leader: ministry.leader || "",
+  };
+  error.value = "";
+};
+
 const close = () => {
   if (!isLoading.value) open.value = false;
 };
 
-const createMinistry = async () => {
+const saveMinistry = async () => {
   error.value = "";
   isLoading.value = true;
 
   try {
-    const response = await MinistriesService.create(form.value);
-    emit("created", response.data);
+    const response = isEditing.value
+      ? await MinistriesService.update(props.ministry!.id, form.value)
+      : await MinistriesService.create(form.value);
+    emit("saved", response.data);
     open.value = false;
     resetForm();
   } catch {
-    error.value = "Unable to create the ministry. Please try again.";
+    error.value = isEditing.value
+      ? "Unable to update the ministry. Please try again."
+      : "Unable to create the ministry. Please try again.";
   } finally {
     isLoading.value = false;
   }
 };
+
+watch(open, (isOpen) => {
+  if (isOpen) {
+    if (props.ministry) loadMinistry(props.ministry);
+    else resetForm();
+  }
+});
+
+watch(() => props.ministry, (ministry) => {
+  if (open.value && ministry) loadMinistry(ministry);
+});
 </script>
 
 <template>
@@ -94,7 +124,7 @@ const createMinistry = async () => {
     }"
   >
     <template #content>
-      <form class="p-6 sm:p-8" @submit.prevent="createMinistry">
+      <form class="p-6 sm:p-8" @submit.prevent="saveMinistry">
         <div class="mb-7 flex items-start justify-between gap-4">
           <div>
             <p
@@ -103,10 +133,12 @@ const createMinistry = async () => {
               Church community
             </p>
             <h2 class="font-['Playfair_Display'] text-3xl text-foreground">
-              Add a ministry
+              {{ isEditing ? "Edit ministry" : "Add a ministry" }}
             </h2>
             <p class="mt-2 text-sm text-muted-foreground">
-              Create a ministry for the church directory.
+              {{ isEditing
+                ? "Update this ministry in the church directory."
+                : "Create a ministry for the church directory." }}
             </p>
           </div>
           <UButton
@@ -189,8 +221,8 @@ const createMinistry = async () => {
           />
           <UButton
             type="submit"
-            label="Create ministry"
-            icon="i-lucide-plus"
+            :label="isEditing ? 'Save changes' : 'Create ministry'"
+            :icon="isEditing ? 'i-lucide-save' : 'i-lucide-plus'"
             color="primary"
             class="rounded-xl"
             :loading="isLoading"

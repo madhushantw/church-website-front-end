@@ -89,13 +89,10 @@ const handleSermonSaved = async () => {
         </button>
       </div>
     </div>
-
     <div v-if="loading" class="text-center py-8">Loading sermons...</div>
-
     <div v-else-if="error" class="text-center py-8 text-red-500">
       {{ error }}
     </div>
-
     <div
       v-else-if="sermons.length > 0"
       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"

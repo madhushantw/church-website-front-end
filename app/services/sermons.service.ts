@@ -16,6 +16,7 @@ export interface SermonItem {
   id: string
   title: string
   description: string | null
+  reflection: string | null
   preacher: string
   sermonDate: string
   pdfFiles: SermonPdfFile[]
@@ -26,9 +27,11 @@ export interface SermonItem {
 export interface CreateSermon {
   title: string
   description?: string | null
+  reflection?: string | null
   preacher: string
   sermonDate: string
   pdfFiles?: SermonPdfFile[]
+
 }
 
 export type UpdateSermon = Partial<CreateSermon>
@@ -41,6 +44,11 @@ export const SermonsService = {
 
   async getById(id: string): Promise<CResponse<SermonItem>> {
     const response = await HTTP.get<CResponse<SermonItem>>(`/sermons/${id}`)
+    return response.data
+  },
+
+  async getGospel(): Promise<CResponse<SermonItem>> {
+    const response = await HTTP.get<CResponse<SermonItem>>('/sermons/gospel')
     return response.data
   },
 

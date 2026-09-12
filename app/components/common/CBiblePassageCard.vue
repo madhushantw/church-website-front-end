@@ -3,7 +3,6 @@ defineProps<Props>();
 
 const isExpanded = ref(false);
 
-const previewLength = 300;
 interface Props {
   book: string;
   reference: string;
@@ -56,7 +55,6 @@ interface Props {
       </div>
 
       <button
-        v-if="passage.length > previewLength"
         type="button"
         class="mt-5 flex items-center gap-1 text-sm font-[13px] text-primary hover:text-primary/60"
         @click="isExpanded = !isExpanded"

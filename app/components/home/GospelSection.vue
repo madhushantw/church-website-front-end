@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { SermonsService, type SermonItem } from "~/services/sermons.service";
 import { CBiblePassageCard, CSection, CSectionHeading } from "../common";
 
-const passage =
-  'As the time approached for him to be taken up to heaven, Jesus resolutely set out for Jerusalem. And he sent messengers on ahead, who went into a Samaritan village to get things ready for him; but the people there did not welcome him, because he was heading for Jerusalem. \n\nWhen the disciples James and John saw this, they asked, "Lord, do you want us to call fire down from heaven to destroy them?" But Jesus turned and rebuked them. Then he and his disciples went to another village. \n\nAs they were walking along the road, a man said to him, "I will follow you wherever you go." Jesus replied, "Foxes have dens and birds have nests, but the Son of Man has no place to lay his head." He said to another man, "Follow me." But he replied, "Lord, first let me go and bury my father." Jesus said to him, "Let the dead bury their own dead, but you go and proclaim the kingdom of God."';
+const gospel = ref<SermonItem | null>(null);
+
+onMounted(async () => {
+  const response = await SermonsService.getGospel();
+  gospel.value = response.data;
+  console.log(gospel);
+});
 </script>
 
 <template>
@@ -26,23 +32,29 @@ const passage =
             <div class="flex gap-2">
               <UIcon name="uil:calendar" class="mt-1 text-primary" />
               <div class="flex flex-col gap-2 text-primary">
-                <div class="text-[13px] font-semibold">
-                  Sunday, June 29, 2025
-                </div>
+                {{
+                  gospel?.sermonDate
+                    ? new Date(gospel.sermonDate).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })
+                    : ""
+                }}
                 <div class="text-[12px] uppercase text-muted-foreground">
-                  Ordinary Time — Year C
+                  {{ gospel?.title }}
                 </div>
               </div>
             </div>
             <div class="h-px w-full bg-primary/15" />
             <div class="flex flex-col gap-2">
               <div class="text-[13px] font-medium text-foreground">
-                Luke 9:51–62
+                Priest's Reflection
               </div>
               <div
                 class="font-['Playfair_Display'] text-[17px] font-semibold text-primary"
               >
-                The Cost of Following Jesus
+                {{ gospel?.preacher }}
               </div>
             </div>
           </div>
@@ -50,7 +62,7 @@ const passage =
             <div
               class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center"
             >
-              <UIcon name="mynaui:book" :size="24" class="text-primary"  />
+              <UIcon name="mynaui:book" :size="24" class="text-primary" />
             </div>
             <div>
               <div class="text-foreground font-medium text-[14px]">
@@ -65,11 +77,12 @@ const passage =
       </div>
       <div class="lg:col-span-3">
         <CBiblePassageCard
+          v-if="gospel"
           book="Saint Luke"
-          reference="Luke 9:51–62"
-          :passage
-          reflection="Today's Gospel calls us to examine the cost and completeness of discipleship. Jesus does not promise comfort, but purpose. Following Him means setting our face resolutely — as He did toward Jerusalem — even when the path is uncertain. Let us reflect this week on what it means to say 'yes' without reservation."
-          author="Fr. James Callahan"
+          :reference="gospel.title"
+          :passage="gospel.description || ''"
+          :reflection="gospel.reflection || ''"
+          :author="gospel.preacher"
         />
       </div>
     </div>

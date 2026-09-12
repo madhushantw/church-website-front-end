@@ -51,7 +51,7 @@ export const MinistriesService = {
   },
 
   async update(id: string, data: UpdateMinistry): Promise<CResponse<MinistryItem>> {
-    const response = await HTTP.put<CResponse<MinistryItem>>(`/ministries/${id}`, data)
+    const response = await HTTP.patch<CResponse<MinistryItem>>(`/ministries/${id}`, data)
     return response.data
   },
 
