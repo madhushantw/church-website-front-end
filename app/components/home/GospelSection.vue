@@ -7,7 +7,6 @@ const gospel = ref<SermonItem | null>(null);
 onMounted(async () => {
   const response = await SermonsService.getGospel();
   gospel.value = response.data;
-  console.log(gospel);
 });
 </script>
 
@@ -50,21 +49,19 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-          <div class="flex gap-4 items-center">
-            <div
-              class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center"
-            >
-              <UIcon name="mynaui:book" :size="24" class="text-primary" />
-            </div>
-            <div>
-              <div class="text-foreground font-medium text-[14px]">
-                Lectionary Year C
-              </div>
-              <div class="text-muted-foreground text-[12px]">
-                Updated every Sunday
-              </div>
-            </div>
-          </div>
+        </div>
+        <div v-if="gospel" class="mt-5 flex flex-wrap gap-2">
+          <a
+            v-for="pdf in gospel!.pdfFiles"
+            :key="`${pdf.type}-${pdf.url}`"
+            :href="pdf.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 flex-1 rounded-md border border-primary/30 px-3 py-2 text-[12px] font-medium text-primary transition-colors hover:bg-primary hover:text-white"
+          >
+            <UIcon name="lucide:file-down" size="14" />
+            {{ pdf.type }}
+          </a>
         </div>
       </div>
       <div class="lg:col-span-3">

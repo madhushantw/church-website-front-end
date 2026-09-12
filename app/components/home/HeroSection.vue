@@ -104,7 +104,7 @@ onMounted(getHeroData)
           variant="solid"
           size="xs"
           aria-label="Edit first title line"
-          class="absolute bottom-0 right-0 rounded-full opacity-10 transition-opacity hover:opacity-80"
+          class="absolute top-0 right-0 rounded-full opacity-10 transition-opacity hover:opacity-80"
           @click="editField('title1')"
         />
       </h1>

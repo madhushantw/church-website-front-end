@@ -288,7 +288,7 @@ onUnmounted(() => {
             <CInput
               v-model="form.sermonDate"
               label="Sermon date"
-              type="date"
+              type="week"
               required
             />
             <CInput
