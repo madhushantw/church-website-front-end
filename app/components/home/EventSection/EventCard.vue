@@ -6,25 +6,6 @@ interface Props {
 }
 
 defineProps<Props>();
-
-const formatMonth = (dateStr: string) =>
-  new Intl.DateTimeFormat("en-US", {
-    month: "short",
-  })
-    .format(new Date(dateStr))
-    .toUpperCase();
-
-const formatDay = (dateStr: string) =>
-  new Intl.DateTimeFormat("en-US", {
-    day: "numeric",
-  }).format(new Date(dateStr));
-
-const formatTime = (dateStr: string) =>
-  new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  }).format(new Date(dateStr));
 </script>
 
 <template>
@@ -35,12 +16,12 @@ const formatTime = (dateStr: string) =>
       <div
         class="rounded-t-md bg-primary py-1.5 text-[11px] font-medium uppercase tracking-widest text-white"
       >
-        {{ formatMonth(event.startDate) }}
+        {{ formatDate(event.startDate, "MMM") }}
       </div>
       <div
         class="rounded-b-md bg-secondary py-2 font-['Playfair_Display'] text-2xl font-bold text-foreground"
       >
-        {{ formatDay(event.startDate) }}
+        {{ formatDate(event.startDate, "D") }}
       </div>
     </div>
     <div class="min-w-0 flex-1">
@@ -57,7 +38,7 @@ const formatTime = (dateStr: string) =>
           class="flex items-center gap-1.5 text-[12px] text-muted-foreground"
         >
           <UIcon name="lucide:clock" size="14" />
-          <span>{{ formatTime(event.startDate) }}</span>
+          <span>{{ formatDate(event.startDate, "h:mm A") }}</span>
         </div>
         <div
           v-if="event.location"

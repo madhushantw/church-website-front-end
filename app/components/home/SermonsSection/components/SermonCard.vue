@@ -12,13 +12,6 @@ const emit = defineEmits<{
   delete: [sermon: SermonItem]
 }>()
 
-const formatDate = (dateStr: string) =>
-  new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }).format(new Date(dateStr))
-
 const pdfLabel = (type: SermonPdfType) => {
   if (type === SermonPdfType.SERMON) return 'Sermon'
   return type
@@ -32,7 +25,7 @@ const pdfLabel = (type: SermonPdfType) => {
     <div class="p-6">
       <div class="mb-3 flex items-center justify-between gap-4">
         <span class="whitespace-nowrap text-[12px] text-muted-foreground">
-          {{ formatDate(sermon.sermonDate) }}
+          {{ formatDate(sermon.sermonDate, "MMM D, YYYY") }}
         </span>
         <div v-if="props.canEdit" class="flex items-center gap-1">
           <UButton

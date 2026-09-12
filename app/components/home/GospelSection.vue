@@ -31,16 +31,8 @@ onMounted(async () => {
           >
             <div class="flex gap-2">
               <UIcon name="uil:calendar" class="mt-1 text-primary" />
-              <div class="flex flex-col gap-2 text-primary">
-                {{
-                  gospel?.sermonDate
-                    ? new Date(gospel.sermonDate).toLocaleDateString("en-GB", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })
-                    : ""
-                }}
+              <div v-if="gospel" class="flex flex-col gap-2 text-primary">
+                {{ formatDate(gospel.sermonDate, "MMM D, YYYY") }}
                 <div class="text-[12px] uppercase text-muted-foreground">
                   {{ gospel?.title }}
                 </div>
