@@ -4,13 +4,12 @@ import { UserRole } from '~/services/users.service'
 import { useUserStore } from '~/stores/user.store'
 import { CButton } from '../common'
 import HeroEditDialog from './HeroEditDialog.vue'
-
 const fallbackHero: Required<Hero> = {
-  welcomeText: 'Welcome Home',
-  title1: 'A Place of Faith,',
-  title2: 'Hope & Community',
+  welcomeText: 'Growing Faith',
+  title1: 'Building Community,',
+  title2: 'Sharing Hope',
   subtitle:
-    'We are a family of believers committed to worship, growth, and serving one another and our community. All are welcome here.',
+    'Welcome to St Lukes Anglican Church Modbury',
   image:
     'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1600&h=900&fit=crop&auto=format',
 }
@@ -47,11 +46,16 @@ onMounted(getHeroData)
     id="home"
     class="relative flex min-h-screen items-center justify-center overflow-hidden"
   >
-    <img
-      :src="hero?.image || fallbackHero.image"
-      alt="Congregation in worship"
-      class="absolute inset-0 w-full h-full object-cover -z-20"
-    >
+    <div class="absolute inset-0 -z-20">
+      <Transition name="hero-image">
+        <img
+          :key="hero.image"
+          :src="hero.image || fallbackHero.image"
+          alt="Congregation in worship"
+          class="absolute inset-0 h-full w-full object-cover"
+        >
+      </Transition>
+    </div>
     <div class="absolute inset-0 bg-linear-to-b from-[#1C2B2A]/75 via-[#1C2B2A]/55 to-[#1C2B2A]/80" />
     <UButton
       v-if="canEdit"
@@ -81,7 +85,7 @@ onMounted(getHeroData)
           @click="editField('welcomeText')"
         />
       </div>
-      <h1 class="relative mb-6 font-['Playfair_Display'] text-6xl leading-tight text-white md:text-7xl lg:text-8xl">
+      <h1 class="relative mb-6 font-['Playfair_Display'] text-5xl leading-tight text-white md:text-6xl lg:text-7xl">
         {{ hero?.title1 || fallbackHero.title1 }}
         <br>
         <span class="relative italic text-accent">
@@ -135,3 +139,20 @@ onMounted(getHeroData)
     />
   </section>
 </template>
+
+<style scoped>
+.hero-image-enter-active,
+.hero-image-leave-active {
+  transition: opacity 0.8s ease-in-out;
+}
+
+.hero-image-enter-from,
+.hero-image-leave-to {
+  opacity: 0;
+}
+
+.hero-image-enter-to,
+.hero-image-leave-from {
+  opacity: 1;
+}
+</style>

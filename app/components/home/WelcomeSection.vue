@@ -49,7 +49,7 @@ import { CButton, CSection, CSectionHeading } from "../common";
         <CSectionHeading
           label="A Message From Our Pastor"
           title="Welcome to"
-          highlighted="Grace Community"
+          highlighted="St Lukes"
           header-class="lg:text-6xl"
         />
         <div class="flex items-center gap-4 mb-6">
@@ -67,7 +67,7 @@ import { CButton, CSection, CSectionHeading } from "../common";
               Fr. James Callahan
             </div>
             <div class="text-muted-foreground text-[13px]">
-              Parish Priest, Grace Community Church
+              Parish Priest, St Lukes Church
             </div>
             <div class="text-primary text-[12px] font-medium mt-0.5">
               Pastor since 2012
@@ -80,7 +80,7 @@ import { CButton, CSection, CSectionHeading } from "../common";
           >
             "Whether you are joining us for the first time or have been part of
             this family for years, know that you are seen, you are loved, and
-            you belong here. Grace Community is not just a church — it is a
+            you belong here. St Lukes is not just a church — it is a
             home."
           </p>
         </blockquote>

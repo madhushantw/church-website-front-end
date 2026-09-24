@@ -33,6 +33,7 @@ interface Props {
   title?: string
   prependIcon?: string
   appendIcon?: string
+  loading?: boolean
 }
 </script>
 
@@ -42,6 +43,7 @@ interface Props {
     :style="styles"
     @click="emit('onClick')"
   >
+    <UIcon v-if="loading" name="i-lucide-loader-circle" class="size-6 animate-spin text-white" :class="outlined ? 'text-primary' : 'text-white'" />
     <UIcon
       v-if="prependIcon"
       :name="prependIcon"

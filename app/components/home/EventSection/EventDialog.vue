@@ -155,6 +155,7 @@ watch(() => props.event, (item) => {
             v-model="form.location"
             label="Location"
             placeholder="Main hall"
+            class="sm:col-span-2"
           />
           <CInput
             v-model="form.description"

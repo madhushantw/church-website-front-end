@@ -86,7 +86,7 @@ const saveUser = async () => {
               {{ isEditing ? 'Edit user' : 'Create a user' }}
             </h2>
             <p class="mt-2 text-sm text-muted-foreground">
-              {{ isEditing ? 'Update this account details.' : 'Add a new account to Grace Community.' }}
+              {{ isEditing ? 'Update this account details.' : 'Add a new account to St Lukes.' }}
             </p>
           </div>
           <UButton

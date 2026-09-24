@@ -5,6 +5,7 @@ import SignInModal from "~/components/auth/SignInModal.vue";
 import UsersSidebar from "~/components/users/UsersSidebar.vue";
 import { UserRole } from "~/services/users.service";
 import { useUserStore } from "~/stores/user.store";
+import appIcon from './../../public/favIcon.png'
 
 const route = useRoute();
 
@@ -44,7 +45,7 @@ const items = computed<NavigationMenuItem[]>(() => {
       href: isHome ? "#gospel" : "/#gospel",
     },
     {
-      label: "Sermons",
+      label: "Readings",
       href: isHome ? "#sermons" : "/sermons",
     },
     {
@@ -99,14 +100,14 @@ onUnmounted(() => {
         :class="scrolled || menuOpen ? 'text-primary' : 'text-white'"
       >
         <div
-          class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-3xl text-white"
+          class="flex h-15 w-15 items-center justify-center rounded-full bg-neutral"
         >
-          †
+          <img class="h-12 w-12" :src="appIcon" alt="">
         </div>
 
         <div class="flex flex-col">
           <div class="font-['Playfair_Display'] text-lg leading-5 font-medium">
-            Grace Community
+            St Lukes
           </div>
 
           <div class="text-[10px] font-thin opacity-60 uppercase">Church</div>
@@ -140,7 +141,7 @@ onUnmounted(() => {
       variant="link"
       :ui="{
         link: scrolled
-          ? 'text-primary hover:text-primary'
+          ? 'text-primary'
           : 'text-white/60 hover:text-white',
       }"
     />

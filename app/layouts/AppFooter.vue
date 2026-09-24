@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import appIcon from '../../public/favIcon.png'
 const navigation = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
@@ -23,13 +24,13 @@ const socials = [
         <div class="lg:col-span-2">
           <div class="mb-5 flex items-center gap-3">
             <div
-              class="flex h-11 w-11 items-center justify-center rounded-full bg-secondary text-primary"
+              class="flex h-15 w-15 items-center justify-center rounded-full bg-neutral"
             >
-              <UIcon name="lucide:church" size="22" />
+              <img class="h-12 w-12" :src="appIcon" alt="" >
             </div>
 
             <div>
-              <h2 class="font-['Playfair_Display'] text-xl">Grace Community</h2>
+              <h2 class="font-['Playfair_Display'] text-xl">St lukes</h2>
               <p class="text-xs tracking-widest text-white/50 uppercase">
                 Church
               </p>
@@ -41,7 +42,6 @@ const socials = [
             serve our community, and live out the Gospel.
           </p>
 
-          <!-- Socials -->
           <div class="mt-6 flex gap-3">
             <button
               v-for="social in socials"
@@ -101,7 +101,7 @@ const socials = [
         class="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-5 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between lg:px-8"
       >
         <p>
-          © {{ new Date().getFullYear() }} Grace Community Church. All rights
+          © {{ new Date().getFullYear() }} St Lukes Church. All rights
           reserved.
         </p>
 

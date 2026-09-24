@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import appIcon from '../../../public/favIcon.png'
 defineProps<Props>();
 
 const isExpanded = ref(false);
@@ -31,9 +32,9 @@ interface Props {
         </div>
 
         <div
-          class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-3xl text-white"
+          class="flex h-15 w-15 items-center justify-center rounded-full bg-neutral"
         >
-          †
+          <img class="h-12 w-12" :src="appIcon" alt="" >
         </div>
       </div>
     </div>

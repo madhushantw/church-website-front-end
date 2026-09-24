@@ -19,7 +19,7 @@ interface Props {
     </div>
     <div class="relative mx-auto max-w-3xl px-6 text-center">
       <p
-        class="mb-6 font-['Playfair_Display'] text-3xl italic leading-relaxed text-white md:text-4xl lg:text-5xl"
+        class="mb-6 font-['Playfair_Display'] text-2xl italic leading-relaxed text-white md:text-3xl lg:text-4xl"
       >
         “{{ text }}”
       </p>
