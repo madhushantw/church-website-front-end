@@ -1,65 +1,50 @@
 <script setup lang="ts">
 import { CButton, CSection, CSectionHeading } from "../common";
+import {
+  GalleryImageType,
+  GalleryService,
+  type GalleryItem,
+} from "~/services/gallery.service";
+import { useUserStore } from "~/stores/user.store";
+import { UserRole } from "~/services/users.service.ts";
+import GalleryUploadDialog from "./GalleryUploadDialog.vue";
 
-defineProps<{ hideNavigationButton?: boolean }>()
+const props = defineProps<{
+  hideNavigationButton?: boolean;
+  allowCreate?: boolean
+}>();
 
-interface GalleryItem {
-  image: string;
-  title: string;
-  category: "Worship" | "Community" | "Events";
-}
+const userStore = useUserStore();
 
-const filters = ["All", "Worship", "Community", "Events"] as const;
+const filters = [
+  "All",
+  GalleryImageType.WORSHIP,
+  GalleryImageType.COMMUNITY,
+  GalleryImageType.EVENTS,
+] as const;
 
 type Filter = (typeof filters)[number];
 
 const activeFilter = ref<Filter>("All");
 
-const gallery: GalleryItem[] = [
-  {
-    image:
-      "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=900&h=1100&fit=crop&auto=format",
-    title: "Sunday Worship",
-    category: "Worship",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1507692049790-de58290a4334?w=900&h=700&fit=crop&auto=format",
-    title: "Church Community",
-    category: "Community",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1519491050282-cf00c82424b4?w=900&h=900&fit=crop&auto=format",
-    title: "Prayer & Fellowship",
-    category: "Worship",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=900&h=1100&fit=crop&auto=format",
-    title: "Bible Study",
-    category: "Community",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=900&h=700&fit=crop&auto=format",
-    title: "Community Outreach",
-    category: "Community",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=900&h=900&fit=crop&auto=format",
-    title: "Church Celebration",
-    category: "Events",
-  },
-];
+const {
+  items: gallery,
+  loading,
+  error,
+} = useApiList<GalleryItem>(
+  "gallery",
+  GalleryService.getAll,
+  "Failed to load gallery",
+);
+
+const isGalleryDialogOpen = ref(false);
 
 const filteredGallery = computed(() => {
   if (activeFilter.value === "All") {
-    return gallery;
+    return gallery.value;
   }
 
-  return gallery.filter((item) => item.category === activeFilter.value);
+  return gallery.value.filter((item) => item.imageType === activeFilter.value);
 });
 
 const isGalleryOpen = ref(false);
@@ -68,6 +53,10 @@ const selectedImageIndex = ref(0);
 const selectedImage = computed(() => {
   return filteredGallery.value[selectedImageIndex.value];
 });
+
+const canCreate = computed(
+  () => props.allowCreate && userStore.user?.role === UserRole.ROOT,
+);
 
 const openImage = (index: number) => {
   selectedImageIndex.value = index;
@@ -115,6 +104,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+  <GalleryUploadDialog v-model="isGalleryDialogOpen" />
   <CSection id="gallery">
     <CSectionHeading
       label="Our Community"
@@ -128,7 +118,7 @@ onBeforeUnmount(() => {
         v-for="filter in filters"
         :key="filter"
         type="button"
-        class="rounded-full px-5 py-2 text-[12px] font-medium transition-all"
+        class="rounded-full px-5 py-2 text-[12px] font-medium capitalize transition-all"
         :class="
           activeFilter === filter
             ? 'bg-primary text-white'
@@ -140,19 +130,35 @@ onBeforeUnmount(() => {
       </button>
     </div>
 
+    <div v-if="canCreate" class="mb-6 flex justify-center">
+      <button
+        class="flex items-center gap-2 whitespace-nowrap text-[14px] font-medium text-primary transition-colors hover:text-primary/70"
+        @click="isGalleryDialogOpen = true"
+      >
+        <UIcon name="lucide:plus" size="16" />
+        Add Images
+      </button>
+    </div>
+    <div v-if="loading" class="py-8 text-center">Loading gallery...</div>
+
+    <div v-else-if="error" class="py-8 text-center text-red-500">
+      {{ error }}
+    </div>
+
     <div
+      v-else-if="filteredGallery.length"
       class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
     >
       <div
         v-for="(item, index) in filteredGallery"
-        :key="item.image"
+        :key="item.id"
         class="group relative cursor-pointer overflow-hidden rounded-lg"
         :class="[index === 0 || index === 3 ? 'row-span-2' : '']"
         @click="openImage(index)"
       >
         <img
-          :src="item.image"
-          :alt="item.title"
+          :src="item.imageUrl"
+          :alt="item.imageType"
           class="h-full min-h-56 w-full object-cover transition-transform duration-700 group-hover:scale-105"
         >
 
@@ -166,15 +172,13 @@ onBeforeUnmount(() => {
           <span
             class="text-[10px] font-medium uppercase tracking-widest text-secondary"
           >
-            {{ item.category }}
+            {{ item.imageType }}
           </span>
-
-          <h3 class="mt-1 font-['Playfair_Display'] text-lg text-white">
-            {{ item.title }}
-          </h3>
         </div>
       </div>
     </div>
+
+    <div v-else class="py-8 text-center">No gallery images found</div>
 
     <div v-if="!hideNavigationButton" class="mt-10 flex justify-center">
       <CButton
@@ -199,8 +203,8 @@ onBeforeUnmount(() => {
       <div class="relative flex h-screen w-screen items-center justify-center">
         <img
           v-if="selectedImage"
-          :src="selectedImage.image"
-          :alt="selectedImage.title"
+          :src="selectedImage.imageUrl"
+          :alt="selectedImage.imageType"
           class="max-h-[90vh] max-w-[90vw] object-contain"
         >
 
@@ -235,12 +239,8 @@ onBeforeUnmount(() => {
           <div
             class="text-[11px] font-medium uppercase tracking-[0.2em] text-secondary"
           >
-            {{ selectedImage.category }}
+            {{ selectedImage.imageType }}
           </div>
-
-          <h3 class="mt-1 font-['Playfair_Display'] text-xl">
-            {{ selectedImage.title }}
-          </h3>
 
           <div class="mt-2 text-xs text-white/50">
             {{ selectedImageIndex + 1 }}

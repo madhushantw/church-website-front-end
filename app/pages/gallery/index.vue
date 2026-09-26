@@ -6,6 +6,6 @@ import GalleryHero from "./GalleryHero.vue";
 <template>
   <div>
     <GalleryHero />
-    <GallerySection hide-navigation-button />
+    <GallerySection hide-navigation-button allow-create />
   </div>
 </template>

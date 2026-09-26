@@ -31,35 +31,69 @@ export interface CreateSermon {
   preacher: string
   sermonDate: string
   pdfFiles?: SermonPdfFile[]
-
 }
 
 export type UpdateSermon = Partial<CreateSermon>
 
+const normalizeSermon = (sermon: SermonItem): SermonItem => {
+  const config = useRuntimeConfig()
+
+  return {
+    ...sermon,
+    pdfFiles: sermon.pdfFiles.map(pdf => ({
+      ...pdf,
+      url: `${config.public.apiBaseUrl}${pdf.url}`,
+    })),
+  }
+}
+
 export const SermonsService = {
   async getAll(): Promise<CResponse<SermonItem[]>> {
     const response = await HTTP.get<CResponse<SermonItem[]>>('/sermons')
-    return response.data
+
+    return {
+      ...response.data,
+      data: response.data.data.map(normalizeSermon),
+    }
   },
 
   async getById(id: string): Promise<CResponse<SermonItem>> {
     const response = await HTTP.get<CResponse<SermonItem>>(`/sermons/${id}`)
-    return response.data
+
+    return {
+      ...response.data,
+      data: normalizeSermon(response.data.data),
+    }
   },
 
   async getGospel(): Promise<CResponse<SermonItem>> {
     const response = await HTTP.get<CResponse<SermonItem>>('/sermons/gospel')
-    return response.data
+
+    return {
+      ...response.data,
+      data: normalizeSermon(response.data.data),
+    }
   },
 
   async create(data: CreateSermon): Promise<CResponse<SermonItem>> {
     const response = await HTTP.post<CResponse<SermonItem>>('/sermons', data)
-    return response.data
+
+    return {
+      ...response.data,
+      data: normalizeSermon(response.data.data),
+    }
   },
 
   async update(id: string, data: UpdateSermon): Promise<CResponse<SermonItem>> {
-    const response = await HTTP.patch<CResponse<SermonItem>>(`/sermons/${id}`, data)
-    return response.data
+    const response = await HTTP.patch<CResponse<SermonItem>>(
+      `/sermons/${id}`,
+      data,
+    )
+
+    return {
+      ...response.data,
+      data: normalizeSermon(response.data.data),
+    }
   },
 
   async uploadPdf(
@@ -77,7 +111,10 @@ export const SermonsService = {
       formData,
     )
 
-    return response.data
+    return {
+      ...response.data,
+      data: normalizeSermon(response.data.data),
+    }
   },
 
   delete(id: string) {
