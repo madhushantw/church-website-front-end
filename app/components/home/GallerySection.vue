@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CButton, CSection, CSectionHeading } from "../common";
+import { CButton, ConfirmationDialog, CSection, CSectionHeading } from "../common";
 import {
   GalleryImageType,
   GalleryService,
@@ -31,6 +31,7 @@ const {
   items: gallery,
   loading,
   error,
+  refresh,
 } = useApiList<GalleryItem>(
   "gallery",
   GalleryService.getAll,
@@ -49,6 +50,9 @@ const filteredGallery = computed(() => {
 
 const isGalleryOpen = ref(false);
 const selectedImageIndex = ref(0);
+const selectedIds = ref<string[]>([]);
+const deleteDialogOpen = ref(false);
+const isDeleting = ref(false)
 
 const selectedImage = computed(() => {
   return filteredGallery.value[selectedImageIndex.value];
@@ -57,6 +61,14 @@ const selectedImage = computed(() => {
 const canCreate = computed(
   () => props.allowCreate && userStore.user?.role === UserRole.ROOT,
 );
+
+onMounted(() => {
+  window.addEventListener("keydown", handleKeydown);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleKeydown);
+});
 
 const openImage = (index: number) => {
   selectedImageIndex.value = index;
@@ -94,17 +106,53 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 };
 
-onMounted(() => {
-  window.addEventListener("keydown", handleKeydown);
-});
+const onSaved = (items: GalleryItem[]) => {
+  console.log(items)
+  gallery.value = [...gallery.value, ...items]
+}
 
-onBeforeUnmount(() => {
-  window.removeEventListener("keydown", handleKeydown);
-});
+const toggleSelection = (id: string) => {
+  if (selectedIds.value.includes(id)) {
+    selectedIds.value = selectedIds.value.filter(selectedId => selectedId !== id)
+    return
+  }
+
+  selectedIds.value.push(id)
+}
+
+const openDelete = () => {
+  isDeleting.value = false
+  deleteDialogOpen.value = true;
+};
+
+const onDelete = async () => {
+  isDeleting.value = true
+
+  try {
+    await GalleryService.delete(selectedIds.value)
+    gallery.value = gallery.value.filter(
+      item => !selectedIds.value.includes(item.id),
+    )
+    selectedIds.value = []
+  } catch {
+    refresh()
+  } finally {
+    isDeleting.value = false
+    deleteDialogOpen.value = false;
+  }
+}
 </script>
 
 <template>
-  <GalleryUploadDialog v-model="isGalleryDialogOpen" />
+  <GalleryUploadDialog v-model="isGalleryDialogOpen" @saved="onSaved" />
+  <ConfirmationDialog
+    v-model="deleteDialogOpen"
+    type="delete"
+    title="Delete Images?"
+    :subtitle="`This will permanently remove all selected images`"
+    :loading="isDeleting"
+    @confirm="onDelete"
+  />
   <CSection id="gallery">
     <CSectionHeading
       label="Our Community"
@@ -112,7 +160,6 @@ onBeforeUnmount(() => {
       sub-title="A glimpse into the life of our church family, from worship and fellowship to serving our community."
       centered
     />
-
     <div class="mb-10 flex flex-wrap justify-center gap-2">
       <button
         v-for="filter in filters"
@@ -129,8 +176,7 @@ onBeforeUnmount(() => {
         {{ filter }}
       </button>
     </div>
-
-    <div v-if="canCreate" class="mb-6 flex justify-center">
+    <div v-if="canCreate" class="mb-6 flex justify-center gap-6">
       <button
         class="flex items-center gap-2 whitespace-nowrap text-[14px] font-medium text-primary transition-colors hover:text-primary/70"
         @click="isGalleryDialogOpen = true"
@@ -138,13 +184,20 @@ onBeforeUnmount(() => {
         <UIcon name="lucide:plus" size="16" />
         Add Images
       </button>
+
+      <button
+        v-if="selectedIds.length"
+        class="flex items-center gap-2 whitespace-nowrap text-[14px] font-medium text-red-500 transition-colors hover:text-red-600"
+        @click="openDelete"
+      >
+        <UIcon name="lucide:trash-2" size="16" />
+        Delete Selected ({{ selectedIds.length }})
+      </button>
     </div>
     <div v-if="loading" class="py-8 text-center">Loading gallery...</div>
-
     <div v-else-if="error" class="py-8 text-center text-red-500">
       {{ error }}
     </div>
-
     <div
       v-else-if="filteredGallery.length"
       class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
@@ -161,11 +214,21 @@ onBeforeUnmount(() => {
           :alt="item.imageType"
           class="h-full min-h-56 w-full object-cover transition-transform duration-700 group-hover:scale-105"
         >
-
         <div
           class="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/40"
         />
-
+          <button
+            v-if="canCreate"
+            type="button"
+            class="absolute left-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm"
+            @click.stop="toggleSelection(item.id)"
+          >
+            <UIcon
+              v-if="selectedIds.includes(item.id)"
+              name="lucide:check"
+              size="20"
+            />
+          </button>
         <div
           class="absolute inset-x-0 bottom-0 translate-y-2 p-5 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
         >
@@ -177,9 +240,7 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </div>
-
     <div v-else class="py-8 text-center">No gallery images found</div>
-
     <div v-if="!hideNavigationButton" class="mt-10 flex justify-center">
       <CButton
         title="View Full Gallery"
@@ -207,7 +268,6 @@ onBeforeUnmount(() => {
           :alt="selectedImage.imageType"
           class="max-h-[90vh] max-w-[90vw] object-contain"
         >
-
         <button
           type="button"
           class="absolute right-6 top-6 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-all hover:bg-white/20"
@@ -215,7 +275,6 @@ onBeforeUnmount(() => {
         >
           <UIcon name="lucide:x" size="24" />
         </button>
-
         <button
           type="button"
           class="absolute left-5 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-all hover:bg-white/20"
@@ -223,7 +282,6 @@ onBeforeUnmount(() => {
         >
           <UIcon name="lucide:chevron-left" size="30" />
         </button>
-
         <button
           type="button"
           class="absolute right-5 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-all hover:bg-white/20"
@@ -231,7 +289,6 @@ onBeforeUnmount(() => {
         >
           <UIcon name="lucide:chevron-right" size="30" />
         </button>
-
         <div
           v-if="selectedImage"
           class="absolute bottom-6 left-1/2 -translate-x-1/2 text-center text-white"

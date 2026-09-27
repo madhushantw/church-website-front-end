@@ -15,23 +15,18 @@ interface ContactInfo {
 const contactInfo: ContactInfo[] = [
   {
     label: "Address",
-    value: "4820 Lakeview Drive\nPinewood, BC V3R 4K1",
+    value: "25 Smart Road, Modbury ",
     icon: "lucide:map-pin",
   },
   {
     label: "Phone",
-    value: "(604) 555-0182",
+    value: "7079 7595",
     icon: "lucide:phone",
   },
   {
     label: "Email",
-    value: "hello@gracecommunity.church",
+    value: "info@stlukesmodbury.com.au",
     icon: "lucide:mail",
-  },
-  {
-    label: "Office Hours",
-    value: "Mon – Fri: 9:00 AM – 4:00 PM",
-    icon: "lucide:clock",
   },
 ];
 
@@ -76,7 +71,6 @@ const submitForm = () => {
       sub-title="Visiting for the first time or just have a question — reach out. We look forward to connecting."
       centered
     />
-
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
       <div class="space-y-6">
         <div class="rounded-lg bg-white p-7">
@@ -85,7 +79,6 @@ const submitForm = () => {
           >
             Find Us
           </h3>
-
           <div class="space-y-5">
             <div
               v-for="info in contactInfo"
@@ -97,7 +90,6 @@ const submitForm = () => {
                 size="20"
                 class="mt-0.5 shrink-0 text-primary"
               />
-
               <div>
                 <div class="text-[14px] font-medium text-foreground">
                   {{ info.label }}
@@ -112,14 +104,12 @@ const submitForm = () => {
             </div>
           </div>
         </div>
-
         <div class="rounded-lg bg-white p-7">
           <h3
             class="mb-4 font-['Playfair_Display'] text-[20px] font-medium text-foreground"
           >
             Follow Along
           </h3>
-
           <div class="flex gap-3">
             <button
               v-for="social in socialLinks"
@@ -140,7 +130,6 @@ const submitForm = () => {
         >
           Send Us a Message
         </h3>
-
         <form class="space-y-5" @submit.prevent="submitForm">
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <CInput
@@ -149,7 +138,6 @@ const submitForm = () => {
               placeholder="John"
               required
             />
-
             <CInput
               v-model="form.lastName"
               label="Last Name"
@@ -157,7 +145,6 @@ const submitForm = () => {
               required
             />
           </div>
-
           <CInput
             v-model="form.email"
             label="Email Address"
@@ -165,13 +152,11 @@ const submitForm = () => {
             placeholder="john.smith@email.com"
             required
           />
-
           <CInput
             v-model="form.subject"
             label="Subject"
             placeholder="I'd like to plan a visit"
           />
-
           <CInput
             v-model="form.message"
             label="Message"
@@ -180,7 +165,6 @@ const submitForm = () => {
             :rows="5"
             required
           />
-
           <CButton
             title="Send Message"
             color="primary"

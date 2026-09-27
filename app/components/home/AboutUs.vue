@@ -47,63 +47,50 @@ const stats = [
         <div class="lg:pl-4">
           <CSectionHeading
             label="About Us"
-            title="A Christian Church"
-            highlighted="and Anglican"
+            title="External Mission"
+            highlighted="Support Activities "
             header-class="lg:text-6xl"
           />
-          <div
-            class="mb-8 space-y-5 text-[16px] leading-relaxed text-foreground/70"
-          >
-            <p>
-              Above all we are a Christian Church and we are also an
-              <a href="https://www.stlukesmodbury.com/christianity" class="underline decoration-accent underline-offset-4 hover:text-accent">Anglican</a>
-              Church. What does it mean to be Anglican? How do we differ from other Churches?
-            </p>
-          </div>
           <ul class="mb-8 space-y-3 text-[16px] leading-relaxed text-foreground/70">
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>We are in a Communion of over 70 million people, spread all over the world.</span>
+              <span>Quickest Warmth – supplying useful new items on request by an organisation for their clients</span>
             </li>
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>We see ourselves as both Catholic and Reformed.</span>
+              <span>School Ministry – supporting chaplains in our local schools.</span>
             </li>
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>We base what we believe on Scripture – but have a very high regard for both Tradition and Reason.</span>
+              <span>Foster Homes in Africa.</span>
             </li>
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>We are an Episcopal Church – led by bishops.</span>
+              <span>Anglican Board of Mission.</span>
             </li>
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>We are a sacramental church.</span>
+              <span>Anglicare.</span>
             </li>
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>We hold to the teachings of the early Councils of the Church, and the beliefs expressed in the Creeds.</span>
+              <span>Samaritans Purse Christmas Shoe Boxes – Christmas gifts for children.</span>
             </li>
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>We are not the church – we are part of the Universal Church.</span>
+              <span>Food Bank.</span>
             </li>
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>We have our origins in the Church of England – but all parts of the Anglican Church are autonomous.</span>
+              <span>Bush Church Aid (BCA)</span>
             </li>
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>
-                We hold the
-                <a href="http://goo.gl/tannd" class="underline decoration-accent underline-offset-4 hover:text-accent">Archbishop of Canterbury</a>
-                in high esteem – but she is the first among equals.
-              </span>
+              <span>Church Missionary Society (CMS)</span>
             </li>
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>We do not think that we know the right way – but we are willing to look for it!</span>
+              <span>Food Hampers through the OP Shop.</span>
             </li>
             <li class="flex gap-3">
               <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>

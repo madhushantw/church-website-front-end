@@ -5,7 +5,7 @@ export function useApiList<T>(
   fetcher: () => Promise<CResponse<T[]>>,
   errorMessage: string,
 ) {
-  const { data: items, error, status, refresh } = useAsyncData(
+  const { data: items, error, status, refresh } = useAsyncData<T[]>(
     key,
     async () => (await fetcher()).data,
     {

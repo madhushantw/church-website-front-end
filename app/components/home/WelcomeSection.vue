@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import priestImage from "~/assets/images/priest-avatar.png";
 import { CButton, CSection, CSectionHeading } from "../common";
 </script>
 
@@ -10,7 +11,7 @@ import { CButton, CSection, CSectionHeading } from "../common";
           class="relative rounded-xl overflow-hidden shadow-2xl bg-foreground aspect-video"
         >
           <img
-            src="https://images.unsplash.com/photo-1570786032462-2efc3ca8fccd?w=900&amp;h=506&amp;fit=crop&amp;auto=format"
+            :src="priestImage"
             alt="Parish Priest video message"
             class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-300"
           >
@@ -21,7 +22,11 @@ import { CButton, CSection, CSectionHeading } from "../common";
             <div
               class="w-20 h-20 rounded-full bg-white/95 hover:bg-white flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-200 cursor-pointer"
             >
-              <UIcon name="line-md:play-filled" size="44" class="text-primary" />
+              <UIcon
+                name="line-md:play-filled"
+                size="44"
+                class="text-primary"
+              />
             </div>
           </div>
           <div
@@ -57,20 +62,20 @@ import { CButton, CSection, CSectionHeading } from "../common";
             class="w-16 h-16 rounded-full overflow-hidden bg-secondary border-2 border-primary/20 shrink-0"
           >
             <img
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&amp;h=100&amp;fit=crop&amp;auto=format&amp;face=1"
-              alt="Fr. James Callahan"
+              :src="priestImage"
+              alt="The Venerable Jo Smith "
               class="w-full h-full object-cover"
             >
           </div>
           <div>
             <div class="text-foreground font-semibold text-[15px]">
-              Fr. James Callahan
+              The Venerable Jo Smith
             </div>
             <div class="text-muted-foreground text-[13px]">
               Parish Priest, St Lukes Church
             </div>
             <div class="text-primary text-[12px] font-medium mt-0.5">
-              Pastor since 2012
+              Rev’d Samuel Yengi
             </div>
           </div>
         </div>
@@ -78,17 +83,17 @@ import { CButton, CSection, CSectionHeading } from "../common";
           <p
             class="text-foreground/75 text-[18px] leading-relaxed italic font-['Playfair_Display']"
           >
-            "Whether you are joining us for the first time or have been part of
-            this family for years, know that you are seen, you are loved, and
-            you belong here. St Lukes is not just a church — it is a
-            home."
+            "We are so pleased you have joined us today and hope that we can
+            provide what you are looking for in your spiritual life."
           </p>
         </blockquote>
         <p class="text-foreground/65 text-[15px] leading-relaxed mb-8">
-          Each week I record a short video message to connect with our
-          parishioners and especially to welcome those visiting for the first
-          time. I invite you to watch, pray with us, and come and experience the
-          warmth of our community in person.
+          After every service we gather and share refreshments and a time of
+          fellowship. We warmly invite you to join us.
+          <br>
+          A good way to get to know
+          each other is to join in group activities and we have much to offer in
+          this regard.
         </p>
         <div class="flex flex-col sm:flex-row gap-4">
           <CButton

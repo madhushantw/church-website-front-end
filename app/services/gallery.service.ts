@@ -67,10 +67,20 @@ export const GalleryService = {
       formData,
     );
 
-    return response.data;
+    return {
+      ...response.data,
+      data: {
+        ...response.data.data,
+        imageUrl: getImageUrl(response.data.data.imageUrl),
+      },
+    };
   },
 
-  delete(id: string) {
-    return HTTP.delete(`/gallery/${id}`);
+  async delete(ids: string | string[]) {
+    return HTTP.delete("/gallery", {
+      data: {
+        ids: Array.isArray(ids) ? ids : [ids],
+      },
+    });
   },
 };

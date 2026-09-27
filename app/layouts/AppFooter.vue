@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import appIcon from '../../public/favIcon.png'
+import appIcon from "../../public/favIcon.png";
 const navigation = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
@@ -26,7 +26,7 @@ const socials = [
             <div
               class="flex h-15 w-15 items-center justify-center rounded-full bg-neutral"
             >
-              <img class="h-12 w-12" :src="appIcon" alt="" >
+              <img class="h-12 w-12" :src="appIcon" alt="">
             </div>
 
             <div>
@@ -69,7 +69,6 @@ const socials = [
         </div>
         <div>
           <h3 class="mb-5 font-['Playfair_Display'] text-lg">Connect</h3>
-
           <div class="space-y-4 text-sm text-white/60">
             <div class="flex items-start gap-3">
               <UIcon
@@ -77,20 +76,15 @@ const socials = [
                 size="18"
                 class="mt-0.5 shrink-0 text-secondary"
               />
-              <span>
-                4820 Lakeview Drive<br >
-                Pinewood, BC V3R 4K1
-              </span>
+              <span> 25 Smart Road, Modbury </span>
             </div>
-
             <div class="flex items-center gap-3">
               <UIcon name="lucide:phone" size="18" class="text-secondary" />
-              <span>(604) 555-0182</span>
+              <span>7079 7595 </span>
             </div>
-
             <div class="flex items-center gap-3">
               <UIcon name="lucide:mail" size="18" class="text-secondary" />
-              <span>hello@gracecommunity.church</span>
+              <span>info@stlukesmodbury.com.au </span>
             </div>
           </div>
         </div>
@@ -101,10 +95,8 @@ const socials = [
         class="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-5 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between lg:px-8"
       >
         <p>
-          © {{ new Date().getFullYear() }} St Lukes Church. All rights
-          reserved.
+          © {{ new Date().getFullYear() }} St Lukes Church. All rights reserved.
         </p>
-
         <p class="font-['Playfair_Display'] italic text-white/50">
           "Together in faith. Together in love."
         </p>

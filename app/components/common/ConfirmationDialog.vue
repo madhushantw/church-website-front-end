@@ -5,6 +5,7 @@ const props = defineProps<{
   title: string;
   subtitle?: string;
   type: ConfirmationType;
+  loading?: boolean
 }>();
 
 const open = defineModel<boolean>({ default: false });
@@ -92,6 +93,7 @@ const handleCancel = () => {
             :label="typeConfig.confirmLabel"
             :icon="typeConfig.confirmIcon"
             :color="typeConfig.confirmColor"
+            :loading="loading"
             class="rounded-xl"
             @click="handleConfirm"
           />
