@@ -4,7 +4,7 @@ const navigation = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
   { label: "Events", href: "#events" },
-  { label: "Sermons", href: "#sermons" },
+  { label: "Readings", href: "#sermons" },
   { label: "Ministries", href: "#ministries" },
   { label: "Gallery", href: "#gallery" },
   { label: "Contact", href: "#contact" },
