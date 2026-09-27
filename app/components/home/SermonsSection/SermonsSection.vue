@@ -69,7 +69,7 @@ const handleSermonSaved = async () => {
 
 <template>
   <CSection id="sermons" background-color="muted">
-    <div class="flex items-center justify-between gap-4">
+    <div class="flex flex-col justify-between gap-4 md:flex-row">
       <CSectionHeading label="Messages" title="Weekly pew sheets," highlighted="Readings and sermons" tow-row-title />
       <div class="mb-6 flex items-center gap-3">
         <button

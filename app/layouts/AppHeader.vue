@@ -116,24 +116,26 @@ onUnmounted(() => {
     </template>
 
     <template #right>
-      <UButton
-        v-if="canManageUsers"
-        label="Users"
-        icon="i-lucide-users"
-        size="sm"
-        color="primary"
-        variant="ghost"
-        class="rounded-full"
-        @click="usersSidebarOpen = true"
-      />
-      <UButton
-        :label="isAuthenticated ? 'Logout' : 'Login'"
-        size="sm"
-        color="primary"
-        :variant="isAuthenticated ? 'ghost' : 'solid'"
-        class="rounded-full px-4"
-        @click="isAuthenticated ? openLogout() : openSignIn()"
-      />
+      <div class="hidden lg:flex items-center gap-2">
+        <UButton
+          v-if="canManageUsers"
+          label="Users"
+          icon="i-lucide-users"
+          size="sm"
+          color="primary"
+          variant="ghost"
+          class="rounded-full"
+          @click="usersSidebarOpen = true"
+        />
+        <UButton
+          :label="isAuthenticated ? 'Logout' : 'Login'"
+          size="sm"
+          color="primary"
+          :variant="isAuthenticated ? 'ghost' : 'solid'"
+          class="rounded-full px-4"
+          @click="isAuthenticated ? openLogout() : openSignIn()"
+        />
+      </div>
     </template>
 
     <UNavigationMenu
@@ -156,6 +158,25 @@ onUnmounted(() => {
           link: 'rounded-xl px-4 py-3 text-base font-medium text-primary transition-colors hover:bg-primary/10 hover:text-primary',
         }"
       />
+      <div class="flex flex-col gap-2 border-t border-primary/10 pt-4">
+        <UButton
+          v-if="canManageUsers"
+          label="Users"
+          icon="i-lucide-users"
+          color="primary"
+          variant="ghost"
+          class="justify-start rounded-xl"
+          @click="usersSidebarOpen = true"
+        />
+
+        <UButton
+          :label="isAuthenticated ? 'Logout' : 'Login'"
+          color="primary"
+          :variant="isAuthenticated ? 'ghost' : 'solid'"
+          class="justify-start rounded-xl"
+          @click="isAuthenticated ? openLogout() : openSignIn()"
+        />
+      </div>
     </template>
     </UHeader>
 

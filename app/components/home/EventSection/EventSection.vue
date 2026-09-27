@@ -78,7 +78,7 @@ watch(() => isEventDialogOpen.value, open => {
 
 <template>
   <CSection id="events">
-    <div class="flex justify-between items-center">
+    <div class="flex flex-col justify-between gap-4 md:flex-row">
       <CSectionHeading label="Calendar" title="Upcoming Events" />
       <div class="mb-6 flex items-center gap-4">
         <button
