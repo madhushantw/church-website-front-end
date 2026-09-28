@@ -21,7 +21,7 @@ const deleteError = ref('');
 const userStore = useUserStore();
 const canManageSermons = computed(() => userStore.user?.role === UserRole.ROOT && props.allowCreate);
 
-const { items: sermons, loading, error, refresh } = useApiList<SermonItem>(
+const { items: sermons, loading, error, refresh } = useApiPagination<SermonItem>(
   "sermons",
   SermonsService.getAll,
   "Failed to load sermons",

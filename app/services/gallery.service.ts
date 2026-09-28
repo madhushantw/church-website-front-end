@@ -1,4 +1,8 @@
 import { HTTP } from "./http";
+import type {
+  PaginationOptions,
+  PaginationResponse,
+} from "./interfaces/pagination.interface";
 import type { CResponse } from "./interfaces/Response.interface";
 
 export enum GalleryImageType {
@@ -27,15 +31,21 @@ const getImageUrl = (imageUrl: string) => {
 };
 
 export const GalleryService = {
-  async getAll(): Promise<CResponse<GalleryItem[]>> {
-    const response = await HTTP.get<CResponse<GalleryItem[]>>("/gallery");
+  async getAll(params: PaginationOptions) {
+    const response = await HTTP.get<PaginationResponse<GalleryItem>>(
+      "/gallery",
+      { params },
+    );
 
     return {
       ...response.data,
-      data: response.data.data.map((item) => ({
-        ...item,
-        imageUrl: getImageUrl(item.imageUrl),
-      })),
+      data: {
+        ...response.data.data,
+        items: response.data.data.items.map((item) => ({
+          ...item,
+          imageUrl: getImageUrl(item.imageUrl),
+        })),
+      },
     };
   },
 

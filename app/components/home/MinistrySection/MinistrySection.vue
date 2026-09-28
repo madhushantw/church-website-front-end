@@ -29,7 +29,7 @@ const isDeleting = ref(false);
 const deleteError = ref("");
 const selectedMinistry = ref<MinistryItem | null>(null);
 
-const { items: ministryItems, loading, error } = useApiList<MinistryItem>(
+const { items: ministryItems, loading, error } = useApiPagination<MinistryItem>(
   "ministries",
   MinistriesService.getAll,
   "Failed to load ministries",

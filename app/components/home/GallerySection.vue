@@ -32,7 +32,7 @@ const {
   loading,
   error,
   refresh,
-} = useApiList<GalleryItem>(
+} = useApiPagination<GalleryItem>(
   "gallery",
   GalleryService.getAll,
   "Failed to load gallery",

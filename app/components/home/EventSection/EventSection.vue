@@ -24,7 +24,7 @@ const {
   items: events,
   loading,
   error,
-} = useApiList<EventItem>(
+} = useApiPagination<EventItem>(
   "events",
   EventsService.getAll,
   "Failed to load events",
