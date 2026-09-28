@@ -27,16 +27,24 @@ type Filter = (typeof filters)[number];
 
 const activeFilter = ref<Filter>("All");
 
+const galleryParams = computed(() => ({
+  type: activeFilter.value === 'All'
+    ? undefined
+    : activeFilter.value,
+}))
+
 const {
   items: gallery,
   loading,
   error,
   refresh,
-} = useApiPagination<GalleryItem>(
-  "gallery",
+  limit
+} = useApiPagination<GalleryItem, { type?: GalleryImageType }>(
+  'gallery',
   GalleryService.getAll,
-  "Failed to load gallery",
-);
+  'Failed to load gallery',
+  galleryParams,
+)
 
 const isGalleryDialogOpen = ref(false);
 
@@ -63,6 +71,7 @@ const canCreate = computed(
 );
 
 onMounted(() => {
+  limit.value = 5
   window.addEventListener("keydown", handleKeydown);
 });
 

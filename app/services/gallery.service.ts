@@ -24,6 +24,10 @@ export interface CreateGallery {
   image: File;
 }
 
+export interface GalleryFindAllOptions extends PaginationOptions {
+  type?: GalleryImageType
+}
+
 const getImageUrl = (imageUrl: string) => {
   const config = useRuntimeConfig();
 
@@ -31,7 +35,7 @@ const getImageUrl = (imageUrl: string) => {
 };
 
 export const GalleryService = {
-  async getAll(params: PaginationOptions) {
+  async getAll(params: GalleryFindAllOptions) {
     const response = await HTTP.get<PaginationResponse<GalleryItem>>(
       "/gallery",
       { params },
