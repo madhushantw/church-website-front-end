@@ -13,7 +13,7 @@ export function useApiPagination<T, P extends Record<string, unknown> = Record<s
   params?: Ref<P>,
 ) {
   const page = ref(1)
-  const limit = ref(20)
+  const limit = ref(5)
   const items = ref<T[]>([])
   const total = ref(0)
   const totalPages = ref(0)

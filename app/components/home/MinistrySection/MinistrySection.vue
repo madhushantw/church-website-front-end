@@ -29,7 +29,7 @@ const isDeleting = ref(false);
 const deleteError = ref("");
 const selectedMinistry = ref<MinistryItem | null>(null);
 
-const { items: ministryItems, loading, error } = useApiPagination<MinistryItem>(
+const { items: ministryItems, loading, error, page, total, limit } = useApiPagination<MinistryItem>(
   "ministries",
   MinistriesService.getAll,
   "Failed to load ministries",
@@ -167,6 +167,7 @@ const ministryColors: Record<MinistryItem["type"], string> = {
       />
     </div>
     <div v-else class="py-8 text-center">No ministries found</div>
+    <UPagination v-if="total && hideNavigationButton" v-model:page="page" :items-per-page="limit" :total="total" class="my-4 mx-auto" />
     <MinistryDialog
       v-if="canCreateMinistry"
       v-model:open="isMinistryDialogOpen"

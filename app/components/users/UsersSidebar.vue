@@ -12,6 +12,7 @@ const open = defineModel<boolean>('open', { default: false })
 const {
   items: users,
   page,
+  total,
   limit,
   loading: isLoading,
   error,
@@ -72,13 +73,6 @@ const deleteUser = async () => {
     isDeleting.value = false
   }
 }
-
-watch(open, isOpen => {
-  if (isOpen) {
-    page.value = 1
-    refresh()
-  }
-})
 </script>
 
 <template>
@@ -121,7 +115,7 @@ watch(open, isOpen => {
           class="flex items-center justify-between border-b border-primary/10 px-6 py-4"
         >
           <span class="text-sm font-medium text-foreground"
-            >{{ users.length }} users</span
+            >{{ total }} users</span
           >
           <UButton
             label="Create user"
@@ -208,6 +202,8 @@ watch(open, isOpen => {
             </div>
           </div>
         </div>
+        {{ total }}
+        <UPagination  v-if="total" v-model:page="page" :items-per-page="limit" :total="total" class="my-4 mx-auto" />
       </div>
     </template>
   </USlideover>

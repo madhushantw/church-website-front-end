@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { CButton, ConfirmationDialog, CSection, CSectionHeading } from "../common";
+import {
+  CButton,
+  ConfirmationDialog,
+  CSection,
+  CSectionHeading,
+} from "../common";
 import {
   GalleryImageType,
   GalleryService,
@@ -11,7 +16,7 @@ import GalleryUploadDialog from "./GalleryUploadDialog.vue";
 
 const props = defineProps<{
   hideNavigationButton?: boolean;
-  allowCreate?: boolean
+  allowCreate?: boolean;
 }>();
 
 const userStore = useUserStore();
@@ -38,13 +43,15 @@ const {
   loading,
   error,
   refresh,
-  limit
+  limit,
+  total,
+  page,
 } = useApiPagination<GalleryItem, { type?: GalleryImageType }>(
-  'gallery',
+  "gallery",
   GalleryService.getAll,
-  'Failed to load gallery',
+  "Failed to load gallery",
   galleryParams,
-)
+);
 
 const isGalleryDialogOpen = ref(false);
 
@@ -60,7 +67,7 @@ const isGalleryOpen = ref(false);
 const selectedImageIndex = ref(0);
 const selectedIds = ref<string[]>([]);
 const deleteDialogOpen = ref(false);
-const isDeleting = ref(false)
+const isDeleting = ref(false);
 
 const selectedImage = computed(() => {
   return filteredGallery.value[selectedImageIndex.value];
@@ -71,7 +78,6 @@ const canCreate = computed(
 );
 
 onMounted(() => {
-  limit.value = 5
   window.addEventListener("keydown", handleKeydown);
 });
 
@@ -84,19 +90,34 @@ const openImage = (index: number) => {
   isGalleryOpen.value = true;
 };
 
-const nextImage = () => {
-  if (!filteredGallery.value.length) return;
+const nextImage = async () => {
+  if (!gallery.value.length) return;
 
-  selectedImageIndex.value =
-    (selectedImageIndex.value + 1) % filteredGallery.value.length;
+  if (selectedImageIndex.value < gallery.value.length - 1) {
+    selectedImageIndex.value++;
+    return;
+  }
+
+  if (page.value < Math.ceil(total.value / limit.value)) {
+    page.value++;
+    await refresh();
+    selectedImageIndex.value = 0;
+  }
 };
 
-const previousImage = () => {
-  if (!filteredGallery.value.length) return;
+const previousImage = async () => {
+  if (!gallery.value.length) return;
 
-  selectedImageIndex.value =
-    (selectedImageIndex.value - 1 + filteredGallery.value.length) %
-    filteredGallery.value.length;
+  if (selectedImageIndex.value > 0) {
+    selectedImageIndex.value--;
+    return;
+  }
+
+  if (page.value > 1) {
+    page.value--;
+    await refresh();
+    selectedImageIndex.value = gallery.value.length - 1;
+  }
 };
 
 const handleKeydown = (event: KeyboardEvent) => {
@@ -115,45 +136,48 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 };
 
-const onSaved = (items: GalleryItem[]) => {
-  console.log(items)
-  gallery.value = [...gallery.value, ...items]
-}
-
 const toggleSelection = (id: string) => {
   if (selectedIds.value.includes(id)) {
-    selectedIds.value = selectedIds.value.filter(selectedId => selectedId !== id)
-    return
+    selectedIds.value = selectedIds.value.filter(
+      (selectedId) => selectedId !== id,
+    );
+    return;
   }
 
-  selectedIds.value.push(id)
-}
+  selectedIds.value.push(id);
+};
 
 const openDelete = () => {
-  isDeleting.value = false
+  isDeleting.value = false;
   deleteDialogOpen.value = true;
 };
 
 const onDelete = async () => {
-  isDeleting.value = true
+  isDeleting.value = true;
 
   try {
-    await GalleryService.delete(selectedIds.value)
-    gallery.value = gallery.value.filter(
-      item => !selectedIds.value.includes(item.id),
-    )
-    selectedIds.value = []
+    await GalleryService.delete(selectedIds.value);
+    refresh();
+    selectedIds.value = [];
   } catch {
-    refresh()
+    refresh();
   } finally {
-    isDeleting.value = false
+    isDeleting.value = false;
     deleteDialogOpen.value = false;
   }
-}
+};
+
+watch(activeFilter, () => {
+  page.value = 1
+})
 </script>
 
 <template>
-  <GalleryUploadDialog v-model="isGalleryDialogOpen" @saved="onSaved" />
+  <GalleryUploadDialog
+    v-model="isGalleryDialogOpen"
+    :type="activeFilter === 'All' ? GalleryImageType.WORSHIP : activeFilter"
+    @saved="refresh()"
+  />
   <ConfirmationDialog
     v-model="deleteDialogOpen"
     type="delete"
@@ -222,22 +246,22 @@ const onDelete = async () => {
           :src="item.imageUrl"
           :alt="item.imageType"
           class="h-full min-h-56 w-full object-cover transition-transform duration-700 group-hover:scale-105"
-        >
+        />
         <div
           class="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/40"
         />
-          <button
-            v-if="canCreate"
-            type="button"
-            class="absolute left-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm"
-            @click.stop="toggleSelection(item.id)"
-          >
-            <UIcon
-              v-if="selectedIds.includes(item.id)"
-              name="lucide:check"
-              size="20"
-            />
-          </button>
+        <button
+          v-if="canCreate"
+          type="button"
+          class="absolute left-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm"
+          @click.stop="toggleSelection(item.id)"
+        >
+          <UIcon
+            v-if="selectedIds.includes(item.id)"
+            name="lucide:check"
+            size="20"
+          />
+        </button>
         <div
           class="absolute inset-x-0 bottom-0 translate-y-2 p-5 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
         >
@@ -250,6 +274,13 @@ const onDelete = async () => {
       </div>
     </div>
     <div v-else class="py-8 text-center">No gallery images found</div>
+    <UPagination
+      v-if="total && hideNavigationButton"
+      v-model:page="page"
+      :items-per-page="limit"
+      :total="total"
+      class="my-4 mx-auto"
+    />
     <div v-if="!hideNavigationButton" class="mt-10 flex justify-center">
       <CButton
         title="View Full Gallery"
@@ -265,18 +296,23 @@ const onDelete = async () => {
     fullscreen
     transition
     :ui="{
-      overlay: 'bg-black/10 backdrop-blur-sm',
+      overlay: 'bg-black/80 backdrop-blur-sm',
       content: 'bg-black/50 border-0 rounded-none shadow-none',
     }"
   >
     <template #content>
       <div class="relative flex h-screen w-screen items-center justify-center">
+        <UIcon
+          v-if="loading"
+          name="i-lucide-loader-circle"
+          class="size-8 animate-spin text-primary"
+        />
         <img
-          v-if="selectedImage"
+          v-else-if="selectedImage"
           :src="selectedImage.imageUrl"
           :alt="selectedImage.imageType"
           class="max-h-[90vh] max-w-[90vw] object-contain"
-        >
+        />
         <button
           type="button"
           class="absolute right-6 top-6 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-all hover:bg-white/20"

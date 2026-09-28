@@ -21,7 +21,7 @@ const deleteError = ref('');
 const userStore = useUserStore();
 const canManageSermons = computed(() => userStore.user?.role === UserRole.ROOT && props.allowCreate);
 
-const { items: sermons, loading, error, refresh } = useApiPagination<SermonItem>(
+const { items: sermons, loading, error, refresh, page, limit, total } = useApiPagination<SermonItem>(
   "sermons",
   SermonsService.getAll,
   "Failed to load sermons",
@@ -108,6 +108,7 @@ const handleSermonSaved = async () => {
       />
     </div>
     <div v-else class="text-center py-8">No sermons found</div>
+    <UPagination v-if="total && hideNavigationButton" v-model:page="page" :items-per-page="limit" :total="total" class="my-4 mx-auto" />
     <CreateSermonSlideover
       v-if="canManageSermons"
       v-model:open="sermonSlideoverOpen"

@@ -13,6 +13,8 @@ interface SelectedImage {
 
 const open = defineModel<boolean>({ default: false });
 
+const props = defineProps<{ type: GalleryImageType }>()
+
 const emit = defineEmits<{
   saved: [items: GalleryItem[]];
 }>();
@@ -126,6 +128,7 @@ const uploadImages = async () => {
 };
 
 watch(open, (isOpen) => {
+  imageType.value = props.type
   if (!isOpen) {
     reset();
   }
@@ -254,18 +257,18 @@ watch(open, (isOpen) => {
           <div class="mt-6">
             <div class="grid grid-cols-3 gap-2">
               <button
-                v-for="type in imageTypes"
-                :key="type.value"
+                v-for="imagetype in imageTypes"
+                :key="imagetype.value"
                 type="button"
                 class="rounded-xl border px-4 py-3 text-sm font-medium transition-all"
                 :class="
-                  imageType === type.value
+                  imageType === imagetype.value
                     ? 'border-primary bg-primary text-white'
                     : 'border-primary/10 bg-primary/5 text-primary hover:bg-primary/10'
                 "
-                @click="imageType = type.value"
+                @click="imageType = imagetype.value"
               >
-                {{ type.label }}
+                {{ imagetype.label }}
               </button>
             </div>
           </div>
