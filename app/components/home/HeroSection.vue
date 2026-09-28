@@ -1,44 +1,49 @@
 <script setup lang="ts">
-import { HeroService, type Hero } from '~/services/hero.service'
-import { UserRole } from '~/services/users.service'
-import { useUserStore } from '~/stores/user.store'
-import { CButton } from '../common'
-import HeroEditDialog from './HeroEditDialog.vue'
+import { HeroService, type Hero } from "~/services/hero.service";
+import { UserRole } from "~/services/users.service";
+import { useUserStore } from "~/stores/user.store";
+import { CButton } from "../common";
+import HeroEditDialog from "./HeroEditDialog.vue";
 const fallbackHero: Required<Hero> = {
-  welcomeText: 'Growing Faith',
-  title1: 'Building Community,',
-  title2: 'Sharing Hope',
-  subtitle:
-    'Welcome to St Lukes Anglican Church Modbury',
+  welcomeText: "Growing Faith",
+  title1: "Building Community,",
+  title2: "Sharing Hope",
+  subtitle: "Welcome to St Lukes Anglican Church Modbury",
   image:
-    'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1600&h=900&fit=crop&auto=format',
-}
+    "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1600&h=900&fit=crop&auto=format",
+};
 
-const hero = ref<Hero>(fallbackHero)
-const userStore = useUserStore()
-const isEditDialogOpen = ref(false)
-const editingField = ref<keyof Hero | null>(null)
-const canEdit = computed(() => userStore.user?.role === UserRole.ROOT)
+const hero = ref<Hero>(fallbackHero);
+const userStore = useUserStore();
+const isEditDialogOpen = ref(false);
+const editingField = ref<keyof Hero | null>(null);
+const canEdit = computed(() => userStore.user?.role === UserRole.ROOT);
 
 const editField = (field: keyof Hero) => {
-  editingField.value = field
-  isEditDialogOpen.value = true
-}
+  editingField.value = field;
+  isEditDialogOpen.value = true;
+};
 
 const setUpdatedHero = (updatedHero: Hero) => {
-  hero.value = updatedHero
-}
+  hero.value = updatedHero;
+};
 
 const getHeroData = async () => {
   try {
-    const { data } = await HeroService.get()
-    hero.value = data
+    const { data } = await HeroService.get();
+    hero.value = data;
   } catch (error) {
-    console.error('Error fetching hero data:', error)
+    console.error("Error fetching hero data:", error);
   }
-}
+};
 
-onMounted(getHeroData)
+onMounted(getHeroData);
+
+const gotContact = () => {
+  document.getElementById("about")?.scrollIntoView({
+    behavior: "smooth",
+  });
+};
 </script>
 
 <template>
@@ -53,10 +58,12 @@ onMounted(getHeroData)
           :src="hero.image || fallbackHero.image"
           alt="Congregation in worship"
           class="absolute inset-0 h-full w-full object-cover"
-        >
+        />
       </Transition>
     </div>
-    <div class="absolute inset-0 bg-linear-to-b from-[#1C2B2A]/75 via-[#1C2B2A]/55 to-[#1C2B2A]/80" />
+    <div
+      class="absolute inset-0 bg-linear-to-b from-[#1C2B2A]/75 via-[#1C2B2A]/55 to-[#1C2B2A]/80"
+    />
     <UButton
       v-if="canEdit"
       icon="i-lucide-pencil"
@@ -70,7 +77,9 @@ onMounted(getHeroData)
     <UContainer class="relative z-10 mx-auto max-w-4xl px-6 text-center">
       <div class="relative mb-8 inline-flex items-center gap-2">
         <div class="h-px w-8 bg-accent" />
-        <span class="text-accent text-[13px] font-medium uppercase tracking-[0.25em]">
+        <span
+          class="text-accent text-[13px] font-medium uppercase tracking-[0.25em]"
+        >
           {{ hero?.welcomeText || fallbackHero.welcomeText }}
         </span>
         <div class="h-px w-8 bg-accent" />
@@ -85,9 +94,11 @@ onMounted(getHeroData)
           @click="editField('welcomeText')"
         />
       </div>
-      <h1 class="relative mb-6 font-['Playfair_Display'] text-5xl leading-tight text-white md:text-6xl lg:text-7xl">
+      <h1
+        class="relative mb-6 font-['Playfair_Display'] text-5xl leading-tight text-white md:text-6xl lg:text-7xl"
+      >
         {{ hero?.title1 || fallbackHero.title1 }}
-        <br>
+        <br />
         <span class="relative italic text-accent">
           {{ hero?.title2 || fallbackHero.title2 }}
           <UButton
@@ -112,7 +123,9 @@ onMounted(getHeroData)
           @click="editField('title1')"
         />
       </h1>
-      <p class="relative mx-auto mb-10 max-w-2xl text-lg font-light leading-relaxed text-white/80 md:text-xl">
+      <p
+        class="relative mx-auto mb-10 max-w-2xl text-lg font-light leading-relaxed text-white/80 md:text-xl"
+      >
         {{ hero?.subtitle || fallbackHero.subtitle }}
         <UButton
           v-if="canEdit"
@@ -126,8 +139,11 @@ onMounted(getHeroData)
         />
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <CButton title="Discover Our Church" />
-        <CButton title="Watch a Sermon" outlined color="neutral" prepend-icon="solar:play-outline" />
+        <CButton
+          title="Discover Our Church"
+          prepend-icon="lucide:church"
+          @on-click="gotContact"
+        />
       </div>
     </UContainer>
     <HeroEditDialog

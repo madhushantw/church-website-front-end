@@ -5,7 +5,7 @@ import SignInModal from "~/components/auth/SignInModal.vue";
 import UsersSidebar from "~/components/users/UsersSidebar.vue";
 import { UserRole } from "~/services/users.service";
 import { useUserStore } from "~/stores/user.store";
-import appIcon from './../../public/favIcon.png'
+import appIcon from "./../../public/favIcon.png";
 
 const route = useRoute();
 
@@ -82,102 +82,102 @@ onUnmounted(() => {
 <template>
   <div>
     <UHeader
-    v-model:open="menuOpen"
-    mode="slideover"
-    :menu="{
-      inset: true,
-    }"
-    class="fixed left-0 right-0 top-0 z-50 transition-colors duration-300 h-20 border-b-0!"
-    :class="
-      scrolled
-        ? 'bg-white/90 text-primary shadow-sm'
-        : 'bg-transparent text-white/60'
-    "
-  >
-    <template #title>
-      <div
-        class="flex gap-2 items-center justify-center"
-        :class="scrolled || menuOpen ? 'text-primary' : 'text-white'"
-      >
+      v-model:open="menuOpen"
+      mode="slideover"
+      :menu="{
+        inset: true,
+      }"
+      class="fixed left-0 right-0 top-0 z-50 transition-colors duration-300 h-20 border-b-0!"
+      :class="
+        scrolled
+          ? 'bg-white/90 text-primary shadow-sm'
+          : 'bg-transparent text-white/60'
+      "
+    >
+      <template #title>
         <div
-          class="flex h-15 w-15 items-center justify-center rounded-full bg-neutral"
+          class="flex gap-2 items-center justify-center"
+          :class="scrolled || menuOpen ? 'text-primary' : 'text-white'"
         >
-          <img class="h-12 w-12" :src="appIcon" alt="">
-        </div>
-
-        <div class="flex flex-col">
-          <div class="font-['Playfair_Display'] text-lg leading-5 font-medium">
-            St Lukes
+          <div
+            class="flex h-15 w-15 items-center justify-center rounded-full"
+          >
+            <img class="h-12 w-12" :src="appIcon" alt="" >
           </div>
 
-          <div class="text-[10px] font-thin opacity-60 uppercase">Church</div>
+          <div class="flex flex-col">
+            <div
+              class="font-['Playfair_Display'] text-lg leading-5 font-medium"
+            >
+              St Lukes
+            </div>
+
+            <div class="text-[10px] font-thin opacity-60 uppercase">Church</div>
+          </div>
         </div>
-      </div>
-    </template>
+      </template>
 
-    <template #right>
-      <div class="hidden lg:flex items-center gap-2">
-        <UButton
-          v-if="canManageUsers"
-          label="Users"
-          icon="i-lucide-users"
-          size="sm"
-          color="primary"
-          variant="ghost"
-          class="rounded-full"
-          @click="usersSidebarOpen = true"
-        />
-        <UButton
-          :label="isAuthenticated ? 'Logout' : 'Login'"
-          size="sm"
-          color="primary"
-          :variant="isAuthenticated ? 'ghost' : 'solid'"
-          class="rounded-full px-4"
-          @click="isAuthenticated ? openLogout() : openSignIn()"
-        />
-      </div>
-    </template>
+      <template #right>
+        <div class="hidden lg:flex items-center gap-2">
+          <UButton
+            v-if="canManageUsers"
+            label="Users"
+            icon="i-lucide-users"
+            size="sm"
+            color="primary"
+            variant="ghost"
+            class="rounded-full"
+            @click="usersSidebarOpen = true"
+          />
+          <UButton
+            :label="isAuthenticated ? 'Logout' : 'Login'"
+            size="sm"
+            color="primary"
+            :variant="isAuthenticated ? 'ghost' : 'solid'"
+            class="rounded-full px-4"
+            @click="isAuthenticated ? openLogout() : openSignIn()"
+          />
+        </div>
+      </template>
 
-    <UNavigationMenu
-      :items="items"
-      variant="link"
-      :ui="{
-        link: scrolled
-          ? 'text-primary'
-          : 'text-white/60 hover:text-white',
-      }"
-    />
-
-    <template #body>
       <UNavigationMenu
         :items="items"
-        orientation="vertical"
         variant="link"
-        class="w-full"
         :ui="{
-          link: 'rounded-xl px-4 py-3 text-base font-medium text-primary transition-colors hover:bg-primary/10 hover:text-primary',
+          link: scrolled ? 'text-primary' : 'text-white/60 hover:text-white',
         }"
       />
-      <div class="flex flex-col gap-2 border-t border-primary/10 pt-4">
-        <UButton
-          v-if="canManageUsers"
-          label="Users"
-          icon="i-lucide-users"
-          color="primary"
-          variant="ghost"
-          class="justify-start rounded-xl"
-          @click="usersSidebarOpen = true"
-        />
 
-        <UButton
-          :label="isAuthenticated ? 'Logout' : 'Login'"
-          color="primary"
-          :variant="isAuthenticated ? 'ghost' : 'solid'"
-          class="justify-start rounded-xl"
-          @click="isAuthenticated ? openLogout() : openSignIn()"
+      <template #body>
+        <UNavigationMenu
+          :items="items"
+          orientation="vertical"
+          variant="link"
+          class="w-full"
+          :ui="{
+            link: 'rounded-xl px-4 py-3 text-base font-medium text-primary transition-colors hover:bg-primary/10 hover:text-primary',
+          }"
         />
-      </div>
-    </template>
+        <div class="flex flex-col gap-2 border-t border-primary/10 pt-4">
+          <UButton
+            v-if="canManageUsers"
+            label="Users"
+            icon="i-lucide-users"
+            color="primary"
+            variant="ghost"
+            class="justify-start rounded-xl"
+            @click="usersSidebarOpen = true"
+          />
+
+          <UButton
+            :label="isAuthenticated ? 'Logout' : 'Login'"
+            color="primary"
+            :variant="isAuthenticated ? 'ghost' : 'solid'"
+            class="justify-start rounded-xl"
+            @click="isAuthenticated ? openLogout() : openSignIn()"
+          />
+        </div>
+      </template>
     </UHeader>
 
     <SignInModal v-model:open="signInOpen" />

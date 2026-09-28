@@ -32,7 +32,7 @@ interface Props {
         </div>
 
         <div
-          class="flex h-15 w-15 items-center justify-center rounded-full bg-neutral"
+          class="flex h-15 w-15 items-center justify-center rounded-full"
         >
           <img class="h-12 w-12" :src="appIcon" alt="" >
         </div>

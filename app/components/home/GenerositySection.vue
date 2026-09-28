@@ -9,22 +9,30 @@ interface GivingOption {
 
 const givingOptions: GivingOption[] = [
   {
-    title: "Tithes & General Fund",
-    description: "Support our weekly ministry, facilities, and staff.",
+    title: "Support Our Ministries",
+    description:
+      "Your giving enable us to run various programs and ministries that uplift and support individuals and families in our community.",
     icon: "💛",
   },
   {
-    title: "Missions Fund",
-    description: "Equip missionaries serving locally and around the world.",
+    title: "Equip Our Place Of Worship",
+    description:
+      "Your giving help maintain our church building as a welcoming and safe space for worship, prayer, and community events.",
     icon: "🌍",
   },
   {
-    title: "Building Fund",
+    title: "Empower Mission",
     description:
-      "Help us maintain and improve our facilities for generations to come.",
+      "We are a church without walls, participating in God's mission both locally and globally. Your generosity helps support outreach initiatives, mission partners, and practical expressions of hope that make a difference in the lives of others.",
     icon: "🏛️",
   },
 ];
+
+const gotContact = () => {
+  document.getElementById("contact")?.scrollIntoView({
+    behavior: "smooth",
+  });
+};
 </script>
 
 <template>
@@ -36,21 +44,36 @@ const givingOptions: GivingOption[] = [
           title="Partner With Us"
           highlighted="in Giving"
         />
-
         <p class="mb-6 max-w-xl text-[16px] leading-relaxed text-foreground/70">
-          Your generosity makes everything we do possible — from Sunday worship
-          to community outreach, youth programs, and global missions. Every gift
-          is an act of faith.
+          Everything we have belongs to God, and giving is one of the ways we
+          worship Him, trust Him, and participate in His mission. Your
+          generosity helps support the ministry of Hope Valley Church and
+          enables us to bring hope locally, nationally, and globally.
         </p>
-
+        <CSectionHeading label="" title="Why Do We Give?" />
+        <p class="mb-6 max-w-xl text-[16px] leading-relaxed text-foreground/70">
+          We believe that everything we have comes from God and ultimately
+          belongs to Him. As followers of Jesus, we respond to His generosity by
+          stewarding our resources faithfully and returning a portion of what He
+          has entrusted to us.
+        </p>
+        <p class="mb-6 max-w-xl text-[16px] leading-relaxed text-foreground/70">
+          Giving is more than a financial transaction—it's an act of worship.
+          When we give, we declare that God is our provider and that His kingdom
+          is our priority.
+        </p>
+        <p class="mb-6 max-w-xl text-[16px] leading-relaxed text-foreground/70">
+          Through our generosity, we participate in God's work, support the
+          ministry of the local church, and help bring hope to people in our
+          communities and beyond.
+        </p>
         <div class="flex flex-col gap-4 sm:flex-row">
           <CButton
             title="Give Online"
             color="accent"
             prepend-icon="lucide:heart"
+            @on-click="gotContact"
           />
-
-          <CButton title="Learn About Stewardship" outlined color="primary" />
         </div>
       </div>
 
