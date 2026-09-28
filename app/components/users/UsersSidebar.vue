@@ -202,7 +202,6 @@ const deleteUser = async () => {
             </div>
           </div>
         </div>
-        {{ total }}
         <UPagination  v-if="total" v-model:page="page" :items-per-page="limit" :total="total" class="my-4 mx-auto" />
       </div>
     </template>

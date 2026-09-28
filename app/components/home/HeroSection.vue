@@ -58,7 +58,7 @@ const gotContact = () => {
           :src="hero.image || fallbackHero.image"
           alt="Congregation in worship"
           class="absolute inset-0 h-full w-full object-cover"
-        />
+        >
       </Transition>
     </div>
     <div
@@ -98,7 +98,7 @@ const gotContact = () => {
         class="relative mb-6 font-['Playfair_Display'] text-5xl leading-tight text-white md:text-6xl lg:text-7xl"
       >
         {{ hero?.title1 || fallbackHero.title1 }}
-        <br />
+        <br>
         <span class="relative italic text-accent">
           {{ hero?.title2 || fallbackHero.title2 }}
           <UButton
