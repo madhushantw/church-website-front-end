@@ -49,7 +49,7 @@ export const UsersService = {
     return response.data;
   },
 
-  delete(id: string) {
+  async delete(id: string) {
     return HTTP.delete(`/users/${id}`);
   },
 };

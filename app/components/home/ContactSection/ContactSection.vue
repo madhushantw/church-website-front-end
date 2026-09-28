@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import axios from "axios";
 import {
   CButton,
   CInput,
   CSection,
   CSectionHeading,
 } from "~/components/common";
+import { ContactService } from "~/services/contact.service";
 
 interface ContactInfo {
   label: string;
@@ -15,7 +17,7 @@ interface ContactInfo {
 const contactInfo: ContactInfo[] = [
   {
     label: "Address",
-    value: "25 Smart Road, Modbury ",
+    value: "25 Smart Road, Modbury",
     icon: "lucide:map-pin",
   },
   {
@@ -58,8 +60,35 @@ const form = reactive({
   message: "",
 });
 
-const submitForm = () => {
-  console.log(form);
+const isSubmitting = ref(false);
+const submitError = ref("");
+
+const submitForm = async () => {
+  isSubmitting.value = true;
+  submitError.value = "";
+
+  try {
+    await ContactService.create({
+      name: `${form.firstName} ${form.lastName}`.trim(),
+      email: form.email,
+      subject: form.subject,
+      message: form.message,
+    });
+
+    form.firstName = "";
+    form.lastName = "";
+    form.email = "";
+    form.subject = "";
+    form.message = "";
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      submitError.value = e.response?.data?.message?.[0] ?? "Something went wrong";
+    } else {
+      submitError.value = "Something went wrong";
+    }
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
 
@@ -130,7 +159,7 @@ const submitForm = () => {
         >
           Send Us a Message
         </h3>
-        <form class="space-y-5" @submit.prevent="submitForm">
+        <form class="space-y-5">
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <CInput
               v-model="form.firstName"
@@ -156,6 +185,7 @@ const submitForm = () => {
             v-model="form.subject"
             label="Subject"
             placeholder="I'd like to plan a visit"
+            required
           />
           <CInput
             v-model="form.message"
@@ -165,10 +195,16 @@ const submitForm = () => {
             :rows="5"
             required
           />
+          <p v-if="submitError" class="text-sm text-red-600">
+            {{ submitError }}
+          </p>
           <CButton
             title="Send Message"
             color="primary"
             append-icon="lucide:arrow-right"
+            :loading="isSubmitting"
+            type="submit"
+            @on-click="submitForm"
           />
         </form>
       </div>
