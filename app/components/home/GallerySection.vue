@@ -246,7 +246,7 @@ watch(activeFilter, () => {
           :src="item.imageUrl"
           :alt="item.imageType"
           class="h-full min-h-56 w-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
+        >
         <div
           class="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/40"
         />
@@ -312,7 +312,7 @@ watch(activeFilter, () => {
           :src="selectedImage.imageUrl"
           :alt="selectedImage.imageType"
           class="max-h-[90vh] max-w-[90vw] object-contain"
-        />
+        >
         <button
           type="button"
           class="absolute right-6 top-6 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-all hover:bg-white/20"
