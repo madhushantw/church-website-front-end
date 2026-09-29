@@ -33,6 +33,15 @@ export const ContactService = {
 
     return response.data;
   },
+
+  async markAsRead(id: string): Promise<CResponse<ContactItem>> {
+    const response = await HTTP.patch<CResponse<ContactItem>>(
+      `/contact/${id}/read`,
+    );
+
+    return response.data;
+  },
+
   async create(data: CreateContactRequest): Promise<CResponse<ContactItem>> {
     const response = await HTTP.post<CResponse<ContactItem>>("/contact", data);
 
@@ -40,6 +49,6 @@ export const ContactService = {
   },
 
   async delete(id: string) {
-    return HTTP.delete(`/users/${id}`);
+    return HTTP.delete(`/contact/${id}`);
   },
 };

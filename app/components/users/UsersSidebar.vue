@@ -7,7 +7,7 @@ import {
 import UserDialog from './UserDialog.vue'
 import ConfirmationDialog from '../common/ConfirmationDialog.vue'
 
-const open = defineModel<boolean>('open', { default: false })
+const open = defineModel<boolean>({ default: false })
 
 const {
   items: users,

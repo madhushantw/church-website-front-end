@@ -3,6 +3,7 @@ import type { NavigationMenuItem } from "@nuxt/ui";
 import LogoutConfirmModal from "~/components/auth/LogoutConfirmModal.vue";
 import SignInModal from "~/components/auth/SignInModal.vue";
 import UsersSidebar from "~/components/users/UsersSidebar.vue";
+import ContactSidebar from "~/components/contact/ContactSidebar.vue";
 import { UserRole } from "~/services/users.service";
 import { useUserStore } from "~/stores/user.store";
 import appIcon from "./../../public/favIcon.png";
@@ -14,6 +15,7 @@ const menuOpen = ref(false);
 const signInOpen = ref(false);
 const logoutOpen = ref(false);
 const usersSidebarOpen = ref(false);
+const contactSidebarOpen = ref(false);
 const userStore = useUserStore();
 const isAuthenticated = computed(() => !!userStore.user);
 const canManageUsers = computed(() => userStore.user?.role === UserRole.ROOT);
@@ -99,9 +101,7 @@ onUnmounted(() => {
           class="flex gap-2 items-center justify-center"
           :class="scrolled || menuOpen ? 'text-primary' : 'text-white'"
         >
-          <div
-            class="flex h-15 w-15 items-center justify-center rounded-full"
-          >
+          <div class="flex h-15 w-15 items-center justify-center rounded-full">
             <img class="h-12 w-12" :src="appIcon" alt="" >
           </div>
 
@@ -119,6 +119,15 @@ onUnmounted(() => {
 
       <template #right>
         <div class="hidden lg:flex items-center gap-2">
+          <UButton
+            v-if="canManageUsers"
+            label="Message"
+            icon="i-lucide-users"
+            color="primary"
+            variant="ghost"
+            class="justify-start rounded-xl"
+            @click="contactSidebarOpen = true"
+          />
           <UButton
             v-if="canManageUsers"
             label="Users"
@@ -161,6 +170,15 @@ onUnmounted(() => {
         <div class="flex flex-col gap-2 border-t border-primary/10 pt-4">
           <UButton
             v-if="canManageUsers"
+            label="Message"
+            icon="i-lucide-users"
+            color="primary"
+            variant="ghost"
+            class="justify-start rounded-xl"
+            @click="contactSidebarOpen = true"
+          />
+          <UButton
+            v-if="canManageUsers"
             label="Users"
             icon="i-lucide-users"
             color="primary"
@@ -168,7 +186,6 @@ onUnmounted(() => {
             class="justify-start rounded-xl"
             @click="usersSidebarOpen = true"
           />
-
           <UButton
             :label="isAuthenticated ? 'Logout' : 'Login'"
             color="primary"
@@ -182,6 +199,7 @@ onUnmounted(() => {
 
     <SignInModal v-model:open="signInOpen" />
     <LogoutConfirmModal v-model:open="logoutOpen" />
-    <UsersSidebar v-if="canManageUsers" v-model:open="usersSidebarOpen" />
+    <UsersSidebar v-if="canManageUsers" v-model="usersSidebarOpen" />
+    <ContactSidebar v-if="canManageUsers" v-model="contactSidebarOpen" />
   </div>
 </template>

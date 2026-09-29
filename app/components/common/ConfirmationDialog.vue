@@ -46,6 +46,7 @@ const handleConfirm = () => emit("confirm");
 
 const handleCancel = () => {
   open.value = false;
+  emit('cancel')
 };
 </script>
 
