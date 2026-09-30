@@ -50,7 +50,7 @@ const signIn = async () => {
               Sign in
             </h2>
             <p class="mt-2 text-sm text-muted-foreground">
-              Continue your journey with St Lukes.
+              Continue your journey with St Luke's Anglican Church.
             </p>
           </div>
           <UButton

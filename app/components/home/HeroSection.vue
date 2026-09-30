@@ -9,7 +9,7 @@ const fallbackHero: Required<Hero> = {
   welcomeText: 'Growing Faith',
   title1: 'Building Community,',
   title2: 'Sharing Hope',
-  subtitle: 'Welcome to St Lukes Anglican Church Modbury',
+  subtitle: "Welcome to St Luke's Anglican Church Modbury",
   images: [],
 }
 

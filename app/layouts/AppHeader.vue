@@ -105,14 +105,14 @@ onUnmounted(() => {
             <img class="h-12 w-12" :src="appIcon" alt="" >
           </div>
 
-          <div class="flex flex-col">
+          <div class="flex flex-col gap-2">
             <div
-              class="font-['Playfair_Display'] text-lg leading-5 font-medium"
+              class="font-['Playfair_Display'] text-xl leading-5 font-medium"
             >
-              St Lukes
+              St Luke's
             </div>
 
-            <div class="text-[10px] font-thin opacity-60 uppercase">Church</div>
+            <div class="text-[12px] font-thin opacity-60 uppercase">Anglican Church</div>
           </div>
         </div>
       </template>

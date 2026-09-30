@@ -30,7 +30,7 @@ const stats = [
           <div class="relative">
             <img
               src="https://adjust-shock-58675515.figma.site/_components/v2/4cf6a4066e32f17a0d7652028d932a3bd8306b4f/image.29153409.png"
-              alt="St Luke's Modbury Church building"
+              alt="St Luke's Anglican Church building"
               class="h-115 w-full object-cover rounded-lg shadow-xl"
             >
             <div

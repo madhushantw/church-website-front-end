@@ -16,7 +16,7 @@ const logout = () => {
     v-model="open"
     type="logout"
     title="Sign out?"
-    subtitle="Are you sure you want to sign out of St Lukes?"
+    subtitle="Are you sure you want to sign out of St Luke's Anglican Church?"
     @confirm="logout"
   />
 </template>

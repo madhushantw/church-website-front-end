@@ -29,10 +29,10 @@ const socials = [
               <img class="h-12 w-12" :src="appIcon" alt="">
             </div>
 
-            <div>
-              <h2 class="font-['Playfair_Display'] text-xl">St lukes</h2>
-              <p class="text-xs tracking-widest text-white/50 uppercase">
-                Church
+            <div class="flex flex-col gap-2">
+              <h2 class="font-['Playfair_Display'] text-xl">St Luke's</h2>
+              <p class="text-sm tracking-widest text-white/50 uppercase">
+                 Anglican Church
               </p>
             </div>
           </div>
@@ -95,7 +95,7 @@ const socials = [
         class="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-5 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between lg:px-8"
       >
         <p>
-          © {{ new Date().getFullYear() }} St Lukes Church. All rights reserved.
+          © {{ new Date().getFullYear() }} St Luke's Anglican Church. All rights reserved.
         </p>
         <p class="font-['Playfair_Display'] italic text-white/50">
           "Together in faith. Together in love."

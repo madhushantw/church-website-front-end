@@ -54,7 +54,7 @@ import { CButton, CSection, CSectionHeading } from "../common";
         <CSectionHeading
           label="A Message From Our Pastor"
           title="Welcome to"
-          highlighted="St Lukes"
+          highlighted="St Luke's"
           header-class="lg:text-6xl"
         />
         <div class="flex items-center gap-4 mb-6">
@@ -72,7 +72,7 @@ import { CButton, CSection, CSectionHeading } from "../common";
               The Venerable Jo Smith
             </div>
             <div class="text-muted-foreground text-[13px]">
-              Parish Priest, St Lukes Church
+              Parish Priest, St Luke's Anglican Church
             </div>
             <div class="text-primary text-[12px] font-medium mt-0.5">
               Rev’d Samuel Yengi
