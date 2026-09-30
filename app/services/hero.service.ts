@@ -6,7 +6,7 @@ export interface Hero {
   title1?: string
   title2?: string
   subtitle?: string
-  image?: string
+  images: string[]
 }
 
 export const HeroService = {

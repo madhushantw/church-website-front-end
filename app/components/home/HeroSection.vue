@@ -1,49 +1,73 @@
 <script setup lang="ts">
-import { HeroService, type Hero } from "~/services/hero.service";
-import { UserRole } from "~/services/users.service";
-import { useUserStore } from "~/stores/user.store";
-import { CButton } from "../common";
-import HeroEditDialog from "./HeroEditDialog.vue";
-const fallbackHero: Required<Hero> = {
-  welcomeText: "Growing Faith",
-  title1: "Building Community,",
-  title2: "Sharing Hope",
-  subtitle: "Welcome to St Lukes Anglican Church Modbury",
-  image:
-    "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1600&h=900&fit=crop&auto=format",
-};
+import { HeroService, type Hero } from '~/services/hero.service'
+import { UserRole } from '~/services/users.service'
+import { useUserStore } from '~/stores/user.store'
+import { CButton } from '../common'
+import HeroEditDialog from './HeroEditDialog.vue'
 
-const hero = ref<Hero>(fallbackHero);
-const userStore = useUserStore();
-const isEditDialogOpen = ref(false);
-const editingField = ref<keyof Hero | null>(null);
-const canEdit = computed(() => userStore.user?.role === UserRole.ROOT);
+const fallbackHero: Required<Hero> = {
+  welcomeText: 'Growing Faith',
+  title1: 'Building Community,',
+  title2: 'Sharing Hope',
+  subtitle: 'Welcome to St Lukes Anglican Church Modbury',
+  images: [],
+}
+
+const hero = ref<Hero>(fallbackHero)
+const userStore = useUserStore()
+const isEditDialogOpen = ref(false)
+const editingField = ref<keyof Hero | null>(null)
+const currentImageIndex = ref(0)
+
+let heroInterval: ReturnType<typeof setInterval>
+
+const canEdit = computed(() => userStore.user?.role === UserRole.ROOT)
+
+const currentHeroImage = computed(() => {
+  return hero.value.images[currentImageIndex.value]
+})
 
 const editField = (field: keyof Hero) => {
-  editingField.value = field;
-  isEditDialogOpen.value = true;
-};
+  editingField.value = field
+  isEditDialogOpen.value = true
+}
 
 const setUpdatedHero = (updatedHero: Hero) => {
-  hero.value = updatedHero;
-};
+  hero.value = updatedHero
+  currentImageIndex.value = 0
+}
 
 const getHeroData = async () => {
   try {
-    const { data } = await HeroService.get();
-    hero.value = data;
-  } catch (error) {
-    console.error("Error fetching hero data:", error);
-  }
-};
+    const { data } = await HeroService.get()
 
-onMounted(getHeroData);
+    hero.value = data
+    currentImageIndex.value = 0
+  } catch (error) {
+    console.error('Error fetching hero data:', error)
+  }
+}
+
+onMounted(async () => {
+  await getHeroData()
+
+  heroInterval = setInterval(() => {
+    if (hero.value.images.length <= 1) return
+
+    currentImageIndex.value =
+      (currentImageIndex.value + 1) % hero.value.images.length
+  }, 1500)
+})
+
+onUnmounted(() => {
+  clearInterval(heroInterval)
+})
 
 const gotContact = () => {
-  document.getElementById("about")?.scrollIntoView({
-    behavior: "smooth",
-  });
-};
+  document.getElementById('about')?.scrollIntoView({
+    behavior: 'smooth',
+  })
+}
 </script>
 
 <template>
@@ -54,8 +78,8 @@ const gotContact = () => {
     <div class="absolute inset-0 -z-20">
       <Transition name="hero-image">
         <img
-          :key="hero.image"
-          :src="hero.image || fallbackHero.image"
+          :key="currentHeroImage"
+          :src="currentHeroImage"
           alt="Congregation in worship"
           class="absolute inset-0 h-full w-full object-cover"
         >
@@ -72,7 +96,7 @@ const gotContact = () => {
       size="xs"
       aria-label="Edit hero background image"
       class="absolute bottom-5 right-5 z-20 rounded-full opacity-10 shadow-lg transition-opacity hover:opacity-80"
-      @click="editField('image')"
+      @click="editField('images')"
     />
     <UContainer class="relative z-10 mx-auto max-w-4xl px-6 text-center">
       <div class="relative mb-8 inline-flex items-center gap-2">
