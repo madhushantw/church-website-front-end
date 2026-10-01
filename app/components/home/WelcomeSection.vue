@@ -100,7 +100,6 @@ import { CButton, CSection, CSectionHeading } from "../common";
             title="Watch Full Message"
             prepend-icon="material-symbols:mic-outline"
           />
-          <CButton title="Browse All Sermons" outlined />
         </div>
       </div>
     </div>
