@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { CPageHero, CSection, CSectionHeading } from "~/components/common";
 import MissionPartnerDialog from "~/components/give/MissionPartnerDialog.vue";
-import { MissionPartnersService, type MissionPartner } from "~/services/mission-partners.service";
+import {
+  MissionPartnersService,
+  type MissionPartner,
+} from "~/services/mission-partners.service";
 import { UserRole } from "~/services/users.service";
 import { useUserStore } from "~/stores/user.store";
 
@@ -72,7 +75,10 @@ const loadMissionPartners = async () => {
   partnersError.value = "";
 
   try {
-    const response = await MissionPartnersService.getAll({ page: 1, limit: 100 });
+    const response = await MissionPartnersService.getAll({
+      page: 1,
+      limit: 100,
+    });
     missionPartners.value = response.data.items;
   } catch {
     partnersError.value = "Unable to load mission partners. Please try again.";
@@ -86,7 +92,8 @@ const addMissionPartner = (missionPartner: MissionPartner) => {
     (partner) => partner.id === missionPartner.id,
   );
 
-  if (index === -1) missionPartners.value = [missionPartner, ...missionPartners.value];
+  if (index === -1)
+    missionPartners.value = [missionPartner, ...missionPartners.value];
   else missionPartners.value[index] = missionPartner;
 
   selectedMissionPartner.value = null;
@@ -280,7 +287,7 @@ onMounted(loadMissionPartners);
             :href="item.link"
             target="_blank"
             rel="noopener noreferrer"
-            class="mt-auto flex w-full items-center justify-center gap-2 rounded-lg bg-muted px-4 py-3 text-sm font-medium text-primary transition-colors hover:bg-muted/90"
+            class="mt-auto flex w-full items-center justify-center gap-2 rounded-lg border border-transparent bg-muted px-4 py-3 text-sm font-medium text-primary transition-colors hover:border-primary hover:bg-transparent"
           >
             Learn More
             <UIcon name="i-lucide-arrow-up-right" class="size-4" />
@@ -288,7 +295,9 @@ onMounted(loadMissionPartners);
         </div>
       </div>
       <p
-        v-if="!isLoadingPartners && !partnersError && missionPartners.length === 0"
+        v-if="
+          !isLoadingPartners && !partnersError && missionPartners.length === 0
+        "
         class="py-8 text-center text-gray-600"
       >
         No mission partners have been added yet.
