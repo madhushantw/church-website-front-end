@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import {
-  CButton,
-  CPageHero,
-  CSection,
-  CSectionHeading,
-} from "~/components/common";
+import { CPageHero, CSection, CSectionHeading } from "~/components/common";
+import MissionPartnerDialog from "~/components/give/MissionPartnerDialog.vue";
+import { MissionPartnersService, type MissionPartner } from "~/services/mission-partners.service";
+import { UserRole } from "~/services/users.service";
+import { useUserStore } from "~/stores/user.store";
 
-interface GivingOption {
+interface GivingFor {
   title: string;
   description: string;
   icon: string;
 }
 
-const givingOptions: GivingOption[] = [
+const givingFore: GivingFor[] = [
   {
     title: "Support Our Ministries",
     description:
@@ -33,11 +32,77 @@ const givingOptions: GivingOption[] = [
   },
 ];
 
-const gotContact = () => {
-  document.getElementById("contact")?.scrollIntoView({
-    behavior: "smooth",
-  });
+const givingOptions = [
+  {
+    title: "Online Giving",
+    description: "Give securely through our website.",
+    icon: "i-lucide-globe",
+  },
+  {
+    title: "In-Person Giving",
+    description:
+      "Offering boxes and envelopes are available at our Sunday gatherings.",
+    icon: "i-lucide-hand-heart",
+  },
+  {
+    title: "Online Transfer",
+    description: "Give directly via bank transfer",
+    icon: "i-lucide-landmark",
+    account: {
+      name: "St Luke's anglican Church",
+      bank: "Bank of Hope",
+      accountNumber: "123456789",
+      routingNumber: "987654321",
+    },
+  },
+];
+
+const userStore = useUserStore();
+const missionPartners = ref<MissionPartner[]>([]);
+const isLoadingPartners = ref(true);
+const partnersError = ref("");
+const isMissionPartnerDialogOpen = ref(false);
+const selectedMissionPartner = ref<MissionPartner | null>(null);
+const canManageMissionPartners = computed(
+  () => userStore.user?.role === UserRole.ROOT,
+);
+
+const loadMissionPartners = async () => {
+  isLoadingPartners.value = true;
+  partnersError.value = "";
+
+  try {
+    const response = await MissionPartnersService.getAll({ page: 1, limit: 100 });
+    missionPartners.value = response.data.items;
+  } catch {
+    partnersError.value = "Unable to load mission partners. Please try again.";
+  } finally {
+    isLoadingPartners.value = false;
+  }
 };
+
+const addMissionPartner = (missionPartner: MissionPartner) => {
+  const index = missionPartners.value.findIndex(
+    (partner) => partner.id === missionPartner.id,
+  );
+
+  if (index === -1) missionPartners.value = [missionPartner, ...missionPartners.value];
+  else missionPartners.value[index] = missionPartner;
+
+  selectedMissionPartner.value = null;
+};
+
+const openCreateMissionPartner = () => {
+  selectedMissionPartner.value = null;
+  isMissionPartnerDialogOpen.value = true;
+};
+
+const openEditMissionPartner = (missionPartner: MissionPartner) => {
+  selectedMissionPartner.value = missionPartner;
+  isMissionPartnerDialogOpen.value = true;
+};
+
+onMounted(loadMissionPartners);
 </script>
 
 <template>
@@ -80,19 +145,10 @@ const gotContact = () => {
             ministry of the local church, and help bring hope to people in our
             communities and beyond.
           </p>
-          <div class="flex flex-col gap-4 sm:flex-row">
-            <CButton
-              title="Give Online"
-              color="accent"
-              prepend-icon="lucide:heart"
-              @on-click="gotContact"
-            />
-          </div>
         </div>
-
         <div class="grid grid-cols-1 gap-5">
           <div
-            v-for="option in givingOptions"
+            v-for="option in givingFore"
             :key="option.title"
             class="group flex items-start gap-5 rounded-lg border border-accent/10 bg-card p-6 transition-colors hover:border-accent/30 bg-white"
           >
@@ -116,6 +172,133 @@ const gotContact = () => {
           </div>
         </div>
       </div>
+    </CSection>
+    <CSection background-color="muted">
+      <CSectionHeading
+        label=""
+        title="Giving Options"
+        sub-title="There are a number of ways you can give at Hope Valley Church."
+      />
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div
+          v-for="(item, index) in givingOptions"
+          :key="index"
+          class="rounded-2xl bg-white p-6 shadow-sm"
+        >
+          <div
+            class="mb-5 flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary"
+          >
+            <UIcon :name="item.icon" class="size-6" />
+          </div>
+          <h3 class="mb-3 text-xl font-semibold text-primary">
+            {{ item.title }}
+          </h3>
+          <p class="text-sm leading-6 text-gray-600">
+            {{ item.description }}
+          </p>
+          <div
+            v-if="item.account"
+            class="mt-5 space-y-2 border-t border-gray-100 pt-5 text-sm"
+          >
+            <div class="flex justify-between gap-4">
+              <span class="text-gray-500">Account Name</span>
+              <span class="font-medium text-gray-800">
+                {{ item.account.name }}
+              </span>
+            </div>
+            <div class="flex justify-between gap-4">
+              <span class="text-gray-500">Bank</span>
+              <span class="font-medium text-gray-800">
+                {{ item.account.bank }}
+              </span>
+            </div>
+            <div class="flex justify-between gap-4">
+              <span class="text-gray-500">Account Number</span>
+              <span class="font-medium text-gray-800">
+                {{ item.account.accountNumber }}
+              </span>
+            </div>
+            <div class="flex justify-between gap-4">
+              <span class="text-gray-500">Routing Number</span>
+              <span class="font-medium text-gray-800">
+                {{ item.account.routingNumber }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </CSection>
+    <CSection>
+      <CSectionHeading
+        label=""
+        title="Our Mission Partners"
+        sub-title="Explore some of the ministries and organizations we support through our monthly Mission Offering."
+      />
+      <div v-if="canManageMissionPartners" class="mb-6 flex justify-center">
+        <UButton
+          label="Add mission partner"
+          icon="i-lucide-plus"
+          color="primary"
+          class="rounded-xl"
+          @click="openCreateMissionPartner"
+        />
+      </div>
+      <p v-if="isLoadingPartners" class="py-8 text-center text-gray-600">
+        Loading mission partners...
+      </p>
+      <p v-else-if="partnersError" class="py-8 text-center text-red-600">
+        {{ partnersError }}
+      </p>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div
+          v-for="(item, index) in missionPartners"
+          :key="index"
+          class="relative flex h-120 flex-col gap-4 rounded-2xl bg-white p-6 shadow-sm"
+        >
+          <UButton
+            v-if="canManageMissionPartners"
+            icon="i-lucide-pencil"
+            color="neutral"
+            variant="soft"
+            size="sm"
+            aria-label="Edit mission partner"
+            class="absolute right-4 top-4 rounded-lg"
+            @click="openEditMissionPartner(item)"
+          />
+          <span class="inline-flex text-xs font-medium text-primary">
+            {{ item.type }}
+          </span>
+          <h3
+            class="font-['Playfair_Display'] text-3xl font-normal text-foreground"
+          >
+            {{ item.title }}
+          </h3>
+          <p class="text-sm leading-6 text-gray-600">
+            {{ item.description }}
+          </p>
+          <a
+            :href="item.link"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-auto flex w-full items-center justify-center gap-2 rounded-lg bg-muted px-4 py-3 text-sm font-medium text-primary transition-colors hover:bg-muted/90"
+          >
+            Learn More
+            <UIcon name="i-lucide-arrow-up-right" class="size-4" />
+          </a>
+        </div>
+      </div>
+      <p
+        v-if="!isLoadingPartners && !partnersError && missionPartners.length === 0"
+        class="py-8 text-center text-gray-600"
+      >
+        No mission partners have been added yet.
+      </p>
+      <MissionPartnerDialog
+        v-if="canManageMissionPartners"
+        v-model:open="isMissionPartnerDialogOpen"
+        :mission-partner="selectedMissionPartner"
+        @saved="addMissionPartner"
+      />
     </CSection>
   </div>
 </template>
