@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import axios from "axios";
 import {
   GalleryImageType,
   GalleryService,
@@ -120,8 +121,10 @@ const uploadImages = async () => {
 
     open.value = false;
     reset();
-  } catch {
-    error.value = "Unable to upload the images. Please try again.";
+  } catch(e) {
+    if (axios.isAxiosError(e)) {
+      error.value = e.response?.data?.message ?? "Unable to upload the images. Please try again.";
+    }
   } finally {
     isLoading.value = false;
   }
