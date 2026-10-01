@@ -7,6 +7,7 @@ interface Props {
 }
 
 defineProps<Props>();
+const isDescriptionExpanded = ref(false);
 const emit = defineEmits<{
   edit: [event: EventItem]
   delete: [event: EventItem]
@@ -35,9 +36,22 @@ const emit = defineEmits<{
       >
         {{ event.title }}
       </h3>
-      <p class="mb-3 text-[13px] leading-relaxed text-muted-foreground">
+      <p
+        class="mb-1 text-[13px] leading-relaxed text-muted-foreground"
+        :class="isDescriptionExpanded ? 'whitespace-pre-line' : 'line-clamp-3'"
+      >
         {{ event.description }}
       </p>
+      <UButton
+        v-if="event.description"
+        :label="isDescriptionExpanded ? 'Show less' : 'Read more'"
+        :aria-expanded="isDescriptionExpanded"
+        color="primary"
+        variant="link"
+        size="xs"
+        class="mb-3 px-0"
+        @click="isDescriptionExpanded = !isDescriptionExpanded"
+      />
       <div class="flex flex-wrap gap-x-4 gap-y-2">
         <div
           class="flex items-center gap-1.5 text-[12px] text-muted-foreground"
