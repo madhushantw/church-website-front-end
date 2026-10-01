@@ -28,21 +28,15 @@ const givingOptions: GivingOption[] = [
   },
 ];
 
-const gotContact = () => {
-  document.getElementById("contact")?.scrollIntoView({
-    behavior: "smooth",
-  });
-};
 </script>
 
 <template>
   <CSection id="gospel" background-color="muted">
-    <div class="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
+    <div class="grid grid-cols-1 gap-16 lg:grid-cols-2">
       <div>
         <CSectionHeading
-          label="Generosity"
-          title="Partner With Us"
-          highlighted="in Giving"
+          label=""
+          title="Give"
         />
         <p class="mb-6 max-w-xl text-[16px] leading-relaxed text-foreground/70">
           Everything we have belongs to God, and giving is one of the ways we
@@ -50,29 +44,13 @@ const gotContact = () => {
           generosity helps support the ministry of Hope Valley Church and
           enables us to bring hope locally, nationally, and globally.
         </p>
-        <CSectionHeading label="" title="Why Do We Give?" />
-        <p class="mb-6 max-w-xl text-[16px] leading-relaxed text-foreground/70">
-          We believe that everything we have comes from God and ultimately
-          belongs to Him. As followers of Jesus, we respond to His generosity by
-          stewarding our resources faithfully and returning a portion of what He
-          has entrusted to us.
-        </p>
-        <p class="mb-6 max-w-xl text-[16px] leading-relaxed text-foreground/70">
-          Giving is more than a financial transaction—it's an act of worship.
-          When we give, we declare that God is our provider and that His kingdom
-          is our priority.
-        </p>
-        <p class="mb-6 max-w-xl text-[16px] leading-relaxed text-foreground/70">
-          Through our generosity, we participate in God's work, support the
-          ministry of the local church, and help bring hope to people in our
-          communities and beyond.
-        </p>
         <div class="flex flex-col gap-4 sm:flex-row">
           <CButton
-            title="Give Online"
-            color="accent"
+            title="Learn More"
+            color="primary"
+            outlined
             prepend-icon="lucide:heart"
-            @on-click="gotContact"
+            @on-click="navigateTo('/give')"
           />
         </div>
       </div>

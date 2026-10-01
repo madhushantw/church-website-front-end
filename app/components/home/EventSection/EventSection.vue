@@ -120,7 +120,7 @@ watch(() => isEventDialogOpen.value, open => {
       />
     </div>
     <div v-else class="text-center py-8">No events found</div>
-    <UPagination v-if="total &&  hideNavigationButton" v-model:page="page" :items-per-page="limit" :total="total" class="my-4 mx-auto" />
+    <UPagination v-if="total > events.length && hideNavigationButton" v-model:page="page" :items-per-page="limit" :total="total" class="my-4 mx-auto" />
     <EventDialog
       v-model="isEventDialogOpen"
       :event="selectedItem"

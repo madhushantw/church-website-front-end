@@ -5,7 +5,7 @@ import ContactSection from "~/components/home/ContactSection/ContactSection.vue"
 import Daily from "~/components/home/Daily/Daily.vue";
 import EventSection from "~/components/home/EventSection/EventSection.vue";
 import GallerySection from "~/components/home/GallerySection.vue";
-import GenerositySection from "~/components/home/GenerositySection.vue";
+import Give from "~/components/home/Give.vue";
 import GospelSection from "~/components/home/GospelSection.vue";
 import HeroSection from "~/components/home/HeroSection.vue";
 import MinistrySection from "~/components/home/MinistrySection/MinistrySection.vue";
@@ -28,7 +28,7 @@ import WelcomeSection from "~/components/home/WelcomeSection.vue";
     <EventSection />
     <MinistrySection />
     <GallerySection />
-    <GenerositySection />
+    <Give />
     <ContactSection />
   </div>
 </template>
