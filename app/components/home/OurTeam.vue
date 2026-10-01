@@ -139,6 +139,9 @@ const scrollMembers = (direction: -1 | 1) => {
               <p class="mt-2 text-sm font-medium text-white/80">
                 {{ member.title }}
               </p>
+              <p class="text-sm font-medium text-white/80">
+                {{ member.email }}
+              </p>
               <a
                 :href="`mailto:${member.email}`"
                 :aria-label="`Send email to ${member.name}`"
