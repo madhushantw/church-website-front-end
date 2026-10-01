@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import priestImage from "~/assets/images/priest-avatar.png";
 import { CButton, CSection, CSectionHeading } from "../common";
+
+const exampleVideoUrl = "https://www.youtube-nocookie.com/embed/Xmq53wlfMek";
 </script>
 
 <template>
@@ -10,41 +12,14 @@ import { CButton, CSection, CSectionHeading } from "../common";
         <div
           class="relative rounded-xl overflow-hidden shadow-2xl bg-foreground aspect-video"
         >
-          <img
-            :src="priestImage"
-            alt="Parish Priest video message"
-            class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-300"
-          >
-          <div
-            class="absolute inset-0 bg-foreground/30 group-hover:bg-foreground/20 transition-colors"
+          <iframe
+            :src="exampleVideoUrl"
+            title="Example welcome video from St Luke's Anglican Church"
+            class="absolute inset-0 h-full w-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
           />
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div
-              class="w-20 h-20 rounded-full bg-white/95 hover:bg-white flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-200 cursor-pointer"
-            >
-              <UIcon
-                name="line-md:play-filled"
-                size="44"
-                class="text-primary"
-              />
-            </div>
-          </div>
-          <div
-            class="absolute bottom-0 left-0 right-0 p-5 bg-linear-to-t from-foreground/70 to-transparent"
-          >
-            <div class="flex items-center gap-2">
-              <div class="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              <span
-                class="text-white text-[12px] font-medium tracking-wide uppercase"
-                >Latest Message</span
-              >
-            </div>
-            <div
-              class="text-white font-semibold text-[16px] mt-1 font-['Playfair_Display']"
-            >
-              A Word of Welcome from Our Pastor
-            </div>
-          </div>
         </div>
         <div
           class="absolute -bottom-4 -right-4 w-20 h-20 border-2 border-accent/40 rounded-xl -z-10"

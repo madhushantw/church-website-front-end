@@ -2,6 +2,7 @@
 import AboutUs from "~/components/home/AboutUs.vue";
 import OurTeam from "~/components/home/OurTeam.vue";
 import { CPageHero } from "~/components/common";
+import NextStep from "~/components/home/NextStep.vue";
 </script>
 
 <template>
@@ -15,6 +16,7 @@ import { CPageHero } from "~/components/common";
       description="At St Luke's Anglican Church we believe that belonging is just the beginning to a life of significance and purpose. Our community and our teachings are built around connecting people to each other and to God."
     />
     <AboutUs />
+    <NextStep />
     <OurTeam />
   </div>
 </template>

@@ -9,6 +9,7 @@ import Give from "~/components/home/Give.vue";
 import GospelSection from "~/components/home/GospelSection.vue";
 import HeroSection from "~/components/home/HeroSection.vue";
 import MinistrySection from "~/components/home/MinistrySection/MinistrySection.vue";
+import NextStep from "~/components/home/NextStep.vue";
 import SermonsSection from "~/components/home/SermonsSection/SermonsSection.vue";
 import WelcomeSection from "~/components/home/WelcomeSection.vue";
 </script>
@@ -20,6 +21,7 @@ import WelcomeSection from "~/components/home/WelcomeSection.vue";
     <AboutUs />
     <GospelSection />
     <WelcomeSection />
+    <NextStep />
     <CGatheringSection
       reference="Matthew 18:20"
       text="For where two or three gather in my name, there am I with them."
