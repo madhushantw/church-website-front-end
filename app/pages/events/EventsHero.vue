@@ -10,17 +10,5 @@ import { CPageHero } from "~/components/common"
     title="Life Is Better"
     highlighted="Together"
     description="From worship and fellowship to serving our community, discover what's happening at our church and find your place to connect."
-    :buttons="[
-      {
-        title: 'View Events',
-        color: 'accent',
-        appendIcon: 'lucide:arrow-down',
-      },
-      {
-        title: 'Plan Your Visit',
-        color: 'accent',
-        outlined: true,
-      },
-    ]"
   />
 </template>
