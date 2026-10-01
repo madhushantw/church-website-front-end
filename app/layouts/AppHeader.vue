@@ -40,7 +40,7 @@ const items = computed<NavigationMenuItem[]>(() => {
     },
     {
       label: "About",
-      href: isHome ? "#about" : "/#about",
+      href: isHome ? "#about" : "/about",
     },
     {
       label: "Gospel",
@@ -56,7 +56,7 @@ const items = computed<NavigationMenuItem[]>(() => {
     },
     {
       label: "Ministries",
-      href: isHome ? "#ministries" : "/#ministries",
+      href: isHome ? "#ministries" : "/ministries",
     },
     {
       label: "Gallery",
@@ -65,6 +65,10 @@ const items = computed<NavigationMenuItem[]>(() => {
     {
       label: "Contact",
       href: isHome ? "#contact" : "/#contact",
+    },
+    {
+      label: "Give",
+      href: isHome ? "#give" : "/give",
     },
   ];
 });

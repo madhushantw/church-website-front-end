@@ -122,7 +122,7 @@ onMounted(loadMissionPartners);
       highlighted="Give"
       description="Everything we have belongs to God, and giving is one of the ways we
             worship Him, trust Him, and participate in His mission. Your
-            generosity helps support the ministry of Hope Valley Church and
+            generosity helps support the ministry of St Luke's Anglican Church and
             enables us to bring hope locally, nationally, and globally."
       :buttons="[]"
     />
@@ -184,7 +184,7 @@ onMounted(loadMissionPartners);
       <CSectionHeading
         label=""
         title="Giving Options"
-        sub-title="There are a number of ways you can give at Hope Valley Church."
+        sub-title="There are a number of ways you can give at St Luke's Anglican Church."
       />
       <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
         <div

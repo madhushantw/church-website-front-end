@@ -31,7 +31,7 @@ const givingOptions: GivingOption[] = [
 </script>
 
 <template>
-  <CSection id="gospel" background-color="muted">
+  <CSection id="give" background-color="muted">
     <div class="grid grid-cols-1 gap-16 lg:grid-cols-2">
       <div>
         <CSectionHeading
@@ -41,7 +41,7 @@ const givingOptions: GivingOption[] = [
         <p class="mb-6 max-w-xl text-[16px] leading-relaxed text-foreground/70">
           Everything we have belongs to God, and giving is one of the ways we
           worship Him, trust Him, and participate in His mission. Your
-          generosity helps support the ministry of Hope Valley Church and
+          generosity helps support the ministry of St Luke's Anglican Church and
           enables us to bring hope locally, nationally, and globally.
         </p>
         <div class="flex flex-col gap-4 sm:flex-row">

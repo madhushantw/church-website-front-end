@@ -113,7 +113,7 @@ watch(() => props.missionPartner, (missionPartner) => {
             <p class="mt-2 text-sm text-muted-foreground">
               {{ isEditing
                 ? "Update this organization’s mission partner details."
-                : "Add an organization supported by Hope Valley Church." }}
+                : "Add an organization supported by St Luke's Anglican Church." }}
             </p>
           </div>
           <UButton

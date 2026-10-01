@@ -104,7 +104,11 @@ const stats = [
             <CStat v-for="stat in stats" :key="stat.label" v-bind="stat" />
           </div>
           <div class="flex">
-            <CButton title="Plan Your Visit" append-icon="ep:right" />
+            <CButton
+              title="Learn more"
+              append-icon="ep:right"
+              @on-click="navigateTo('/about')"
+            />
           </div>
         </div>
       </div>

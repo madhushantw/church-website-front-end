@@ -1,14 +1,48 @@
 <script setup lang="ts">
 import appIcon from "../../public/favIcon.png";
-const navigation = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Events", href: "#events" },
-  { label: "Readings", href: "#sermons" },
-  { label: "Ministries", href: "#ministries" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Contact", href: "#contact" },
-];
+const route = useRoute();
+const navigation = computed(() => {
+  const isHome = route.path === "/";
+
+  return [
+    {
+      label: "Home",
+      href: isHome ? "#home" : "/",
+    },
+    {
+      label: "About",
+      href: isHome ? "#about" : "/about",
+    },
+    {
+      label: "Gospel",
+      href: isHome ? "#gospel" : "/#gospel",
+    },
+    {
+      label: "Readings",
+      href: isHome ? "#sermons" : "/sermons",
+    },
+    {
+      label: "Events",
+      href: isHome ? "#events" : "/events",
+    },
+    {
+      label: "Ministries",
+      href: isHome ? "#ministries" : "/ministries",
+    },
+    {
+      label: "Gallery",
+      href: isHome ? "#gallery" : "/gallery",
+    },
+    {
+      label: "Contact",
+      href: isHome ? "#contact" : "/#contact",
+    },
+    {
+      label: "Give",
+      href: isHome ? "#give" : "/give",
+    },
+  ];
+});
 
 const socials = [
   { name: "Facebook", icon: "lucide:facebook" },

@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import AboutUs from "~/components/home/AboutUs.vue";
-import CGatheringSection from "~/components/common/CGatheringSection.vue";
+import OurTeam from "~/components/home/OurTeam.vue";
+import { CPageHero } from "~/components/common";
 </script>
 
 <template>
   <div>
-    <AboutUs />
-    <CGatheringSection
-      reference="Matthew 18:20"
-      text="For where two or three gather in my name, there am I with them."
+    <CPageHero
+      image="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1800&h=900&fit=crop&auto=format"
+      alt="about us"
+      label=""
+      title=""
+      highlighted="About Us"
+      description="At St Luke's Anglican Church we believe that belonging is just the beginning to a life of significance and purpose. Our community and our teachings are built around connecting people to each other and to God."
     />
+    <AboutUs />
+    <OurTeam />
   </div>
 </template>
