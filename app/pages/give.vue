@@ -99,6 +99,13 @@ const addMissionPartner = (missionPartner: MissionPartner) => {
   selectedMissionPartner.value = null;
 };
 
+const removeMissionPartner = (id: string) => {
+  missionPartners.value = missionPartners.value.filter(
+    (partner) => partner.id !== id,
+  );
+  selectedMissionPartner.value = null;
+};
+
 const openCreateMissionPartner = () => {
   selectedMissionPartner.value = null;
   isMissionPartnerDialogOpen.value = true;
@@ -236,19 +243,22 @@ onMounted(loadMissionPartners);
       </div>
     </CSection>
     <CSection>
-      <CSectionHeading
-        label=""
-        title="Our Mission Partners"
-        sub-title="Explore some of the ministries and organizations we support through our monthly Mission Offering."
-      />
-      <div v-if="canManageMissionPartners" class="mb-6 flex justify-center">
-        <UButton
-          label="Add mission partner"
-          icon="i-lucide-plus"
-          color="primary"
-          class="rounded-xl"
-          @click="openCreateMissionPartner"
+      <div class="flex flex-col justify-between gap-4 md:flex-row">
+        <CSectionHeading
+          label=""
+          title="Our Mission Partners"
+          sub-title="Explore some of the ministries and organizations we support through our monthly Mission Offering."
         />
+        <div v-if="canManageMissionPartners" class="mb-6 flex justify-center">
+          <UButton
+            label="Add mission partner"
+            icon="i-lucide-plus"
+            color="primary"
+            variant="ghost"
+            class="rounded-xl my-auto"
+            @click="openCreateMissionPartner"
+          />
+        </div>
       </div>
       <p v-if="isLoadingPartners" class="py-8 text-center text-gray-600">
         Loading mission partners...
@@ -266,10 +276,10 @@ onMounted(loadMissionPartners);
             v-if="canManageMissionPartners"
             icon="i-lucide-pencil"
             color="neutral"
-            variant="soft"
+            variant="ghost"
             size="sm"
             aria-label="Edit mission partner"
-            class="absolute right-4 top-4 rounded-lg"
+            class="absolute right-4 top-4 rounded-full"
             @click="openEditMissionPartner(item)"
           />
           <span class="inline-flex text-xs font-medium text-primary">
@@ -307,6 +317,7 @@ onMounted(loadMissionPartners);
         v-model:open="isMissionPartnerDialogOpen"
         :mission-partner="selectedMissionPartner"
         @saved="addMissionPartner"
+        @deleted="removeMissionPartner"
       />
     </CSection>
   </div>

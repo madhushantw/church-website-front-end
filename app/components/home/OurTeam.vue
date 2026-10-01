@@ -94,6 +94,7 @@ const scrollMembers = (direction: -1 | 1) => {
             label="Add team member"
             icon="i-lucide-plus"
             color="primary"
+            variant="soft"
             class="rounded-xl"
             @click="openCreateDialog"
           />

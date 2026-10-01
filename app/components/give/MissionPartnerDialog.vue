@@ -18,6 +18,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{
   saved: [missionPartner: MissionPartner];
+  deleted: [id: string];
 }>();
 
 const initialForm = (): MissionPartnerForm => ({
@@ -29,12 +30,15 @@ const initialForm = (): MissionPartnerForm => ({
 
 const form = ref<MissionPartnerForm>(initialForm());
 const isLoading = ref(false);
+const isDeleting = ref(false);
+const confirmDelete = ref(false);
 const error = ref("");
 const isEditing = computed(() => !!props.missionPartner);
 
 const resetForm = () => {
   form.value = initialForm();
   error.value = "";
+  confirmDelete.value = false;
 };
 
 const loadMissionPartner = (missionPartner: MissionPartner) => {
@@ -45,10 +49,11 @@ const loadMissionPartner = (missionPartner: MissionPartner) => {
     link: missionPartner.link,
   };
   error.value = "";
+  confirmDelete.value = false;
 };
 
 const close = () => {
-  if (!isLoading.value) open.value = false;
+  if (!isLoading.value && !isDeleting.value) open.value = false;
 };
 
 const saveMissionPartner = async () => {
@@ -74,6 +79,24 @@ const saveMissionPartner = async () => {
       : "Unable to add this mission partner. Please try again.";
   } finally {
     isLoading.value = false;
+  }
+};
+
+const deleteMissionPartner = async () => {
+  if (!props.missionPartner) return;
+
+  isDeleting.value = true;
+  error.value = "";
+
+  try {
+    await MissionPartnersService.delete(props.missionPartner.id);
+    emit("deleted", props.missionPartner.id);
+    open.value = false;
+    resetForm();
+  } catch {
+    error.value = "Unable to delete this mission partner. Please try again.";
+  } finally {
+    isDeleting.value = false;
   }
 };
 
@@ -123,7 +146,7 @@ watch(() => props.missionPartner, (missionPartner) => {
             variant="ghost"
             aria-label="Close mission partner dialog"
             class="rounded-full"
-            :disabled="isLoading"
+            :disabled="isLoading || isDeleting"
             @click="close"
           />
         </div>
@@ -158,28 +181,70 @@ watch(() => props.missionPartner, (missionPartner) => {
           />
         </div>
 
+        <div
+          v-if="isEditing && confirmDelete"
+          class="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 p-4"
+        >
+          <p class="text-sm text-red-700">
+            Delete {{ props.missionPartner?.title }} permanently?
+          </p>
+          <div class="flex gap-2">
+            <UButton
+              type="button"
+              label="Keep partner"
+              color="neutral"
+              variant="soft"
+              size="sm"
+              :disabled="isDeleting"
+              @click="confirmDelete = false"
+            />
+            <UButton
+              type="button"
+              label="Confirm delete"
+              color="error"
+              size="sm"
+              :loading="isDeleting"
+              @click="deleteMissionPartner"
+            />
+          </div>
+        </div>
+
         <p v-if="error" class="mt-4 text-sm text-red-600">
           {{ error }}
         </p>
 
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="mt-6 flex flex-wrap justify-between gap-3">
           <UButton
+            v-if="isEditing && !confirmDelete"
             type="button"
-            label="Cancel"
-            color="neutral"
+            label="Delete partner"
+            icon="i-lucide-trash-2"
+            color="error"
             variant="soft"
             class="rounded-xl"
-            :disabled="isLoading"
-            @click="close"
+            :disabled="isLoading || isDeleting"
+            @click="confirmDelete = true"
           />
-          <UButton
-            type="submit"
-            :label="isEditing ? 'Save changes' : 'Add mission partner'"
-            :icon="isEditing ? 'i-lucide-save' : 'i-lucide-plus'"
-            color="primary"
-            class="rounded-xl"
-            :loading="isLoading"
-          />
+          <span v-else />
+          <div class="ml-auto flex gap-3">
+            <UButton
+              type="button"
+              label="Cancel"
+              color="neutral"
+              variant="soft"
+              class="rounded-xl"
+              :disabled="isLoading || isDeleting"
+              @click="close"
+            />
+            <UButton
+              type="submit"
+              :label="isEditing ? 'Save changes' : 'Add mission partner'"
+              :icon="isEditing ? 'i-lucide-save' : 'i-lucide-plus'"
+              color="primary"
+              class="rounded-xl"
+              :loading="isLoading"
+            />
+          </div>
         </div>
       </form>
     </template>
