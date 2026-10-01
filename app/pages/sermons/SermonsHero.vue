@@ -10,12 +10,5 @@ import { CPageHero } from "~/components/common"
     title="Words That"
     highlighted="Inspire"
     description="Discover messages of faith, hope, and grace. Listen to sermons that encourage you to grow deeper in your relationship with God."
-    :buttons="[
-      {
-        title: 'Explore Sermons',
-        color: 'white',
-        appendIcon: 'lucide:play',
-      },
-    ]"
   />
 </template>

@@ -10,12 +10,5 @@ import { CPageHero } from "~/components/common"
     title="Growing Together in"
     highlighted="Faith"
     description="Discover the ministries, people, and opportunities that help you connect, serve, and grow in the life of our church."
-    :buttons="[
-      {
-        title: 'Explore Ministries',
-        color: 'accent',
-        appendIcon: 'lucide:arrow-down',
-      },
-    ]"
   />
 </template>

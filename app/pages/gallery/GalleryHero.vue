@@ -10,12 +10,5 @@ import { CPageHero } from "~/components/common"
     title="Moments of Faith"
     highlighted="& Fellowship"
     description="Take a glimpse into the life of our church family. Explore moments of worship, community, service, and celebration."
-    :buttons="[
-      {
-        title: 'Explore Gallery',
-        color: 'white',
-        appendIcon: 'lucide:images',
-      },
-    ]"
   />
 </template>
