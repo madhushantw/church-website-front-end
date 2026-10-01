@@ -56,7 +56,7 @@ onMounted(async () => {
 
     currentImageIndex.value =
       (currentImageIndex.value + 1) % hero.value.images.length
-  }, 1500)
+  }, 10000)
 })
 
 onUnmounted(() => {

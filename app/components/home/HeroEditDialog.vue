@@ -166,7 +166,7 @@ const updateHero = async () => {
             >
               No hero images added yet.
             </div>
-            <div class="flex gap-2">
+            <div v-if="images.length < 8" class="flex gap-2">
               <CInput
                 v-model="value"
                 label="Image URL"
