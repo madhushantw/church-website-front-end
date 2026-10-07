@@ -118,12 +118,17 @@ watch(() => props.missionPartner, (missionPartner) => {
     :ui="{
       overlay: 'bg-foreground/30 backdrop-blur-sm',
       content:
-        'max-w-2xl rounded-3xl border border-primary/10 bg-background shadow-2xl',
+        'w-full max-w-2xl overflow-hidden rounded-3xl border border-primary/10 bg-background shadow-2xl',
     }"
   >
     <template #content>
-      <form class="p-6 sm:p-8" @submit.prevent="saveMissionPartner">
-        <div class="mb-7 flex items-start justify-between gap-4">
+      <form
+        class="flex max-h-[calc(100dvh-2rem)] flex-col sm:max-h-[calc(100dvh-4rem)]"
+        @submit.prevent="saveMissionPartner"
+      >
+        <div
+          class="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 sm:px-8 sm:pt-8"
+        >
           <div>
             <p
               class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent"
@@ -145,75 +150,79 @@ watch(() => props.missionPartner, (missionPartner) => {
             color="neutral"
             variant="ghost"
             aria-label="Close mission partner dialog"
-            class="rounded-full"
+            class="shrink-0 rounded-full"
             :disabled="isLoading || isDeleting"
             @click="close"
           />
         </div>
 
-        <div class="grid gap-4 sm:grid-cols-2">
-          <CInput
-            v-model="form.title"
-            label="Organization name"
-            placeholder="Hands of Hope Foundation"
-            required
-            class="sm:col-span-2"
-          />
-          <CInput
-            v-model="form.type"
-            label="Mission type"
-            placeholder="Local Mission"
-            required
-          />
-          <CInput
-            v-model="form.link"
-            label="Website"
-            placeholder="https://example.org"
-            type="url"
-            required
-          />
-          <CInput
-            v-model="form.description"
-            label="Description"
-            placeholder="Describe this mission partner"
-            textarea
-            class="sm:col-span-2"
-          />
+        <div class="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <CInput
+              v-model="form.title"
+              label="Organization name"
+              placeholder="Hands of Hope Foundation"
+              required
+              class="sm:col-span-2"
+            />
+            <CInput
+              v-model="form.type"
+              label="Mission type"
+              placeholder="Local Mission"
+              required
+            />
+            <CInput
+              v-model="form.link"
+              label="Website"
+              placeholder="https://example.org"
+              type="url"
+              required
+            />
+            <CInput
+              v-model="form.description"
+              label="Description"
+              placeholder="Describe this mission partner"
+              textarea
+              class="sm:col-span-2"
+            />
+          </div>
+
+          <div
+            v-if="isEditing && confirmDelete"
+            class="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 p-4"
+          >
+            <p class="text-sm text-red-700">
+              Delete {{ props.missionPartner?.title }} permanently?
+            </p>
+            <div class="flex gap-2">
+              <UButton
+                type="button"
+                label="Keep partner"
+                color="neutral"
+                variant="soft"
+                size="sm"
+                :disabled="isDeleting"
+                @click="confirmDelete = false"
+              />
+              <UButton
+                type="button"
+                label="Confirm delete"
+                color="error"
+                size="sm"
+                :loading="isDeleting"
+                @click="deleteMissionPartner"
+              />
+            </div>
+          </div>
+
+          <p v-if="error" class="mt-4 text-sm text-red-600">
+            {{ error }}
+          </p>
         </div>
 
         <div
-          v-if="isEditing && confirmDelete"
-          class="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 p-4"
+          class="flex shrink-0 flex-wrap justify-between gap-3 border-t border-primary/10 px-6 py-4 sm:px-8"
         >
-          <p class="text-sm text-red-700">
-            Delete {{ props.missionPartner?.title }} permanently?
-          </p>
-          <div class="flex gap-2">
-            <UButton
-              type="button"
-              label="Keep partner"
-              color="neutral"
-              variant="soft"
-              size="sm"
-              :disabled="isDeleting"
-              @click="confirmDelete = false"
-            />
-            <UButton
-              type="button"
-              label="Confirm delete"
-              color="error"
-              size="sm"
-              :loading="isDeleting"
-              @click="deleteMissionPartner"
-            />
-          </div>
-        </div>
-
-        <p v-if="error" class="mt-4 text-sm text-red-600">
-          {{ error }}
-        </p>
-
-        <div class="mt-6 flex flex-wrap justify-between gap-3">
           <UButton
             v-if="isEditing && !confirmDelete"
             type="button"

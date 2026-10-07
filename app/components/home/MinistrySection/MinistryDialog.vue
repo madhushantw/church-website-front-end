@@ -120,12 +120,15 @@ watch(() => props.ministry, (ministry) => {
     :ui="{
       overlay: 'bg-foreground/30 backdrop-blur-sm',
       content:
-        'max-w-2xl rounded-3xl border border-primary/10 bg-background shadow-2xl',
+        'w-full max-w-2xl overflow-hidden rounded-3xl border border-primary/10 bg-background shadow-2xl',
     }"
   >
     <template #content>
-      <form class="p-6 sm:p-8" @submit.prevent="saveMinistry">
-        <div class="mb-7 flex items-start justify-between gap-4">
+      <form
+        class="flex max-h-[calc(100dvh-2rem)] flex-col sm:max-h-[calc(100dvh-4rem)]"
+        @submit.prevent="saveMinistry"
+      >
+        <div class="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 sm:px-8 sm:pt-8">
           <div>
             <p
               class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent"
@@ -147,12 +150,13 @@ watch(() => props.ministry, (ministry) => {
             color="neutral"
             variant="ghost"
             aria-label="Close add ministry dialog"
-            class="rounded-full"
+            class="shrink-0 rounded-full"
             @click="close"
           />
         </div>
 
-        <div class="grid gap-4 sm:grid-cols-2">
+        <div class="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8">
+          <div class="grid gap-4 sm:grid-cols-2">
           <CInput
             v-model="form.name"
             label="Ministry name"
@@ -203,13 +207,14 @@ watch(() => props.ministry, (ministry) => {
             textarea
             class="sm:col-span-2"
           />
+          </div>
+
+          <p v-if="error" class="mt-4 text-sm text-red-600">
+            {{ error }}
+          </p>
         </div>
 
-        <p v-if="error" class="mt-4 text-sm text-red-600">
-          {{ error }}
-        </p>
-
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="flex shrink-0 justify-end gap-3 border-t border-primary/10 px-6 py-4 sm:px-8">
           <UButton
             type="button"
             label="Cancel"

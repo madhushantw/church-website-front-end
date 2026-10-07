@@ -164,12 +164,17 @@ onBeforeUnmount(clearPhotoPreview);
     :ui="{
       overlay: 'bg-foreground/30 backdrop-blur-sm',
       content:
-        'max-w-2xl rounded-3xl border border-primary/10 bg-background shadow-2xl',
+        'w-full max-w-2xl overflow-hidden rounded-3xl border border-primary/10 bg-background shadow-2xl',
     }"
   >
     <template #content>
-      <form class="p-6 sm:p-8" @submit.prevent="saveMember">
-        <div class="mb-7 flex items-start justify-between gap-4">
+      <form
+        class="flex max-h-[calc(100dvh-2rem)] flex-col sm:max-h-[calc(100dvh-4rem)]"
+        @submit.prevent="saveMember"
+      >
+        <div
+          class="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 sm:px-8 sm:pt-8"
+        >
           <div>
             <p
               class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent"
@@ -189,91 +194,95 @@ onBeforeUnmount(clearPhotoPreview);
             color="neutral"
             variant="ghost"
             aria-label="Close team member dialog"
-            class="rounded-full"
+            class="shrink-0 rounded-full"
             :disabled="isLoading || isDeleting"
             @click="close"
           />
         </div>
 
-        <div class="grid gap-4 sm:grid-cols-2">
-          <CInput
-            v-model="form.name"
-            label="Name"
-            placeholder="Team member name"
-            required
-          />
-          <CInput
-            v-model="form.title"
-            label="Title"
-            placeholder="Church Council Chair"
-            required
-          />
-          <CInput
-            v-model="form.email"
-            label="Email"
-            placeholder="name@example.org"
-            type="email"
-            required
-          />
-          <div class="sm:col-span-2">
-            <label
-              for="team-member-photo"
-              class="mb-1.5 block text-[13px] font-medium text-foreground/70"
-            >
-              Photo {{ isEditing ? "(optional replacement)" : "(required)" }}
-            </label>
-            <input
-              id="team-member-photo"
-              ref="photoInput"
-              type="file"
-              accept="image/*"
-              :required="!isEditing"
-              :disabled="isLoading || isDeleting"
-              class="block w-full cursor-pointer rounded-xl border border-primary/20 bg-background px-3 py-3 text-sm text-foreground file:mr-4 file:rounded-lg file:border-0 file:bg-primary/10 file:px-4 file:py-2 file:font-medium file:text-primary hover:file:bg-primary/15"
-              @change="selectPhoto"
-            >
-            <img
-              v-if="photoPreview"
-              :src="photoPreview"
-              alt="Team member photo preview"
-              class="mt-4 h-40 w-32 rounded-xl object-cover"
-            >
+        <div class="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <CInput
+              v-model="form.name"
+              label="Name"
+              placeholder="Team member name"
+              required
+            />
+            <CInput
+              v-model="form.title"
+              label="Title"
+              placeholder="Church Council Chair"
+              required
+            />
+            <CInput
+              v-model="form.email"
+              label="Email"
+              placeholder="name@example.org"
+              type="email"
+              required
+            />
+            <div class="sm:col-span-2">
+              <label
+                for="team-member-photo"
+                class="mb-1.5 block text-[13px] font-medium text-foreground/70"
+              >
+                Photo {{ isEditing ? "(optional replacement)" : "(required)" }}
+              </label>
+              <input
+                id="team-member-photo"
+                ref="photoInput"
+                type="file"
+                accept="image/*"
+                :required="!isEditing"
+                :disabled="isLoading || isDeleting"
+                class="block w-full cursor-pointer rounded-xl border border-primary/20 bg-background px-3 py-3 text-sm text-foreground file:mr-4 file:rounded-lg file:border-0 file:bg-primary/10 file:px-4 file:py-2 file:font-medium file:text-primary hover:file:bg-primary/15"
+                @change="selectPhoto"
+              >
+              <img
+                v-if="photoPreview"
+                :src="photoPreview"
+                alt="Team member photo preview"
+                class="mt-4 h-40 w-32 rounded-xl object-cover"
+              >
+            </div>
           </div>
+
+          <div
+            v-if="isEditing && confirmDelete"
+            class="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 p-4"
+          >
+            <p class="text-sm text-red-700">
+              Delete {{ props.member?.name }} permanently?
+            </p>
+            <div class="flex gap-2">
+              <UButton
+                type="button"
+                label="Keep member"
+                color="neutral"
+                variant="soft"
+                size="sm"
+                :disabled="isDeleting"
+                @click="confirmDelete = false"
+              />
+              <UButton
+                type="button"
+                label="Confirm delete"
+                color="error"
+                size="sm"
+                :loading="isDeleting"
+                @click="deleteMember"
+              />
+            </div>
+          </div>
+
+          <p v-if="error" class="mt-4 text-sm text-red-600">
+            {{ error }}
+          </p>
         </div>
 
         <div
-          v-if="isEditing && confirmDelete"
-          class="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 p-4"
+          class="flex shrink-0 flex-wrap justify-between gap-3 border-t border-primary/10 px-6 py-4 sm:px-8"
         >
-          <p class="text-sm text-red-700">
-            Delete {{ props.member?.name }} permanently?
-          </p>
-          <div class="flex gap-2">
-            <UButton
-              type="button"
-              label="Keep member"
-              color="neutral"
-              variant="soft"
-              size="sm"
-              :disabled="isDeleting"
-              @click="confirmDelete = false"
-            />
-            <UButton
-              type="button"
-              label="Confirm delete"
-              color="error"
-              size="sm"
-              :loading="isDeleting"
-              @click="deleteMember"
-            />
-          </div>
-        </div>
-
-        <p v-if="error" class="mt-4 text-sm text-red-600">
-          {{ error }}
-        </p>
-
-        <div class="mt-6 flex flex-wrap justify-between gap-3">
           <UButton
             v-if="isEditing && !confirmDelete"
             type="button"

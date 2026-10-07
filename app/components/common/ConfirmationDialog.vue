@@ -55,12 +55,12 @@ const handleCancel = () => {
     v-model:open="open"
     :ui="{
       overlay: 'bg-foreground/30 backdrop-blur-sm',
-      content: 'max-w-sm rounded-3xl border border-primary/10 bg-background shadow-2xl',
+      content: 'w-full max-w-sm overflow-hidden rounded-3xl border border-primary/10 bg-background shadow-2xl',
     }"
   >
     <template #content>
-      <div class="p-6">
-        <div class="mb-6 flex items-start justify-between gap-4">
+      <div class="flex max-h-[calc(100dvh-2rem)] flex-col sm:max-h-[calc(100dvh-4rem)]">
+        <div class="flex shrink-0 items-start justify-between gap-4 p-6 pb-3">
           <div>
             <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
               {{ typeConfig.eyebrow }}
@@ -68,9 +68,6 @@ const handleCancel = () => {
             <h2 class="font-['Playfair_Display'] text-2xl text-foreground">
               {{ title }}
             </h2>
-            <p v-if="subtitle" class="mt-2 text-sm text-muted-foreground">
-              {{ subtitle }}
-            </p>
           </div>
           <UButton
             icon="i-lucide-x"
@@ -82,7 +79,13 @@ const handleCancel = () => {
           />
         </div>
 
-        <div class="flex justify-end gap-3">
+        <div class="min-h-0 flex-1 overflow-y-auto px-6 pb-4">
+          <p v-if="subtitle" class="text-sm text-muted-foreground">
+            {{ subtitle }}
+          </p>
+        </div>
+
+        <div class="flex shrink-0 justify-end gap-3 border-t border-primary/10 px-6 py-4">
           <UButton
             label="Cancel"
             color="neutral"

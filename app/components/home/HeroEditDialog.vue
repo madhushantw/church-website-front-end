@@ -173,12 +173,15 @@ const updateHero = async () => {
     :ui="{
       overlay: 'bg-foreground/30',
       content:
-        'max-w-lg rounded-3xl border border-primary/10 bg-background shadow-2xl',
+        'w-full max-w-lg overflow-hidden rounded-3xl border border-primary/10 bg-background shadow-2xl',
     }"
   >
     <template #content>
-      <form class="p-6 sm:p-8" @submit.prevent="updateHero">
-        <div class="mb-7 flex items-start justify-between gap-4">
+      <form
+        class="flex max-h-[calc(100dvh-2rem)] flex-col sm:max-h-[calc(100dvh-4rem)]"
+        @submit.prevent="updateHero"
+      >
+        <div class="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 sm:px-8 sm:pt-8">
           <div>
             <p
               class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent"
@@ -195,10 +198,11 @@ const updateHero = async () => {
             color="neutral"
             variant="ghost"
             aria-label="Close hero editor"
-            class="rounded-full"
+            class="shrink-0 rounded-full"
             @click="close"
           />
         </div>
+        <div class="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8">
         <template v-if="isImages">
           <div class="space-y-4">
             <input
@@ -211,7 +215,7 @@ const updateHero = async () => {
             >
             <div
               v-if="images.length"
-              class="grid max-h-56 grid-cols-2 gap-3 overflow-y-auto pr-2"
+              class="grid grid-cols-2 gap-3 pr-2"
             >
               <div
                 v-for="(image, index) in images"
@@ -244,7 +248,7 @@ const updateHero = async () => {
               <p class="text-xs font-medium text-muted-foreground">
                 New images ({{ selectedImages.length }})
               </p>
-              <div class="grid max-h-56 grid-cols-2 gap-3 overflow-y-auto pr-2">
+              <div class="grid grid-cols-2 gap-3 pr-2">
                 <div
                   v-for="(image, index) in selectedImages"
                   :key="image.preview"
@@ -306,7 +310,8 @@ const updateHero = async () => {
         <p v-if="error" class="mt-4 text-sm text-red-600">
           {{ error }}
         </p>
-        <div class="mt-6 flex justify-end gap-3">
+        </div>
+        <div class="flex shrink-0 justify-end gap-3 border-t border-primary/10 px-6 py-4 sm:px-8">
           <UButton
             type="button"
             label="Cancel"

@@ -297,11 +297,11 @@ watch(activeFilter, () => {
     transition
     :ui="{
       overlay: 'bg-black/80 backdrop-blur-sm',
-      content: 'bg-black/50 border-0 rounded-none shadow-none',
+      content: 'h-dvh w-screen overflow-hidden bg-black/50 border-0 rounded-none shadow-none',
     }"
   >
     <template #content>
-      <div class="relative flex h-screen w-screen items-center justify-center">
+      <div class="relative flex h-dvh w-screen items-center justify-center">
         <UIcon
           v-if="loading"
           name="i-lucide-loader-circle"
@@ -311,7 +311,7 @@ watch(activeFilter, () => {
           v-else-if="selectedImage"
           :src="selectedImage.imageUrl"
           :alt="selectedImage.imageType"
-          class="max-h-[90vh] max-w-[90vw] object-contain"
+          class="max-h-[90dvh] max-w-[90vw] object-contain"
         >
         <button
           type="button"

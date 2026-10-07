@@ -66,15 +66,15 @@ const submitRequest = async () => {
     :ui="{
       overlay: 'bg-foreground/30 backdrop-blur-sm',
       content:
-        'max-w-2xl rounded-3xl border border-primary/10 bg-background shadow-2xl',
+        'w-full max-w-2xl overflow-hidden rounded-3xl border border-primary/10 bg-background shadow-2xl',
     }"
   >
     <template #content>
       <form
-        class="max-h-[90vh] overflow-y-auto p-6 sm:p-8"
+        class="flex max-h-[calc(100dvh-2rem)] flex-col sm:max-h-[calc(100dvh-4rem)]"
         @submit.prevent="submitRequest"
       >
-        <div class="mb-7 flex items-start justify-between gap-4">
+        <div class="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 sm:px-8 sm:pt-8">
           <div>
             <p
               class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent"
@@ -94,12 +94,13 @@ const submitRequest = async () => {
             color="neutral"
             variant="ghost"
             aria-label="Close prayer request dialog"
-            class="rounded-full"
+            class="shrink-0 rounded-full"
             :disabled="isSubmitting"
             @click="open = false"
           />
         </div>
 
+        <div class="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8">
         <div
           v-if="submitSuccess"
           class="mb-5 rounded-xl bg-primary/10 p-4 text-sm text-primary"
@@ -188,7 +189,9 @@ const submitRequest = async () => {
           {{ submitError }}
         </p>
 
-        <div v-if="!submitSuccess" class="mt-6 flex justify-end">
+        </div>
+
+        <div v-if="!submitSuccess" class="flex shrink-0 justify-end border-t border-primary/10 px-6 py-4 sm:px-8">
           <UButton
             type="submit"
             label="Send Request"
