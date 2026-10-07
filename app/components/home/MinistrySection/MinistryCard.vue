@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from "vue";
+
 interface Ministry {
   id: string;
   title: string;
@@ -7,18 +9,17 @@ interface Ministry {
   icon?: string;
   iconColor?: string;
 }
-
 interface Props {
   ministry: Ministry;
   canDelete?: boolean;
   canEdit?: boolean;
 }
-
 const props = defineProps<Props>();
 const emit = defineEmits<{
   delete: [ministry: Ministry];
   edit: [ministry: Ministry];
 }>();
+const expanded = ref(false);
 </script>
 
 <template>
@@ -28,9 +29,9 @@ const emit = defineEmits<{
     <div class="mb-5 flex items-start justify-between gap-3">
       <div
         class="flex h-14 w-14 items-center justify-center rounded-lg transition-colors"
-      :style="{
-        backgroundColor: `color-mix(in srgb, var(--color-${ministry.iconColor || 'primary'}) 10%, transparent)`,
-      }"
+        :style="{
+          backgroundColor: `color-mix(in srgb, var(--color-${ministry.iconColor || 'primary'}) 10%, transparent)`,
+        }"
       >
         <UIcon
           :name="ministry.icon || 'lucide:church'"
@@ -40,7 +41,11 @@ const emit = defineEmits<{
           }"
         />
       </div>
-      <div v-if="props.canEdit || props.canDelete" class="flex items-center gap-1">
+
+      <div
+        v-if="props.canEdit || props.canDelete"
+        class="flex items-center gap-1"
+      >
         <UButton
           v-if="props.canEdit"
           icon="i-lucide-pencil"
@@ -51,6 +56,7 @@ const emit = defineEmits<{
           class="rounded-full"
           @click="emit('edit', ministry)"
         />
+
         <UButton
           v-if="props.canDelete"
           icon="i-lucide-trash-2"
@@ -70,20 +76,26 @@ const emit = defineEmits<{
       {{ ministry.title }}
     </h3>
 
-    <p class="text-[14px] leading-relaxed text-muted-foreground">
+    <p
+      class="text-[14px] leading-relaxed text-muted-foreground"
+      :class="expanded ? '' : 'line-clamp-3'"
+    >
       {{ ministry.subtitle }}
     </p>
 
-    <div
-      class="mt-4 flex items-center gap-1 text-[13px] font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100"
+    <button
+      type="button"
+      class="mt-4 flex items-center gap-1 text-[13px] font-medium text-primary transition-colors hover:text-primary/80"
+      @click="expanded = !expanded"
     >
-      Learn more
+      {{ expanded ? "Show less" : "Show more" }}
 
       <UIcon
-        name="lucide:arrow-right"
+        name="lucide:chevron-down"
         size="15"
-        class="transition-transform group-hover:translate-x-1"
+        class="transition-transform"
+        :class="expanded ? 'rotate-180' : ''"
       />
-    </div>
+    </button>
   </div>
 </template>
