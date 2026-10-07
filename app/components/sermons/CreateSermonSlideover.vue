@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { CInput } from '~/components/common'
+import dayjs from "dayjs";
+
 import {
   SermonsService,
   SermonPdfType,
@@ -110,7 +112,7 @@ const loadSermon = (sermon: SermonItem) => {
   form.value = {
     title: sermon.title,
     preacher: sermon.preacher,
-    sermonDate: sermon.sermonDate.slice(0, 10),
+    sermonDate: dayjs(sermon.sermonDate).format("YYYY-MM-DDTHH:mm"),
     description: sermon.description || '',
     reflection: sermon.reflection || ''
   }
