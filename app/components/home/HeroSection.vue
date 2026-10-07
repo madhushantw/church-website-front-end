@@ -24,7 +24,8 @@ let heroInterval: ReturnType<typeof setInterval>
 const canEdit = computed(() => userStore.user?.role === UserRole.ROOT)
 
 const currentHeroImage = computed(() => {
-  return hero.value.images[currentImageIndex.value]
+  const image = hero.value.images[currentImageIndex.value]
+  return image ? HeroService.getImageUrl(image) : ''
 })
 
 const editField = (field: keyof Hero) => {

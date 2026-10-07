@@ -15,7 +15,10 @@ const emit = defineEmits<{
 
 const value = ref('')
 const images = ref<string[]>([])
+const selectedImages = ref<{ file: File; preview: string }[]>([])
+const fileInput = ref<HTMLInputElement | null>(null)
 const isLoading = ref(false)
+const deletingImage = ref<string | null>(null)
 const error = ref('')
 
 const fieldLabels: Record<keyof Hero, string> = {
@@ -28,20 +31,34 @@ const fieldLabels: Record<keyof Hero, string> = {
 
 const isImages = computed(() => props.field === 'images')
 const isTextarea = computed(() => props.field === 'subtitle')
+const remainingImageSlots = computed(() =>
+  Math.max(0, 10 - images.value.length - selectedImages.value.length),
+)
 
 const fieldLabel = computed(() =>
   props.field ? fieldLabels[props.field] : 'Hero content',
 )
 
+const clearSelectedImages = () => {
+  selectedImages.value.forEach(image => URL.revokeObjectURL(image.preview))
+  selectedImages.value = []
+}
+
 watch(
-  () => [open.value, props.field, props.hero] as const,
+  () => [open.value, props.field] as const,
   () => {
-    if (!open.value || !props.field) return
+    if (!open.value) {
+      clearSelectedImages()
+      return
+    }
+
+    if (!props.field) return
 
     error.value = ''
 
     if (props.field === 'images') {
       images.value = [...props.hero.images]
+      clearSelectedImages()
       value.value = ''
       return
     }
@@ -51,27 +68,63 @@ watch(
   { immediate: true },
 )
 
-const addImage = () => {
-  const image = value.value.trim()
+const selectImages = () => {
+  fileInput.value?.click()
+}
 
-  if (!image) return
+const handleFiles = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const files = Array.from(input.files ?? [])
+  input.value = ''
 
-  if (images.value.includes(image)) {
-    error.value = 'This image has already been added.'
+  const imageFiles = files.filter(file => file.type.startsWith('image/'))
+
+  if (imageFiles.length !== files.length) {
+    error.value = 'Please select image files only.'
+  }
+
+  const uniqueFiles = imageFiles.filter(file =>
+    !selectedImages.value.some(selected =>
+      selected.file.name === file.name &&
+      selected.file.size === file.size &&
+      selected.file.lastModified === file.lastModified,
+    ),
+  )
+
+  if (uniqueFiles.length > remainingImageSlots.value) {
+    error.value = `You can have up to 10 hero images total. Remove ${uniqueFiles.length - remainingImageSlots.value} image${uniqueFiles.length - remainingImageSlots.value === 1 ? '' : 's'} before adding these files.`
     return
   }
 
-  images.value.push(image)
-  value.value = ''
-  error.value = ''
+  selectedImages.value.push(...uniqueFiles.map(file => ({
+    file,
+    preview: URL.createObjectURL(file),
+  })))
+  if (imageFiles.length === files.length) error.value = ''
 }
 
-const removeImage = (index: number) => {
-  images.value.splice(index, 1)
+const removeSelectedImage = (index: number) => {
+  const [image] = selectedImages.value.splice(index, 1)
+  if (image) URL.revokeObjectURL(image.preview)
+}
+
+const removeImage = async (imageUrl: string) => {
+  error.value = ''
+  deletingImage.value = imageUrl
+
+  try {
+    const response = await HeroService.removeImage(imageUrl)
+    images.value = response.data.images
+    emit('updated', { ...props.hero, images: response.data.images })
+  } catch {
+    error.value = 'Unable to delete this hero image. Please try again.'
+  } finally {
+    deletingImage.value = null
+  }
 }
 
 const close = () => {
-  if (!isLoading.value) open.value = false
+  if (!isLoading.value && !deletingImage.value) open.value = false
 }
 
 const updateHero = async () => {
@@ -81,11 +134,25 @@ const updateHero = async () => {
   isLoading.value = true
 
   try {
+    if (props.field === 'images') {
+      if (!selectedImages.value.length) return
+      if (images.value.length + selectedImages.value.length > 10) {
+        error.value = 'You can have up to 10 hero images total.'
+        return
+      }
+
+      const response = await HeroService.uploadImages(
+        selectedImages.value.map(image => image.file),
+      )
+      emit('updated', response.data)
+      clearSelectedImages()
+      open.value = false
+      return
+    }
+
     const updatedHero: Hero = {
       ...props.hero,
-      ...(props.field === 'images'
-        ? { images: images.value }
-        : { [props.field]: value.value }),
+      [props.field]: value.value,
     }
 
     const response = await HeroService.update(updatedHero)
@@ -134,9 +201,17 @@ const updateHero = async () => {
         </div>
         <template v-if="isImages">
           <div class="space-y-4">
+            <input
+              ref="fileInput"
+              type="file"
+              accept="image/*"
+              multiple
+              class="hidden"
+              @change="handleFiles"
+            >
             <div
               v-if="images.length"
-              class="grid max-h-100 grid-cols-2 gap-3 overflow-y-auto pr-2"
+              class="grid max-h-56 grid-cols-2 gap-3 overflow-y-auto pr-2"
             >
               <div
                 v-for="(image, index) in images"
@@ -144,7 +219,7 @@ const updateHero = async () => {
                 class="group relative overflow-hidden rounded-xl border border-primary/10"
               >
                 <img
-                  :src="image"
+                  :src="HeroService.getImageUrl(image)"
                   :alt="`Hero image ${index + 1}`"
                   class="aspect-video w-full object-cover"
                 >
@@ -155,32 +230,67 @@ const updateHero = async () => {
                   variant="solid"
                   size="xs"
                   aria-label="Remove image"
+                  :loading="deletingImage === image"
+                  :disabled="!!deletingImage"
                   class="absolute right-2 top-2 rounded-full opacity-0 transition-opacity group-hover:opacity-100"
-                  @click="removeImage(index)"
+                  @click="removeImage(image)"
                 />
               </div>
             </div>
+            <p v-if="images.length" class="text-xs font-medium text-muted-foreground">
+              Existing images ({{ images.length }})
+            </p>
+            <div v-if="selectedImages.length" class="space-y-2">
+              <p class="text-xs font-medium text-muted-foreground">
+                New images ({{ selectedImages.length }})
+              </p>
+              <div class="grid max-h-56 grid-cols-2 gap-3 overflow-y-auto pr-2">
+                <div
+                  v-for="(image, index) in selectedImages"
+                  :key="image.preview"
+                  class="group relative overflow-hidden rounded-xl border border-primary/10"
+                >
+                  <img
+                    :src="image.preview"
+                    :alt="image.file.name"
+                    class="aspect-video w-full object-cover"
+                  >
+                  <UButton
+                    type="button"
+                    icon="i-lucide-x"
+                    color="error"
+                    variant="solid"
+                    size="xs"
+                    :aria-label="`Remove ${image.file.name} from upload`"
+                    class="absolute right-2 top-2 rounded-full opacity-0 transition-opacity group-hover:opacity-100"
+                    @click="removeSelectedImage(index)"
+                  />
+                  <span class="absolute inset-x-0 bottom-0 truncate bg-black/60 px-2 py-1 text-xs text-white">
+                    {{ image.file.name }}
+                  </span>
+                </div>
+              </div>
+            </div>
             <div
-              v-else
+              v-if="!images.length && !selectedImages.length"
               class="rounded-xl border border-dashed border-primary/20 p-8 text-center text-sm text-muted-foreground"
             >
-              No hero images added yet.
+              No hero images yet. Select files to add images.
             </div>
-            <div v-if="images.length < 8" class="flex gap-2">
-              <CInput
-                v-model="value"
-                label="Image URL"
-                placeholder="https://..."
-                class="min-w-0 flex-1"
-              />
+            <div class="space-y-3">
               <UButton
                 type="button"
-                icon="i-lucide-plus"
-                label="Add"
+                icon="i-lucide-upload"
+                :label="selectedImages.length ? 'Add more images' : 'Choose images'"
                 color="primary"
-                class="mt-7 rounded-xl"
-                @click="addImage"
+                variant="soft"
+                class="rounded-xl"
+                :disabled="isLoading || !!deletingImage || remainingImageSlots === 0"
+                @click="selectImages"
               />
+              <p class="text-xs text-muted-foreground">
+                Maximum 10 images total. Remove pending images with ×; existing images are deleted immediately with the trash button.
+              </p>
             </div>
           </div>
         </template>
@@ -203,16 +313,17 @@ const updateHero = async () => {
             color="neutral"
             variant="soft"
             class="rounded-xl"
-            :disabled="isLoading"
+            :disabled="isLoading || !!deletingImage"
             @click="close"
           />
           <UButton
             type="submit"
-            label="Save changes"
-            icon="i-lucide-check"
+            :label="isImages ? 'Upload images' : 'Save changes'"
+            :icon="isImages ? 'i-lucide-upload' : 'i-lucide-check'"
             color="primary"
             class="rounded-xl"
             :loading="isLoading"
+            :disabled="(isImages && !selectedImages.length) || !!deletingImage"
           />
         </div>
       </form>
