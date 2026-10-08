@@ -67,8 +67,8 @@ onMounted(async () => {
       <div class="lg:col-span-3">
         <CBiblePassageCard
           v-if="gospel"
-          book="Saint Luke"
-          :reference="gospel.title"
+          :book="gospel.title"
+          :reference="formatDate(gospel.sermonDate, 'MMM D, YYYY hh:mm a')"
           :passage="gospel.description || ''"
           :reflection="gospel.reflection || ''"
           :author="gospel.preacher"
