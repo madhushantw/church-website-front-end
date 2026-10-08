@@ -7,6 +7,10 @@ import {
   CSectionHeading,
 } from "~/components/common";
 import { ContactService } from "~/services/contact.service";
+import { UserRole } from "~/services/users.service";
+import { useChurchInfoStore } from "~/stores/church-info.store";
+import { useUserStore } from "~/stores/user.store";
+import ContactInfoEditDialog from "./ContactInfoEditDialog.vue";
 
 interface ContactInfo {
   label: string;
@@ -14,43 +18,62 @@ interface ContactInfo {
   icon: string;
 }
 
-const contactInfo: ContactInfo[] = [
+interface SocialLink {
+  label: string;
+  icon: string;
+  url: string;
+}
+
+const props = withDefaults(defineProps<{ allowCreate?: boolean }>(), {
+  allowCreate: false,
+});
+
+const churchInfoStore = useChurchInfoStore();
+const userStore = useUserStore();
+const isEditOpen = ref(false);
+const canEdit = computed(
+  () => props.allowCreate && userStore.user?.role === UserRole.ROOT,
+);
+
+const contactInfo = computed<ContactInfo[]>(() => [
   {
     label: "Address",
-    value: "25 Smart Road, Modbury",
+    value: churchInfoStore.churchInfo?.address || "---",
     icon: "lucide:map-pin",
   },
   {
     label: "Phone",
-    value: "7079 7595",
+    value: churchInfoStore.churchInfo?.phone || "---",
     icon: "lucide:phone",
   },
   {
     label: "Email",
-    value: "info@stlukesmodbury.com.au",
+    value: churchInfoStore.churchInfo?.email || "---",
     icon: "lucide:mail",
   },
-];
+]);
 
-interface SocialLink {
-  label: string;
-  icon: string;
-}
-
-const socialLinks: SocialLink[] = [
+const socialLinks = computed<SocialLink[]>(() => [
   {
     label: "Facebook",
     icon: "simple-icons:facebook",
+    url: churchInfoStore.churchInfo?.facebookUrl || "",
   },
   {
     label: "Instagram",
     icon: "simple-icons:instagram",
+    url: churchInfoStore.churchInfo?.instagramUrl || "",
   },
   {
     label: "YouTube",
     icon: "simple-icons:youtube",
+    url: churchInfoStore.churchInfo?.youtubeUrl || "",
   },
-];
+].filter((social) => Boolean(social.url)));
+
+const openSocialLink = (url: string) => {
+  if (url) window.open(url, "_blank", "noopener,noreferrer");
+};
 
 const form = reactive({
   firstName: "",
@@ -103,11 +126,22 @@ const submitForm = async () => {
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
       <div class="space-y-6">
         <div class="rounded-lg bg-white p-7">
-          <h3
-            class="mb-5 font-['Playfair_Display'] text-[20px] font-medium text-foreground"
-          >
-            Find Us
-          </h3>
+          <div class="mb-5 flex items-center justify-between gap-3">
+            <h3 class="font-['Playfair_Display'] text-[20px] font-medium text-foreground">
+              Find Us
+            </h3>
+            <UButton
+              v-if="canEdit"
+              type="button"
+              icon="i-lucide-pencil"
+              label="Edit"
+              color="primary"
+              variant="soft"
+              size="sm"
+              class="rounded-xl"
+              @click="isEditOpen = true"
+            />
+          </div>
           <div class="space-y-5">
             <div
               v-for="info in contactInfo"
@@ -133,7 +167,7 @@ const submitForm = async () => {
             </div>
           </div>
         </div>
-        <div class="rounded-lg bg-white p-7">
+        <div v-if="socialLinks.length" class="rounded-lg bg-white p-7">
           <h3
             class="mb-4 font-['Playfair_Display'] text-[20px] font-medium text-foreground"
           >
@@ -146,6 +180,7 @@ const submitForm = async () => {
               type="button"
               :aria-label="social.label"
               class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg bg-secondary text-primary transition-colors hover:bg-primary hover:text-white"
+              @click="openSocialLink(social.url)"
             >
               <UIcon :name="social.icon" size="19" />
             </button>
@@ -210,4 +245,8 @@ const submitForm = async () => {
       </div>
     </div>
   </CSection>
+  <ContactInfoEditDialog
+    v-if="userStore.user"
+    v-model:open="isEditOpen"
+  />
 </template>

@@ -31,6 +31,6 @@ import WelcomeSection from "~/components/home/WelcomeSection.vue";
     <MinistrySection />
     <GallerySection />
     <Give />
-    <ContactSection />
+    <ContactSection allow-create />
   </div>
 </template>

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import appIcon from "../../public/favIcon.png";
+import { useChurchInfoStore } from "~/stores/church-info.store";
+
 const route = useRoute();
+const churchInfoStore = useChurchInfoStore();
 const navigation = computed(() => {
   const isHome = route.path === "/";
 
@@ -44,11 +47,38 @@ const navigation = computed(() => {
   ];
 });
 
-const socials = [
-  { name: "Facebook", icon: "lucide:facebook" },
-  { name: "Instagram", icon: "lucide:instagram" },
-  { name: "YouTube", icon: "lucide:youtube" },
-];
+const socials = computed(() => [
+  {
+    name: "Facebook",
+    icon: "lucide:facebook",
+    url: churchInfoStore.churchInfo?.facebookUrl || "",
+  },
+  {
+    name: "Instagram",
+    icon: "lucide:instagram",
+    url: churchInfoStore.churchInfo?.instagramUrl || "",
+  },
+  {
+    name: "YouTube",
+    icon: "lucide:youtube",
+    url: churchInfoStore.churchInfo?.youtubeUrl || "",
+  },
+].filter((social) => Boolean(social.url)));
+
+const contactDetails = computed(() => [
+  {
+    icon: "lucide:map-pin",
+    value: churchInfoStore.churchInfo?.address || "---",
+  },
+  {
+    icon: "lucide:phone",
+    value: churchInfoStore.churchInfo?.phone || "---",
+  },
+  {
+    icon: "lucide:mail",
+    value: churchInfoStore.churchInfo?.email || "---",
+  },
+]);
 </script>
 
 <template>
@@ -76,15 +106,18 @@ const socials = [
             serve our community, and live out the Gospel.
           </p>
 
-          <div class="mt-6 flex gap-3">
-            <button
+          <div v-if="socials.length" class="mt-6 flex gap-3">
+            <a
               v-for="social in socials"
               :key="social.name"
+              :href="social.url"
               :aria-label="social.name"
+              target="_blank"
+              rel="noopener noreferrer"
               class="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/70 transition-all hover:border-secondary hover:bg-secondary hover:text-primary"
             >
               <UIcon :name="social.icon" size="18" />
-            </button>
+            </a>
           </div>
         </div>
         <div>
@@ -104,21 +137,17 @@ const socials = [
         <div>
           <h3 class="mb-5 font-['Playfair_Display'] text-lg">Connect</h3>
           <div class="space-y-4 text-sm text-white/60">
-            <div class="flex items-start gap-3">
+            <div
+              v-for="detail in contactDetails"
+              :key="detail.icon"
+              class="flex items-start gap-3"
+            >
               <UIcon
-                name="lucide:map-pin"
+                :name="detail.icon"
                 size="18"
                 class="mt-0.5 shrink-0 text-secondary"
               />
-              <span> 25 Smart Road, Modbury </span>
-            </div>
-            <div class="flex items-center gap-3">
-              <UIcon name="lucide:phone" size="18" class="text-secondary" />
-              <span>7079 7595 </span>
-            </div>
-            <div class="flex items-center gap-3">
-              <UIcon name="lucide:mail" size="18" class="text-secondary" />
-              <span>info@stlukesmodbury.com.au </span>
+              <span>{{ detail.value }}</span>
             </div>
           </div>
         </div>

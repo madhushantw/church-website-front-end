@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { CPageHero, CSection, CSectionHeading } from "~/components/common";
+import BankTransferEditDialog from "~/components/give/BankTransferEditDialog.vue";
 import MissionPartnerDialog from "~/components/give/MissionPartnerDialog.vue";
 import {
   MissionPartnersService,
@@ -52,12 +53,6 @@ const givingOptions = [
     title: "Online Transfer",
     description: "Give directly via bank transfer",
     icon: "i-lucide-landmark",
-    account: {
-      name: "St Luke's anglican Church",
-      bank: "Bank of Hope",
-      accountNumber: "123456789",
-      routingNumber: "987654321",
-    },
   },
 ];
 
@@ -72,6 +67,13 @@ const selectedMissionPartner = ref<MissionPartner | null>(null);
 const canManageMissionPartners = computed(
   () => userStore.user?.role === UserRole.ROOT,
 );
+const isBankTransferDialogOpen = ref(false);
+const bankTransferAccount = computed(() => ({
+  name: churchInfoStore.churchInfo?.bankAccountName || "---",
+  bank: churchInfoStore.churchInfo?.bank || "---",
+  accountNumber: churchInfoStore.churchInfo?.accountNumber || "---",
+  routingNumber: churchInfoStore.churchInfo?.routingNumber || "---",
+}));
 
 const loadMissionPartners = async () => {
   isLoadingPartners.value = true;
@@ -205,8 +207,19 @@ onMounted(loadMissionPartners);
         <div
           v-for="(item, index) in givingOptions"
           :key="index"
-          class="rounded-2xl bg-white p-6 shadow-sm"
+          class="relative rounded-2xl bg-white p-6 shadow-sm"
         >
+          <UButton
+            v-if="item.title === 'Online Transfer' && canManageMissionPartners"
+            type="button"
+            icon="i-lucide-pencil"
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            aria-label="Edit online transfer details"
+            class="absolute right-4 top-4 rounded-full"
+            @click="isBankTransferDialogOpen = true"
+          />
           <div
             class="mb-5 flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary"
           >
@@ -218,32 +231,29 @@ onMounted(loadMissionPartners);
           <p class="text-sm leading-6 text-gray-600">
             {{ item.description }}
           </p>
-          <div
-            v-if="item.account"
-            class="mt-5 space-y-2 border-t border-gray-100 pt-5 text-sm"
-          >
+          <div v-if="item.title === 'Online Transfer'" class="mt-5 space-y-2 border-t border-gray-100 pt-5 text-sm">
             <div class="flex justify-between gap-4">
               <span class="text-gray-500">Account Name</span>
               <span class="font-medium text-gray-800">
-                {{ item.account.name }}
+                {{ bankTransferAccount.name }}
               </span>
             </div>
             <div class="flex justify-between gap-4">
               <span class="text-gray-500">Bank</span>
               <span class="font-medium text-gray-800">
-                {{ item.account.bank }}
+                {{ bankTransferAccount.bank }}
               </span>
             </div>
             <div class="flex justify-between gap-4">
               <span class="text-gray-500">Account Number</span>
               <span class="font-medium text-gray-800">
-                {{ item.account.accountNumber }}
+                {{ bankTransferAccount.accountNumber }}
               </span>
             </div>
             <div class="flex justify-between gap-4">
               <span class="text-gray-500">Routing Number</span>
               <span class="font-medium text-gray-800">
-                {{ item.account.routingNumber }}
+                {{ bankTransferAccount.routingNumber }}
               </span>
             </div>
           </div>
@@ -326,6 +336,10 @@ onMounted(loadMissionPartners);
         :mission-partner="selectedMissionPartner"
         @saved="addMissionPartner"
         @deleted="removeMissionPartner"
+      />
+      <BankTransferEditDialog
+        v-if="canManageMissionPartners"
+        v-model:open="isBankTransferDialogOpen"
       />
     </CSection>
   </div>
