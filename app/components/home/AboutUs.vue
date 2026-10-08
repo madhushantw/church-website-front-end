@@ -1,7 +1,16 @@
 <script setup lang="ts">
+import { computed, ref } from "vue";
+
+import { useChurchInfoStore } from "~/stores/church-info.store";
+import { useUserStore } from "~/stores/user.store";
 import { CSection, CSectionHeading, CStat } from "../common";
 import CButton from "../common/CButton.vue";
-import image from "~/assets/images/about-us.jpeg";
+import SafeHtml from "../common/SafeHtml.vue";
+import AboutUsEditDialog from "./AboutUsEditDialog.vue";
+import { UserRole } from "~/services/users.service.ts";
+
+const churchInfoStore = useChurchInfoStore();
+const userStore = useUserStore();
 
 const stats = [
   {
@@ -21,6 +30,26 @@ const stats = [
     label: "Ministries",
   },
 ];
+
+const churchInfo = computed(() => churchInfoStore.churchInfo ?? null);
+const isEditOpen = ref(false);
+
+const sectionTitle = computed(
+  () => churchInfo.value?.aboutUsTitle || "External Mission",
+);
+const sectionSubtitle = computed(
+  () => churchInfo.value?.aboutUsSubTitle || "Support Activities",
+);
+const aboutUsImage = computed(
+  () => churchInfo.value?.aboutUsImage || "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1800&h=900&fit=crop&auto=format",
+);
+const aboutUsHtml = computed(() => churchInfo.value?.aboutUs || "");
+
+const handleSaved = (updatedChurchInfo: typeof churchInfo.value) => {
+  if (updatedChurchInfo) {
+    churchInfoStore.churchInfo = updatedChurchInfo;
+  }
+};
 </script>
 
 <template>
@@ -30,9 +59,9 @@ const stats = [
         <div class="relative">
           <div class="relative">
             <img
-              :src=image
-              alt="St Luke's Anglican Church building"
-              class="h-115 w-full object-cover rounded-lg shadow-xl"
+              :src="aboutUsImage"
+              alt="Church building"
+              class="h-115 w-full rounded-lg object-cover shadow-xl"
             >
             <div
               class="absolute -bottom-6 -right-6 hidden rounded-lg bg-accent px-7 py-5 text-white shadow-xl md:block"
@@ -46,64 +75,40 @@ const stats = [
         </div>
 
         <div class="lg:pl-4">
-          <CSectionHeading
-            label="About Us"
-            title="External Mission"
-            highlighted="Support Activities "
-            header-class="lg:text-6xl"
+          <div class="mb-6 flex items-start justify-between gap-4">
+            <CSectionHeading
+              :label="churchInfo?.aboutUsTitle ? 'About Us' : 'About Us'"
+              :title="sectionTitle"
+              :highlighted="sectionSubtitle"
+              header-class="lg:text-6xl"
+            />
+
+            <UButton
+              v-if="userStore.user?.role === UserRole.ROOT"
+              type="button"
+              icon="i-lucide-pencil"
+              label="Edit"
+              color="primary"
+              variant="soft"
+              class="rounded-xl"
+              @click="isEditOpen = true"
+            />
+          </div>
+
+          <SafeHtml
+            v-if="aboutUsHtml"
+            :html="aboutUsHtml"
+            class="prose prose-sm max-w-none mb-8 text-[16px] leading-relaxed text-foreground/70 prose-p:mb-3 prose-p:mt-0 prose-ul:my-3 prose-li:my-1"
           />
-          <ul class="mb-8 space-y-3 text-[16px] leading-relaxed text-foreground/70">
-            <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>Quickest Warmth – supplying useful new items on request by an organisation for their clients</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>School Ministry – supporting chaplains in our local schools.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>Foster Homes in Africa.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>Anglican Board of Mission.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>Anglicare.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>Samaritans Purse Christmas Shoe Boxes – Christmas gifts for children.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>Food Bank.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>Bush Church Aid (BCA)</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>Church Missionary Society (CMS)</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>Food Hampers through the OP Shop.</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"/>
-              <span>We have as many failings as everyone else!</span>
-            </li>
-          </ul>
-          <p class="mb-8 text-[16px] leading-relaxed text-foreground/70">
+
+          <p v-else class="mb-8 text-[16px] leading-relaxed text-foreground/70">
             We try to welcome everyone.
           </p>
+
           <div class="mb-8 grid grid-cols-2 gap-6">
             <CStat v-for="stat in stats" :key="stat.label" v-bind="stat" />
           </div>
+
           <div class="flex">
             <CButton
               title="Learn more"
@@ -114,5 +119,12 @@ const stats = [
         </div>
       </div>
     </div>
+
+    <AboutUsEditDialog
+      v-if="userStore.user"
+      v-model:open="isEditOpen"
+      :church-info="churchInfo"
+      @saved="handleSaved"
+    />
   </CSection>
 </template>
