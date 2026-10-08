@@ -6,6 +6,7 @@ import {
   type MissionPartner,
 } from "~/services/mission-partners.service";
 import { UserRole } from "~/services/users.service";
+import { useChurchHeroImage } from "~/composables/useChurchHeroImage";
 import { useUserStore } from "~/stores/user.store";
 
 interface GivingFor {
@@ -61,6 +62,8 @@ const givingOptions = [
 ];
 
 const userStore = useUserStore();
+const { churchInfoStore, canEdit: canEditHeroImage, isSaving: isSavingHeroImage, error: heroImageError, saveImage: saveHeroImage } = useChurchHeroImage("giveHeroImage");
+const giveHeroImage = computed(() => churchInfoStore.churchInfo?.giveHeroImage || "");
 const missionPartners = ref<MissionPartner[]>([]);
 const isLoadingPartners = ref(true);
 const partnersError = ref("");
@@ -122,7 +125,11 @@ onMounted(loadMissionPartners);
 <template>
   <div>
     <CPageHero
-      image="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1800&h=900&fit=crop&auto=format"
+      :image="giveHeroImage"
+      :can-edit-image="canEditHeroImage"
+      :image-loading="churchInfoStore.isLoading || isSavingHeroImage"
+      :image-saving="isSavingHeroImage"
+      :image-save-error="heroImageError"
       alt="give"
       label=""
       title=""
@@ -132,6 +139,7 @@ onMounted(loadMissionPartners);
             generosity helps support the ministry of St Luke's Anglican Church and
             enables us to bring hope locally, nationally, and globally."
       :buttons="[]"
+      @save-image="saveHeroImage"
     />
     <CSection>
       <div class="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">

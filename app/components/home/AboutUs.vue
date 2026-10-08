@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-
 import { useChurchInfoStore } from "~/stores/church-info.store";
 import { useUserStore } from "~/stores/user.store";
 import { CSection, CSectionHeading, CStat } from "../common";
@@ -39,15 +38,15 @@ const churchInfo = computed(() => churchInfoStore.churchInfo ?? null);
 const isEditOpen = ref(false);
 
 const sectionTitle = computed(
-  () => churchInfo.value?.aboutUsTitle || "External Mission",
+  () => churchInfo.value?.aboutUsTitle || "---",
 );
 const sectionSubtitle = computed(
-  () => churchInfo.value?.aboutUsSubTitle || "Support Activities",
+  () => churchInfo.value?.aboutUsSubTitle || "---",
 );
 const aboutUsImage = computed(
   () =>
     churchInfo.value?.aboutUsImage ||
-    "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1800&h=900&fit=crop&auto=format",
+    "",
 );
 const aboutUsHtml = computed(() => churchInfo.value?.aboutUs || "");
 
@@ -110,7 +109,7 @@ const handleSaved = (updatedChurchInfo: typeof churchInfo.value) => {
           />
 
           <p v-else class="mb-8 text-[16px] leading-relaxed text-foreground/70">
-            We try to welcome everyone.
+            ---
           </p>
 
           <div class="mb-8 grid grid-cols-2 gap-6">

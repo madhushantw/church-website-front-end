@@ -5,15 +5,19 @@ export interface ChurchInfo {
   id?: string;
   name?: string | null;
   description?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  video2?: string | null;
+  website?: string | null;
+  foundedYear?: number | null;
+
   address?: string | null;
   phone?: string | null;
   email?: string | null;
-  website?: string | null;
-  foundedYear?: number | null;
   facebookUrl?: string | null;
   youtubeUrl?: string | null;
   instagramUrl?: string | null;
-  
+
   aboutUsTitle?: string | null;
   aboutUsSubTitle?: string | null;
   aboutUsImage?: string | null;
@@ -32,17 +36,12 @@ export interface ChurchInfo {
   pastorMessage1?: string | null;
   pastorMessage2?: string | null;
   pastorAvatar?: string | null;
-
   video1?: string | null;
-  video2?: string | null;
 
   bankAccountName?: string | null;
   bank?: string | null;
   accountNumber?: string | null;
   routingNumber?: string | null;
-
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export type UpdateChurchInfoInput = Partial<ChurchInfo>;

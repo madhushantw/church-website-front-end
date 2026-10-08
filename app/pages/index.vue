@@ -20,7 +20,7 @@ import WelcomeSection from "~/components/home/WelcomeSection.vue";
     <Daily />
     <AboutUs />
     <GospelSection />
-    <WelcomeSection />
+    <WelcomeSection allow-create />
     <NextStep />
     <CGatheringSection
       reference="Matthew 18:20"
