@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { EditorContent, useEditor } from "@tiptap/vue-3";
-import StarterKit from "@tiptap/starter-kit";
+import { QuillEditor } from "@vueup/vue-quill";
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { computed, ref, watch } from "vue";
 
 import { CInput } from "../common";
@@ -26,19 +26,16 @@ const imageFile = ref<File | null>(null);
 const imagePreview = ref("");
 const error = ref("");
 
-const editor = useEditor({
-  extensions: [StarterKit],
-  content: "",
-  editorProps: {
-    attributes: {
-      class:
-        "prose max-w-none min-h-[140px] w-full rounded-xl border border-primary/10 bg-background px-4 py-3 text-sm leading-7 text-foreground focus:outline-none",
-    },
-  },
-  onUpdate: ({ editor }) => {
-    aboutUsHtml.value = editor.getHTML();
-  },
-});
+const toolbar = [
+  [{ header: [1, 2, 3, false] }],
+  ["bold", "italic", "underline", "strike"],
+  ["blockquote", "code-block"],
+  [{ list: "ordered" }, { list: "bullet" }],
+  [{ indent: "-1" }, { indent: "+1" }],
+  [{ align: [] }],
+  ["link"],
+  ["clean"],
+];
 
 const hasImage = computed(() => Boolean(imagePreview.value || props.churchInfo?.aboutUsImage));
 
@@ -49,10 +46,6 @@ const resetForm = () => {
   imageFile.value = null;
   imagePreview.value = "";
   error.value = "";
-
-  if (editor.value) {
-    editor.value.commands.setContent(aboutUsHtml.value || "<p></p>", { emitUpdate: false });
-  }
 };
 
 watch(
@@ -91,11 +84,6 @@ const close = () => {
 };
 
 const saveContent = async () => {
-  if (!editor.value) return;
-
-  const html = editor.value.getHTML();
-  aboutUsHtml.value = html;
-
   isSaving.value = true;
   error.value = "";
 
@@ -163,7 +151,16 @@ onBeforeUnmount(() => {
 
           <div>
             <label class="mb-2 block text-sm font-medium text-foreground">Main text</label>
-            <EditorContent :editor="editor" />
+            <ClientOnly>
+              <QuillEditor
+                v-model:content="aboutUsHtml"
+                content-type="html"
+                theme="snow"
+                :toolbar="toolbar"
+                content-class="min-h-36 bg-background text-foreground"
+                placeholder="Write the About Us content..."
+              />
+            </ClientOnly>
           </div>
 
           <div>

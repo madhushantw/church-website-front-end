@@ -59,3 +59,22 @@ body {
 h1 {
   line-height: 1 !important;
 }
+
+.about-us-rich-content ul,
+.about-us-rich-content ol {
+  margin-block: 0.75rem;
+  padding-left: 1.5rem;
+}
+
+.about-us-rich-content ul > li,
+.about-us-rich-content li[data-list="bullet"] {
+  list-style-type: disc;
+}
+
+.about-us-rich-content ol > li:not([data-list="bullet"]) {
+  list-style-type: decimal;
+}
+
+.about-us-rich-content li {
+  margin-block: 0.25rem;
+}

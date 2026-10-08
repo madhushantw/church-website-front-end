@@ -98,7 +98,7 @@ const handleSaved = (updatedChurchInfo: typeof churchInfo.value) => {
           <SafeHtml
             v-if="aboutUsHtml"
             :html="aboutUsHtml"
-            class="prose prose-sm max-w-none mb-8 text-[16px] leading-relaxed text-foreground/70 prose-p:mb-3 prose-p:mt-0 prose-ul:my-3 prose-li:my-1"
+            class="about-us-rich-content prose prose-sm max-w-none mb-8 text-[16px] leading-relaxed text-foreground/70 prose-p:mb-3 prose-p:mt-0 prose-ul:my-3 prose-li:my-1"
           />
 
           <p v-else class="mb-8 text-[16px] leading-relaxed text-foreground/70">
