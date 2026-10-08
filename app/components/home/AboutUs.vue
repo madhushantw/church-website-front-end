@@ -9,6 +9,10 @@ import SafeHtml from "../common/SafeHtml.vue";
 import AboutUsEditDialog from "./AboutUsEditDialog.vue";
 import { UserRole } from "~/services/users.service.ts";
 
+defineProps<{
+  allowCreate?: boolean;
+}>();
+
 const churchInfoStore = useChurchInfoStore();
 const userStore = useUserStore();
 
@@ -41,7 +45,9 @@ const sectionSubtitle = computed(
   () => churchInfo.value?.aboutUsSubTitle || "Support Activities",
 );
 const aboutUsImage = computed(
-  () => churchInfo.value?.aboutUsImage || "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1800&h=900&fit=crop&auto=format",
+  () =>
+    churchInfo.value?.aboutUsImage ||
+    "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1800&h=900&fit=crop&auto=format",
 );
 const aboutUsHtml = computed(() => churchInfo.value?.aboutUs || "");
 
@@ -69,7 +75,9 @@ const handleSaved = (updatedChurchInfo: typeof churchInfo.value) => {
               <div class="font-['Playfair_Display'] text-5xl leading-none">
                 70M+
               </div>
-              <div class="mt-1 text-[13px] text-white/80">In Communion Worldwide</div>
+              <div class="mt-1 text-[13px] text-white/80">
+                In Communion Worldwide
+              </div>
             </div>
           </div>
         </div>
@@ -84,7 +92,7 @@ const handleSaved = (updatedChurchInfo: typeof churchInfo.value) => {
             />
 
             <UButton
-              v-if="userStore.user?.role === UserRole.ROOT"
+              v-if="userStore.user?.role === UserRole.ROOT && allowCreate"
               type="button"
               icon="i-lucide-pencil"
               label="Edit"
