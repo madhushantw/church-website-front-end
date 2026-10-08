@@ -107,10 +107,7 @@ const scrollMembers = (direction: -1 | 1) => {
       <p v-else-if="membersError" class="py-8 text-center text-red-600">
         {{ membersError }}
       </p>
-      <div
-        v-else-if="teamMembers.length"
-        class="min-w-0"
-      >
+      <div v-else-if="teamMembers.length" class="min-w-0">
         <div
           ref="teamMembersScroller"
           class="team-members-scroll flex gap-6 overflow-x-auto pb-4"
@@ -118,9 +115,13 @@ const scrollMembers = (direction: -1 | 1) => {
           <article
             v-for="member in teamMembers"
             :key="member.email"
-            class="group relative flex h-112 w-80 shrink-0 flex-col justify-end overflow-hidden rounded-2xl bg-cover bg-center p-6 shadow-sm"
-            :style="{ backgroundImage: `url('${member.photo}')` }"
+            class="group relative flex h-112 w-80 shrink-0 flex-col justify-end overflow-hidden rounded-2xl bg-foreground p-6 shadow-sm transition duration-300 ease-out motion-reduce:transform-none motion-reduce:transition-none"
           >
+            <img
+              :src="member.photo"
+              :alt="member.name"
+              class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
+            >
             <UButton
               v-if="canManageTeam"
               icon="i-lucide-pencil"
@@ -131,7 +132,7 @@ const scrollMembers = (direction: -1 | 1) => {
               @click="openEditDialog(member)"
             />
             <div
-              class="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-transparent transition-opacity group-hover:from-black/90"
+              class="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-transparent transition-colors duration-300 group-hover:from-black/90"
             />
             <div class="relative z-10">
               <h3 class="font-['Playfair_Display'] text-2xl text-white">
