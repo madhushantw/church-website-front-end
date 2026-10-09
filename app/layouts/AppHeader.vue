@@ -97,7 +97,7 @@ onUnmounted(() => {
       :class="
         scrolled
           ? 'bg-white/90 text-primary shadow-sm'
-          : 'bg-transparent text-white/60'
+          : 'bg-transparent text-white/60 font-bold'
       "
     >
       <template #title>
@@ -127,7 +127,7 @@ onUnmounted(() => {
             v-if="canManageUsers"
             label="Message"
             icon="i-lucide-users"
-            color="primary"
+            :color="scrolled ? 'primary' : 'secondary'"
             variant="ghost"
             class="justify-start rounded-xl"
             @click="contactSidebarOpen = true"
@@ -137,7 +137,7 @@ onUnmounted(() => {
             label="Users"
             icon="i-lucide-users"
             size="sm"
-            color="primary"
+            :color="scrolled ? 'primary' : 'secondary'"
             variant="ghost"
             class="rounded-full"
             @click="usersSidebarOpen = true"
@@ -145,8 +145,8 @@ onUnmounted(() => {
           <UButton
             :label="isAuthenticated ? 'Logout' : 'Login'"
             size="sm"
-            color="primary"
-            :variant="isAuthenticated ? 'ghost' : 'solid'"
+            :color="scrolled ? 'primary' : 'secondary'"
+            variant="ghost"
             class="rounded-full px-4"
             @click="isAuthenticated ? openLogout() : openSignIn()"
           />
