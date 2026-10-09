@@ -5,8 +5,14 @@ import { useUserStore } from "~/stores/user.store";
 const userStore = useUserStore();
 const churchInfoStore = useChurchInfoStore();
 
-await userStore.restoreSession();
-await churchInfoStore.fetchChurchInfo();
+onMounted(async () => {
+  try {
+    await userStore.restoreSession();
+    await churchInfoStore.fetchChurchInfo();
+  } catch (e) {
+    console.error(e);
+  }
+});
 </script>
 
 <template>

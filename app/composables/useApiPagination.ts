@@ -43,9 +43,9 @@ export function useApiPagination<T, P extends Record<string, unknown> = Record<s
     { immediate: true },
   )
 
-  watch([page, limit, params], () => {
+  watch([() => page.value, () => limit.value, () => params?.value], () => {
     refresh()
-  }, { deep: true })
+  }, { immediate: true })
 
   return {
     items,
