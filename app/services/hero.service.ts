@@ -17,7 +17,7 @@ export interface RemoveHeroImageResponse {
 const getImageUrl = (imageUrl: string) => {
   if (/^https?:\/\//i.test(imageUrl)) return imageUrl
 
-  const baseUrl = useRuntimeConfig().public.apiBaseUrl
+  const baseUrl = HTTP.defaults.baseURL
   return baseUrl ? `${baseUrl.replace(/\/$/, '')}${imageUrl}` : imageUrl
 }
 

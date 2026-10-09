@@ -29,10 +29,11 @@ export interface GalleryFindAllOptions extends PaginationOptions {
 }
 
 const getImageUrl = (imageUrl: string) => {
-  const config = useRuntimeConfig();
+  if (/^https?:\/\//i.test(imageUrl)) return imageUrl
 
-  return `${config.public.apiBaseUrl}${imageUrl}`;
-};
+  const baseUrl = HTTP.defaults.baseURL
+  return baseUrl ? `${baseUrl.replace(/\/$/, '')}${imageUrl}` : imageUrl
+}
 
 export const GalleryService = {
   async getAll(params: GalleryFindAllOptions) {

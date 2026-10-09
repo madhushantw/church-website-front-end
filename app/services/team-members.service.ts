@@ -36,10 +36,11 @@ const toFormData = (data: CreateTeamMember | UpdateTeamMember) => {
 };
 
 const getImageUrl = (imageUrl: string) => {
-  const config = useRuntimeConfig();
+  if (/^https?:\/\//i.test(imageUrl)) return imageUrl
 
-  return `${config.public.apiBaseUrl}${imageUrl}`;
-};
+  const baseUrl = HTTP.defaults.baseURL
+  return baseUrl ? `${baseUrl.replace(/\/$/, '')}${imageUrl}` : imageUrl
+}
 
 const normalizeTeamMember = (member: TeamMember): TeamMember => ({
   ...member,

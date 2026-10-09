@@ -64,9 +64,8 @@ const getImageUrl = (imageUrl?: string | null) => {
     return imageUrl;
   }
 
-  if (import.meta.server) return imageUrl;
 
-  const baseUrl = useRuntimeConfig().public.apiBaseUrl;
+  const baseUrl = HTTP.defaults.baseURL
 
   if (!baseUrl) return imageUrl;
 

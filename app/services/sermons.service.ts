@@ -40,13 +40,13 @@ export interface CreateSermon {
 export type UpdateSermon = Partial<CreateSermon>;
 
 const normalizeSermon = (sermon: SermonItem): SermonItem => {
-  const config = useRuntimeConfig();
+  const baseUrl = HTTP.defaults.baseURL
 
   return {
     ...sermon,
     pdfFiles: sermon.pdfFiles.map((pdf) => ({
       ...pdf,
-      url: `${config.public.apiBaseUrl}${pdf.url}`,
+      url: `${baseUrl}${pdf.url}`,
     })),
   };
 };
