@@ -17,20 +17,20 @@ const userStore = useUserStore();
 
 const stats = [
   {
+    value: "60+",
+    label: "Years serving modbury",
+  },
+  {
     value: "70M+",
-    label: "Communion Members Worldwide",
+    label: "Anglicans worldwide",
   },
   {
-    value: "1983",
-    label: "Founded",
+    value: "1972",
+    label: "Current church dedicated",
   },
   {
-    value: "70+",
-    label: "Years in Communion",
-  },
-  {
-    value: "12",
-    label: "Ministries",
+    value: "1965",
+    label: "Our story began",
   },
 ];
 
@@ -88,6 +88,7 @@ const handleSaved = (updatedChurchInfo: typeof churchInfo.value) => {
               :title="sectionTitle"
               :highlighted="sectionSubtitle"
               header-class="lg:text-6xl"
+              tow-row-title
             />
 
             <UButton
@@ -105,7 +106,7 @@ const handleSaved = (updatedChurchInfo: typeof churchInfo.value) => {
           <SafeHtml
             v-if="aboutUsHtml"
             :html="aboutUsHtml"
-            class="about-us-rich-content prose prose-sm max-w-none mb-8 text-[16px] leading-relaxed text-foreground/70 prose-p:mb-3 prose-p:mt-0 prose-ul:my-3 prose-li:my-1"
+            class="about-us-rich-content prose prose-sm max-w-none mb-8 text-[18px] leading-relaxed text-foreground/70 prose-p:mb-3 prose-p:mt-0 prose-ul:my-3 prose-li:my-1"
           />
 
           <p v-else class="mb-8 text-[16px] leading-relaxed text-foreground/70">
@@ -118,6 +119,7 @@ const handleSaved = (updatedChurchInfo: typeof churchInfo.value) => {
 
           <div class="flex">
             <CButton
+              v-if="!allowCreate"
               title="Learn more"
               append-icon="ep:right"
               @on-click="navigateTo('/about')"

@@ -67,10 +67,16 @@ const createEvent = async () => {
 
   isLoading.value = true;
 
+  const payload = {
+    ...form.value,
+    startDate: toUtcIso(form.value.startDate),
+    endDate: toUtcIso(form.value.endDate),
+  }
+
   try {
     const response = props.event
-      ? await EventsService.update(props.event.id, form.value)
-      : await EventsService.create(form.value);
+      ? await EventsService.update(props.event.id, payload)
+      : await EventsService.create(payload);
 
     emit("saved", response.data);
     open.value = false;

@@ -71,11 +71,6 @@ interface Props {
       <div
         class="mt-7 rounded-r-xl border-l-4 border-accent bg-secondary/50 px-5 py-5"
       >
-        <p
-          class="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-accent"
-        >
-          Priest's Reflection
-        </p>
 
         <p class="whitespace-pre-line text-sm leading-6 text-gray-600">
           {{ reflection }}

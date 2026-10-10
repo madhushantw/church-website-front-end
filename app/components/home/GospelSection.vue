@@ -37,17 +37,6 @@ onMounted(async () => {
                 </div>
               </div>
             </div>
-            <div class="h-px w-full bg-primary/15" />
-            <div class="flex flex-col gap-2">
-              <div class="text-[13px] font-medium text-foreground">
-                Priest's Reflection
-              </div>
-              <div
-                class="font-['Playfair_Display'] text-[17px] font-semibold text-primary"
-              >
-                {{ gospel?.preacher }}
-              </div>
-            </div>
           </div>
         </div>
         <div v-if="gospel" class="mt-5 flex flex-wrap gap-2">
@@ -57,7 +46,7 @@ onMounted(async () => {
             :href="pdf.url"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 flex-1 rounded-md border border-primary/30 px-3 py-2 text-[12px] font-medium text-primary transition-colors hover:bg-primary hover:text-white"
+            class="group/pdf inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/5 px-3.5 py-1.5 text-[12px] font-medium text-primary transition-all duration-300 hover:border-primary hover:bg-primary hover:text-white hover:shadow-md hover:shadow-primary/20"
           >
             <UIcon name="lucide:file-down" size="14" />
             {{ pdf.type }}
@@ -68,7 +57,7 @@ onMounted(async () => {
         <CBiblePassageCard
           v-if="gospel"
           :book="gospel.title"
-          :reference="formatDate(gospel.sermonDate, 'MMM D, YYYY hh:mm a')"
+          :reference="formatDate(gospel.sermonDate, 'MMM D, YYYY')"
           :passage="gospel.description || ''"
           :reflection="gospel.reflection || ''"
           :author="gospel.preacher"

@@ -68,27 +68,17 @@ const scrollMembers = (direction: -1 | 1) => {
   <CSection id="our-team" background-color="muted">
     <div class="grid gap-12 lg:grid-cols-[2fr_3fr] lg:items-start">
       <div>
-        <CSectionHeading label="Our Team" title="Our Team" />
+        <CSectionHeading label="" title="Our Team" />
         <div class="space-y-8 text-foreground/70">
-          <div>
-            <h3 class="mb-2 font-['Playfair_Display'] text-2xl text-foreground">
-              Church Council
-            </h3>
-            <p class="text-[16px] leading-relaxed">
-              Our Church Council is made up of elected men and women from our
-              church community who provide governance and oversight of our
-              congregation and mission.
-            </p>
-          </div>
-          <div>
-            <h3 class="mb-2 font-['Playfair_Display'] text-2xl text-foreground">
-              Staff &amp; Ministry Directors
-            </h3>
-            <p class="text-[16px] leading-relaxed">
-              Our Staff and Ministry Directors lead the day-to-day ministry and
-              support the people and teams of Hope Valley Church.
-            </p>
-          </div>
+          <h3 class="mb-2 font-['Playfair_Display'] text-2xl text-foreground">
+            Meet the People Behind St Luke’s
+          </h3>
+          <p class="text-[16px] leading-relaxed">
+            Our clergy, Church Council, and dedicated volunteers work together
+            to nurture faith, support our congregation, and serve the Modbury
+            community. Guided by Christ’s love, we strive to create a welcoming
+            and caring church where everyone belongs.
+          </p>
           <UButton
             v-if="canManageTeam"
             label="Add team member"

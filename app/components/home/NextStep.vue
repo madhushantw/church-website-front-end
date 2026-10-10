@@ -57,42 +57,73 @@ const nextSteps = [
 
     <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
       <NuxtLink
-        v-for="step in nextSteps"
+        v-for="(step, index) in nextSteps"
         :key="step.title"
         :to="step.href"
-        class="group flex h-full flex-col overflow-hidden rounded-xl border border-primary/10 bg-background shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+        class="group relative isolate flex min-h-104 cursor-pointer flex-col justify-between overflow-hidden rounded-3xl border border-white/10 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-primary/25"
         @click="handleCardClick($event, step.action)"
       >
-        <div class="h-48 w-full overflow-hidden">
-          <img
-            :src="step.image"
-            :alt="step.imageAlt"
-            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-          >
-        </div>
-        <div class="flex flex-1 flex-col p-7">
+        <!-- Background image -->
+        <img
+          :src="step.image"
+          :alt="step.imageAlt"
+          loading="lazy"
+          class="absolute inset-0 -z-20 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
+        >
+
+        <!-- Overlays -->
+        <div
+          class="absolute inset-0 -z-10 bg-linear-to-t from-black/90 via-black/40 to-black/10"
+        />
+        <div
+          class="absolute inset-0 -z-10 bg-primary/20 opacity-0 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-100"
+        />
+
+        <!-- Top row: icon + step number -->
+        <div class="flex items-start justify-between p-5">
           <div
-            class="mb-6 flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors"
+            class="flex size-14 items-center justify-center rounded-2xl border border-white/25 bg-white/15 text-white shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"
           >
             <UIcon :name="step.icon" class="size-6" />
           </div>
-          <h3 class="mb-3 font-['Playfair_Display'] text-2xl text-foreground">
-            {{ step.title }}
-          </h3>
-          <p class="mb-7 flex-1 text-sm leading-relaxed text-muted-foreground">
-            {{ step.description }}
-          </p>
+
           <span
-            v-if="step.action"
-            class="inline-flex items-center gap-2 text-sm font-semibold text-primary"
+            class="font-['Playfair_Display'] text-5xl font-bold leading-none text-white/20 transition-colors duration-500 group-hover:text-white/50"
           >
-            {{ step.action }}
-            <UIcon
-              name="i-lucide-arrow-right"
-              class="size-4 transition-transform group-hover:translate-x-1"
-            />
+            {{ String(index + 1).padStart(2, '0') }}
           </span>
+        </div>
+
+        <!-- Glass content panel -->
+        <div class="p-3">
+          <div
+            class="rounded-2xl border border-white/15 bg-white/10 p-6 shadow-xl backdrop-blur-xl transition-colors duration-300 group-hover:bg-white/15"
+          >
+            <span
+              class="mb-4 block h-1 w-10 rounded-full bg-primary transition-all duration-500 group-hover:w-20"
+            />
+
+            <h3
+              class="mb-2 font-['Playfair_Display'] text-2xl font-semibold tracking-tight text-white"
+            >
+              {{ step.title }}
+            </h3>
+
+            <p class="text-sm leading-relaxed text-white/80">
+              {{ step.description }}
+            </p>
+
+            <span
+              v-if="step.action"
+              class="mt-5 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[13px] font-semibold text-white transition-all duration-300 group-hover:border-white group-hover:bg-white group-hover:text-gray-900"
+            >
+              {{ step.action }}
+              <UIcon
+                name="i-lucide-arrow-right"
+                class="size-4 transition-transform duration-300 group-hover:translate-x-1"
+              />
+            </span>
+          </div>
         </div>
       </NuxtLink>
     </div>

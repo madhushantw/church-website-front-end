@@ -7,7 +7,7 @@ interface GivingOption {
   icon: string;
 }
 
-const givingOptions: GivingOption[] = [
+const givingFore: GivingOption[] = [
   {
     title: "Support Our Ministries",
     description:
@@ -27,54 +27,72 @@ const givingOptions: GivingOption[] = [
     icon: "🏛️",
   },
 ];
-
 </script>
 
 <template>
   <CSection id="give" background-color="muted">
-    <div class="grid grid-cols-1 gap-16 lg:grid-cols-2">
-      <div>
-        <CSectionHeading
-          label=""
-          title="Give"
-        />
-        <p class="mb-6 max-w-xl text-[16px] leading-relaxed text-foreground/70">
-          Everything we have belongs to God, and giving is one of the ways we
-          worship Him, trust Him, and participate in His mission. Your
-          generosity helps support the ministry of St Luke's Anglican Church and
-          enables us to bring hope locally, nationally, and globally.
-        </p>
-        <div class="flex flex-col gap-4 sm:flex-row">
-          <CButton
-            title="Learn More"
-            color="primary"
-            outlined
-            prepend-icon="lucide:heart"
-            @on-click="navigateTo('/give')"
-          />
+    <div class="grid grid-cols-1 items-start gap-14 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-2 lg:sticky lg:top-28">
+        <CSectionHeading label="" highlighted="Why Do We Give?" title="" />
+
+        <div class="space-y-5">
+          <p class="text-base leading-[1.85] text-foreground/75">
+            We believe that everything we have comes from God and ultimately
+            belongs to Him. As followers of Jesus, we respond to His generosity
+            by stewarding our resources faithfully and returning a portion of
+            what He has entrusted to us.
+          </p>
+
+          <p
+            class="border-l-2 border-accent pl-5 font-['Playfair_Display'] text-xl italic leading-relaxed text-foreground"
+          >
+            Giving is more than a financial transaction—it's an act of worship.
+          </p>
+
+          <p class="text-base leading-[1.85] text-foreground/75">
+            When we give, we declare that God is our provider and that His
+            kingdom is our priority. Through our generosity, we participate in
+            God's work, support the ministry of the local church, and help bring
+            hope to people in our communities and beyond.
+          </p>
+          <div class="flex flex-col gap-4 sm:flex-row">
+            <CButton
+              title="Learn More"
+              color="primary"
+              outlined
+              prepend-icon="lucide:heart"
+              @on-click="navigateTo('/give')"
+            />
+          </div>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 gap-5">
+      <div class="grid grid-cols-1 gap-5 lg:col-span-3">
         <div
-          v-for="option in givingOptions"
+          v-for="(option, index) in givingFore"
           :key="option.title"
-          class="group flex items-start gap-5 rounded-lg border border-accent/10 bg-card p-6 transition-colors hover:border-accent/30 bg-white"
+          class="group relative flex items-start gap-5 overflow-hidden rounded-3xl bg-white p-6 shadow-[0_10px_40px_-18px_rgba(0,0,0,0.15)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_60px_-20px_rgba(0,0,0,0.22)] sm:p-7"
         >
+          <span
+            class="pointer-events-none absolute -right-2 -top-4 font-['Playfair_Display'] text-8xl font-bold leading-none text-primary/5 transition-colors duration-500 group-hover:text-primary/10"
+          >
+            {{ String(index + 1).padStart(2, "0") }}
+          </span>
+
           <div
-            class="flex h-12 w-12 shrink-0 items-center justify-center text-2xl"
+            class="relative flex size-14 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-primary/15 to-primary/5 text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
           >
             {{ option.icon }}
           </div>
 
-          <div>
+          <div class="relative">
             <h4
-              class="mb-1 font-['Playfair_Display'] text-[20px] font-medium text-foreground"
+              class="mb-2 font-['Playfair_Display'] text-xl font-semibold text-foreground transition-colors duration-300 group-hover:text-primary"
             >
               {{ option.title }}
             </h4>
 
-            <p class="text-[14px] leading-relaxed text-muted-foreground">
+            <p class="text-sm leading-relaxed text-muted-foreground">
               {{ option.description }}
             </p>
           </div>

@@ -9,14 +9,6 @@ import {
 import MinistryCard from "./MinistryCard.vue";
 import MinistryDialog from "./MinistryDialog.vue";
 
-interface Ministry {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon?: string;
-  iconColor?: string;
-}
-
 const props = defineProps<{
   hideNavigationButton?: boolean
   allowCreate?: boolean
@@ -24,7 +16,7 @@ const props = defineProps<{
 
 const userStore = useUserStore();
 const deleteDialogOpen = ref(false);
-const ministryToDelete = ref<Ministry | null>(null);
+const ministryToDelete = ref<MinistryItem | null>(null);
 const isDeleting = ref(false);
 const deleteError = ref("");
 const selectedMinistry = ref<MinistryItem | null>(null);
@@ -36,18 +28,6 @@ const { items: ministryItems, loading, error, page, total, limit } = useApiPagin
 );
 const isMinistryDialogOpen = ref(false);
 
-const ministries = computed<Ministry[]>(() =>
-  ministryItems.value.map((ministry) => ({
-    id: ministry.id,
-    title: ministry.name,
-    subtitle:
-      ministry.description ||
-      "Join us as we grow together in faith and service.",
-    icon: ministryIcons[ministry.type],
-    iconColor: ministryColors[ministry.type],
-  })),
-);
-
 const canCreateMinistry = computed(
   () => props.allowCreate && userStore.user?.role === UserRole.ROOT,
 );
@@ -57,7 +37,7 @@ const openCreateMinistry = () => {
   isMinistryDialogOpen.value = true;
 };
 
-const openEditMinistry = (ministry: Ministry) => {
+const openEditMinistry = (ministry: MinistryItem) => {
   selectedMinistry.value =
     ministryItems.value.find((item) => item.id === ministry.id) || null;
   isMinistryDialogOpen.value = true;
@@ -70,7 +50,7 @@ const saveMinistry = (ministry: MinistryItem) => {
   selectedMinistry.value = null;
 };
 
-const openDeleteMinistry = (ministry: Ministry) => {
+const openDeleteMinistry = (ministry: MinistryItem) => {
   ministryToDelete.value = ministry;
   deleteError.value = "";
   deleteDialogOpen.value = true;
@@ -94,30 +74,6 @@ const deleteMinistry = async () => {
   } finally {
     isDeleting.value = false;
   }
-};
-
-const ministryIcons: Record<MinistryItem["type"], string> = {
-  general: "lucide:church",
-  children: "lucide:baby",
-  youth: "lucide:users",
-  women: "lucide:heart",
-  men: "lucide:user-round",
-  worship: "lucide:music",
-  outreach: "lucide:hand-heart",
-  prayer: "lucide:hand-heart",
-  media: "lucide:video",
-};
-
-const ministryColors: Record<MinistryItem["type"], string> = {
-  general: "primary",
-  children: "primary",
-  youth: "primary",
-  women: "accent",
-  men: "primary",
-  worship: "primary",
-  outreach: "accent",
-  prayer: "primary",
-  media: "primary",
 };
 
 </script>
@@ -153,11 +109,11 @@ const ministryColors: Record<MinistryItem["type"], string> = {
       {{ error }}
     </div>
     <div
-      v-else-if="ministries.length > 0"
+      v-else-if="ministryItems.length > 0"
       class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
     >
       <MinistryCard
-        v-for="ministry in ministries"
+        v-for="ministry in ministryItems"
         :key="ministry.id"
         :ministry="ministry"
         :can-delete="canCreateMinistry"
@@ -178,7 +134,7 @@ const ministryColors: Record<MinistryItem["type"], string> = {
       v-model="deleteDialogOpen"
       type="delete"
       title="Delete ministry?"
-      :subtitle="`This will permanently remove ${ministryToDelete?.title}.`"
+      :subtitle="`This will permanently remove ${ministryToDelete?.name}.`"
       @confirm="deleteMinistry"
     />
   </CSection>

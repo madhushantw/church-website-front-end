@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-
-import { CButton, CSection, CSectionHeading } from "../common";
+import { CSection, CSectionHeading } from "../common";
 import { UserRole } from "~/services/users.service";
 import { useChurchInfoStore } from "~/stores/church-info.store";
 import { useUserStore } from "~/stores/user.store";
@@ -160,12 +159,6 @@ const videoEmbedUrl = computed(() => {
         <p class="text-foreground/65 text-[15px] leading-relaxed mb-8">
           {{ pastorMessage2 }}
         </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <CButton
-            title="Watch Full Message"
-            prepend-icon="material-symbols:mic-outline"
-          />
-        </div>
       </div>
     </div>
     <PastorWelcomeEditDialog

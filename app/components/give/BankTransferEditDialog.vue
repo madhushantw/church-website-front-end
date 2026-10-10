@@ -92,9 +92,8 @@ const save = async () => {
 
         <div class="min-h-0 flex-1 space-y-5 overflow-y-auto p-6">
           <CInput v-model="bankAccountName" label="Account Name" placeholder="Account holder name" />
-          <CInput v-model="bank" label="Bank" placeholder="Bank name" />
           <CInput v-model="accountNumber" label="Account Number" placeholder="Account number" />
-          <CInput v-model="routingNumber" label="Routing Number" placeholder="Routing number" />
+          <CInput v-model="routingNumber" label="BSB Number" placeholder="Routing number" />
           <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
         </div>
 

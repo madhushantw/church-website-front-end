@@ -161,8 +161,8 @@ const close = () => {
 const saveSermon = async () => {
   error.value = ''
 
-  if (!form.value.title.trim() || !form.value.preacher.trim() || !form.value.sermonDate) {
-    error.value = 'Add a title, preacher, and sermon date.'
+  if (!form.value.title.trim() || !form.value.sermonDate) {
+    error.value = 'and sermon date.'
     return
   }
 
@@ -173,27 +173,23 @@ const saveSermon = async () => {
 
   isLoading.value = true
 
+  const payload = {
+    title: form.value.title,
+    preacher: form.value.preacher || ' ',
+    sermonDate: toUtcIso(form.value.sermonDate),
+    description: form.value.description.trim() || null,
+    reflection: form.value.reflection.trim() || null,
+  }
+
   try {
     let savedSermon: SermonItem
 
     if (isEditing.value) {
-      const response = await SermonsService.update(props.sermon!.id, {
-        title: form.value.title.trim(),
-        preacher: form.value.preacher.trim(),
-        sermonDate: form.value.sermonDate,
-        description: form.value.description.trim() || null,
-        reflection: form.value.reflection.trim() || null,
-      })
+      const response = await SermonsService.update(props.sermon!.id, payload)
       savedSermon = response.data
       createdSermonId.value = response.data.id
     } else if (!createdSermonId.value) {
-      const response = await SermonsService.create({
-        title: form.value.title.trim(),
-        preacher: form.value.preacher.trim(),
-        sermonDate: form.value.sermonDate,
-        description: form.value.description.trim() || null,
-        reflection: form.value.reflection.trim() || null,
-      })
+      const response = await SermonsService.create(payload)
       savedSermon = response.data
       createdSermonId.value = response.data.id
     } else {
@@ -276,7 +272,7 @@ onUnmounted(() => {
           <div class="grid gap-4 sm:grid-cols-2">
             <CInput
               v-model="form.title"
-              label="Sermon title"
+              label="Gospel Title"
               placeholder="The hope we share"
               required
               class="sm:col-span-2"
@@ -285,7 +281,6 @@ onUnmounted(() => {
               v-model="form.preacher"
               label="Preacher"
               placeholder="Rev. Grace Williams"
-              required
             />
             <CInput
               v-model="form.sermonDate"
@@ -302,8 +297,8 @@ onUnmounted(() => {
             />
             <CInput
               v-model="form.reflection"
-              label="Priest's Reflection"
-              placeholder="Priest's Reflection"
+              label="Reading"
+              placeholder="Reading"
               textarea
               class="sm:col-span-2"
             />
