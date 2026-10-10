@@ -5,15 +5,8 @@ import { useUserStore } from '~/stores/user.store'
 import { CButton } from '../common'
 import HeroEditDialog from './HeroEditDialog.vue'
 
-const fallbackHero: Required<Hero> = {
-  welcomeText: 'Growing Faith',
-  title1: 'Building Community,',
-  title2: 'Sharing Hope',
-  subtitle: "Welcome to St Luke's Anglican Church Modbury",
-  images: [],
-}
-
-const hero = ref<Hero>(fallbackHero)
+const hero = ref<Hero>({ images: [] })
+const hasHeroData = ref(false)
 const userStore = useUserStore()
 const isEditDialogOpen = ref(false)
 const editingField = ref<keyof Hero | null>(null)
@@ -42,7 +35,10 @@ const getHeroData = async () => {
   try {
     const { data } = await HeroService.get()
 
+    if (!data) return
+
     hero.value = data
+    hasHeroData.value = true
     currentImageIndex.value = 0
   } catch (error) {
     console.error('Error fetching hero data:', error)
@@ -96,80 +92,86 @@ const gotContact = () => {
       variant="solid"
       size="xs"
       aria-label="Edit hero background image"
-      class="absolute bottom-5 right-5 z-20 rounded-full opacity-10 shadow-lg transition-opacity hover:opacity-80"
+      class="absolute bottom-5 right-5 z-20 rounded-full opacity-30 shadow-lg transition-opacity hover:opacity-80"
       @click="editField('images')"
     />
     <UContainer class="relative z-10 mx-auto max-w-4xl px-6 text-center">
-      <div class="relative mb-8 inline-flex items-center gap-2">
-        <div class="h-px w-8 bg-accent" />
-        <span
-          class="text-accent text-[13px] font-medium uppercase tracking-[0.25em]"
-        >
-          {{ hero?.welcomeText || fallbackHero.welcomeText }}
-        </span>
-        <div class="h-px w-8 bg-accent" />
-        <UButton
-          v-if="canEdit"
-          icon="i-lucide-pencil"
-          color="neutral"
-          variant="solid"
-          size="xs"
-          aria-label="Edit welcome text"
-          class="absolute -bottom-3 -right-8 rounded-full opacity-10 transition-opacity hover:opacity-80"
-          @click="editField('welcomeText')"
-        />
-      </div>
-      <h1
-        class="relative mb-6 font-['Playfair_Display'] text-5xl leading-tight text-white md:text-6xl lg:text-7xl"
-      >
-        {{ hero?.title1 || fallbackHero.title1 }}
-        <br>
-        <span class="relative italic text-accent">
-          {{ hero?.title2 || fallbackHero.title2 }}
+      <Transition name="hero-text" appear>
+        <div v-if="hasHeroData">
+          <div class="relative mb-8 inline-flex items-center gap-2">
+            <div class="h-px w-8 bg-accent" />
+            <span
+              class="text-accent text-[13px] font-medium uppercase tracking-[0.25em]"
+            >
+              {{ hero.welcomeText }}
+            </span>
+            <div class="h-px w-8 bg-accent" />
+            <UButton
+              v-if="canEdit"
+              icon="i-lucide-pencil"
+              color="neutral"
+              variant="solid"
+              size="xs"
+              aria-label="Edit welcome text"
+              class="absolute -bottom-3 -right-8 rounded-full opacity-30 transition-opacity hover:opacity-80"
+              @click="editField('welcomeText')"
+            />
+          </div>
+          <h1
+            class="relative mb-6 font-['Playfair_Display'] text-5xl leading-tight text-white md:text-6xl lg:text-7xl"
+          >
+            {{ hero.title1 }}
+            <br>
+            <span class="relative italic text-accent">
+              {{ hero.title2 }}
+              <UButton
+                v-if="canEdit"
+                icon="i-lucide-pencil"
+                color="neutral"
+                variant="solid"
+                size="xs"
+                aria-label="Edit second title line"
+                class="absolute -bottom-2 -right-8 rounded-full opacity-30 transition-opacity hover:opacity-80 not-italic"
+                @click="editField('title2')"
+              />
+            </span>
           <UButton
             v-if="canEdit"
             icon="i-lucide-pencil"
             color="neutral"
             variant="solid"
             size="xs"
-            aria-label="Edit second title line"
-            class="absolute -bottom-2 -right-8 rounded-full opacity-10 transition-opacity hover:opacity-80 not-italic"
-            @click="editField('title2')"
+            aria-label="Edit first title line"
+            class="absolute top-0 right-0 rounded-full opacity-30 transition-opacity hover:opacity-80"
+            @click="editField('title1')"
           />
-        </span>
-        <UButton
-          v-if="canEdit"
-          icon="i-lucide-pencil"
-          color="neutral"
-          variant="solid"
-          size="xs"
-          aria-label="Edit first title line"
-          class="absolute top-0 right-0 rounded-full opacity-10 transition-opacity hover:opacity-80"
-          @click="editField('title1')"
-        />
-      </h1>
-      <p
-        class="relative mx-auto mb-10 max-w-2xl text-lg font-light leading-relaxed text-white/80 md:text-xl"
-      >
-        {{ hero?.subtitle || fallbackHero.subtitle }}
-        <UButton
-          v-if="canEdit"
-          icon="i-lucide-pencil"
-          color="neutral"
-          variant="solid"
-          size="xs"
-          aria-label="Edit hero subtitle"
-          class="absolute -bottom-3 right-0 rounded-full opacity-10 transition-opacity hover:opacity-80"
-          @click="editField('subtitle')"
-        />
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <CButton
-          title="Discover Our Church"
-          prepend-icon="lucide:church"
-          @on-click="gotContact"
-        />
-      </div>
+          </h1>
+          <p
+            class="relative mx-auto mb-10 max-w-2xl text-lg font-light leading-relaxed text-white/80 md:text-xl"
+          >
+            {{ hero.subtitle }}
+            <UButton
+              v-if="canEdit"
+              icon="i-lucide-pencil"
+              color="neutral"
+              variant="solid"
+              size="xs"
+              aria-label="Edit hero subtitle"
+              class="absolute -bottom-3 right-0 rounded-full opacity-30 transition-opacity hover:opacity-80"
+              @click="editField('subtitle')"
+            />
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <CButton
+              outlined
+              title="Discover Our Church"
+              color="neutral"
+              prepend-icon="lucide:church"
+              @on-click="gotContact"
+            />
+          </div>
+        </div>
+      </Transition>
     </UContainer>
     <HeroEditDialog
       v-if="canEdit"
@@ -195,5 +197,19 @@ const gotContact = () => {
 .hero-image-enter-to,
 .hero-image-leave-from {
   opacity: 1;
+}
+
+.hero-text-enter-active {
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hero-text-enter-from {
+  opacity: 0;
+  transform: translateY(1.5rem);
+}
+
+.hero-text-enter-to {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
