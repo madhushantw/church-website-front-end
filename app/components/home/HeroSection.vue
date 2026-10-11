@@ -101,7 +101,13 @@ const gotContact = () => {
     </div>
 
     <div
-      class="absolute inset-0 -z-20 hidden bg-linear-to-r from-[#1C2B2A]/80 from-15% via-[#1C2B2A]/70 via-45% to-[#1C2B2A]/20 md:block"
+      class="absolute inset-0 -z-20 bg-linear-to-t from-[#1C2B2A] via-[#1C2B2A]/85 to-[#1C2B2A]/35 md:hidden"
+    />
+    <div
+      class="absolute inset-0 -z-20 hidden bg-linear-to-r from-[#1C2B2A] from-35% via-[#1C2B2A]/90 via-65% to-[#1C2B2A]/40 md:block"
+    />
+    <div
+      class="absolute inset-x-0 top-0 -z-20 h-40 bg-linear-to-b from-[#1C2B2A]/80 to-transparent"
     />
 
     <UButton

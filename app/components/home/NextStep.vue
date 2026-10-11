@@ -63,7 +63,6 @@ const nextSteps = [
         class="group relative isolate flex min-h-104 cursor-pointer flex-col justify-between overflow-hidden rounded-3xl border border-white/10 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-primary/25"
         @click="handleCardClick($event, step.action)"
       >
-        <!-- Background image -->
         <img
           :src="step.image"
           :alt="step.imageAlt"
@@ -71,7 +70,6 @@ const nextSteps = [
           class="absolute inset-0 -z-20 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
         >
 
-        <!-- Overlays -->
         <div
           class="absolute inset-0 -z-10 bg-linear-to-t from-black/90 via-black/40 to-black/10"
         />
@@ -79,7 +77,6 @@ const nextSteps = [
           class="absolute inset-0 -z-10 bg-primary/20 opacity-0 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-100"
         />
 
-        <!-- Top row: icon + step number -->
         <div class="flex items-start justify-between p-5">
           <div
             class="flex size-14 items-center justify-center rounded-2xl border border-white/25 bg-white/15 text-white shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"
@@ -94,7 +91,6 @@ const nextSteps = [
           </span>
         </div>
 
-        <!-- Glass content panel -->
         <div class="p-3">
           <div
             class="rounded-2xl border border-white/15 bg-white/10 p-6 shadow-xl backdrop-blur-xl transition-colors duration-300 group-hover:bg-white/15"

@@ -29,7 +29,7 @@ const ministryIcons: Record<MinistryItem["type"], string> = {
 
 <template>
   <article
-    class="group relative isolate flex min-h-88 cursor-pointer flex-col justify-between overflow-hidden rounded-3xl border border-white/10 shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20"
+    class="group relative isolate flex min-h-104 cursor-pointer flex-col justify-between overflow-hidden rounded-3xl border border-white/10 shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20"
   >
     
     <div class="absolute inset-0 -z-20 bg-primary/30">
