@@ -59,7 +59,7 @@ const handleSaved = (updatedChurchInfo: typeof churchInfo.value) => {
 
 <template>
   <CSection id="about" container-class="max-w-[90rem]">
-    <div class="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+    <div class="grid gap-14 lg:grid-cols-2 lg:gap-20">
       <div class="relative mx-auto w-full max-w-xl lg:max-w-none">
         <div
           class="pointer-events-none absolute -bottom-10 -left-10 -z-10 h-56 w-56 rounded-full bg-primary/15 blur-3xl"
