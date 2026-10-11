@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-
+import { QuillEditor } from "@vueup/vue-quill";
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { CInput } from "../common";
 import { ChurchInfoService } from "~/services/church-info.service";
 import { useChurchInfoStore } from "~/stores/church-info.store";
@@ -19,6 +20,16 @@ const avatarPreview = ref("");
 const fileInput = ref<HTMLInputElement | null>(null);
 const isSaving = ref(false);
 const error = ref("");
+
+const toolbar = [
+  ["bold", "italic", "underline", "strike"],
+  ["blockquote", "code-block"],
+  [{ list: "ordered" }, { list: "bullet" }],
+  [{ indent: "-1" }, { indent: "+1" }],
+  [{ align: [] }],
+  ["link"],
+  ["clean"],
+];
 
 const currentAvatar = computed(
   () => avatarPreview.value || churchInfoStore.churchInfo?.pastorAvatar || "",
@@ -167,12 +178,17 @@ onBeforeUnmount(() => {
                 />
               </div>
               <div class="sm:col-span-2">
-                <CInput
-                  v-model="pastorMessage2"
-                  label="Second message"
-                  placeholder="Additional welcome information"
-                  textarea
-                />
+                <label class="mb-2 block text-sm font-medium text-foreground">Second message</label>
+                <ClientOnly>
+                  <QuillEditor
+                    v-model:content="pastorMessage2"
+                    content-type="html"
+                    theme="snow"
+                    :toolbar="toolbar"
+                    content-class="min-h-36 bg-background text-foreground"
+                    placeholder="Write the About Us content..."
+                  />
+                </ClientOnly>
               </div>
             </div>
             <div>

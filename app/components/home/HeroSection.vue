@@ -23,9 +23,9 @@ const currentHeroImage = computed(() => {
   return image ? HeroService.getImageUrl(image) : "";
 });
 
-const hasMultipleImages = computed(() => hero.value.images.length > 1);
+// const hasMultipleImages = computed(() => hero.value.images.length > 1);
 
-const pad = (value: number) => String(value).padStart(2, "0");
+// const pad = (value: number) => String(value).padStart(2, "0");
 
 const editField = (field: keyof Hero) => {
   editingField.value = field;
@@ -43,10 +43,10 @@ const startSlideshow = () => {
   }, SLIDE_DURATION);
 };
 
-const goToSlide = (index: number) => {
-  currentImageIndex.value = index;
-  startSlideshow();
-};
+// const goToSlide = (index: number) => {
+//   currentImageIndex.value = index;
+//   startSlideshow();
+// };
 
 const setUpdatedHero = (updatedHero: Hero) => {
   hero.value = updatedHero;
@@ -87,7 +87,7 @@ const gotContact = () => {
 <template>
   <section
     id="home"
-    class="relative isolate flex min-h-screen items-end overflow-hidden bg-[#1C2B2A] md:items-center"
+    class="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[#1C2B2A]"
   >
     <div class="absolute inset-0 -z-30">
       <Transition name="hero-image">
@@ -100,15 +100,16 @@ const gotContact = () => {
       </Transition>
     </div>
 
+    <div class="absolute inset-0 -z-20 bg-[#1C2B2A]/55" />
     <div
-      class="absolute inset-0 -z-20 bg-linear-to-t from-[#1C2B2A] via-[#1C2B2A]/85 to-[#1C2B2A]/35 md:hidden"
+      class="absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_center,rgba(28,43,42,0.75)_0%,rgba(28,43,42,0.45)_60%,rgba(28,43,42,0.7)_100%)]"
     />
-    <div
-      class="absolute inset-0 -z-20 hidden bg-linear-to-r from-[#1C2B2A] from-35% via-[#1C2B2A]/90 via-65% to-[#1C2B2A]/40 md:block"
-    />
-    <div
+    <!-- <div
       class="absolute inset-x-0 top-0 -z-20 h-40 bg-linear-to-b from-[#1C2B2A]/80 to-transparent"
-    />
+    /> -->
+    <!-- <div
+      class="absolute inset-x-0 bottom-0 -z-20 h-40 bg-linear-to-t from-[#1C2B2A]/80 to-transparent"
+    /> -->
 
     <UButton
       v-if="canEdit"
@@ -122,11 +123,13 @@ const gotContact = () => {
     />
 
     <UContainer
-      class="relative z-10 w-full max-w-7xl px-6 pb-28 pt-32 md:pb-24"
+      class="relative z-10 mx-auto w-full max-w-7xl px-6 pb-28 pt-32 md:pb-24"
     >
       <Transition name="hero-text" appear>
-        <div v-if="hasHeroData" class="max-w-4xl text-left">
-          <div class="mb-8 flex items-center gap-4 md:mb-10">
+        <div v-if="hasHeroData" class="mx-auto max-w-4xl text-center">
+          <div
+            class="mb-8 flex items-center justify-center gap-4 md:mb-10"
+          >
             <span class="h-px w-10 shrink-0 bg-accent" />
             <span
               class="relative text-[13px] font-semibold uppercase tracking-[0.25em] text-accent"
@@ -143,6 +146,7 @@ const gotContact = () => {
                 @click="editField('welcomeText')"
               />
             </span>
+            <span class="h-px w-10 shrink-0 bg-accent" />
           </div>
 
           <h1
@@ -162,7 +166,7 @@ const gotContact = () => {
               />
             </span>
             <br >
-            <span class="relative inline-block italic text-accent mt-10">
+            <span class="relative mt-10 inline-block italic text-accent">
               {{ hero.title2 }}
               <UButton
                 v-if="canEdit"
@@ -178,7 +182,7 @@ const gotContact = () => {
           </h1>
 
           <p
-            class="relative mb-12 max-w-3xl text-base leading-[1.8] text-white/85 md:mb-14 md:text-lg"
+            class="relative mx-auto mb-12 max-w-3xl text-base leading-[1.8] text-white/90 md:mb-14 md:text-lg"
           >
             {{ hero.subtitle }}
             <UButton
@@ -193,7 +197,7 @@ const gotContact = () => {
             />
           </p>
 
-          <div class="flex flex-col gap-4 sm:flex-row">
+          <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <CButton
               outlined
               title="Discover Our Church"
@@ -206,9 +210,9 @@ const gotContact = () => {
       </Transition>
     </UContainer>
 
-    <div
+    <!-- <div
       v-if="hasMultipleImages"
-      class="absolute inset-x-0 bottom-8 z-20 mx-auto flex w-full max-w-7xl items-center gap-5 px-6"
+      class="absolute inset-x-0 bottom-8 z-20 mx-auto flex w-full max-w-7xl items-center justify-center gap-5 px-6"
     >
       <span
         class="text-[12px] font-medium tabular-nums tracking-widest text-white/70"
@@ -235,7 +239,7 @@ const gotContact = () => {
           />
         </button>
       </div>
-    </div>
+    </div> -->
 
     <HeroEditDialog
       v-if="canEdit"

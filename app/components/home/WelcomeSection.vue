@@ -5,6 +5,7 @@ import { UserRole } from "~/services/users.service";
 import { useChurchInfoStore } from "~/stores/church-info.store";
 import { useUserStore } from "~/stores/user.store";
 import PastorWelcomeEditDialog from "./PastorWelcomeEditDialog.vue";
+import SafeHtml from "../common/SafeHtml.vue";
 
 const props = defineProps<{
   allowCreate?: boolean;
@@ -156,9 +157,11 @@ const videoEmbedUrl = computed(() => {
             {{ pastorMessage1 }}
           </p>
         </blockquote>
-        <p class="text-foreground/65 text-[15px] leading-relaxed mb-8">
-          {{ pastorMessage2 }}
-        </p>
+        <SafeHtml
+          v-if="pastorMessage2"
+          :html="pastorMessage2"
+          class="about-us-rich-content prose prose-sm mb-10 max-w-none text-base leading-[1.85] text-foreground/75 md:text-[17px] prose-p:mb-4 prose-p:mt-0 prose-ul:my-3 prose-li:my-1"
+        />
       </div>
     </div>
     <PastorWelcomeEditDialog

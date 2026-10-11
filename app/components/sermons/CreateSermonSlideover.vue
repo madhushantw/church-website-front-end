@@ -295,13 +295,6 @@ onUnmounted(() => {
               textarea
               class="sm:col-span-2"
             />
-            <CInput
-              v-model="form.reflection"
-              label="Reading"
-              placeholder="Reading"
-              textarea
-              class="sm:col-span-2"
-            />
           </div>
 
           <section>

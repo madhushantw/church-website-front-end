@@ -443,7 +443,7 @@ onUnmounted(() => clearTimeout(copiedTimer));
           </span>
 
           <h3
-            class="font-['Playfair_Display'] text-xl font-semibold leading-snug tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary"
+            class="font-['Playfair_Display'] py-4 text-xl font-semibold leading-snug tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary"
           >
             {{ item.title }}
           </h3>

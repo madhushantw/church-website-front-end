@@ -59,8 +59,6 @@ onMounted(async () => {
           :book="gospel.title"
           :reference="formatDate(gospel.sermonDate, 'MMM D, YYYY')"
           :passage="gospel.description || ''"
-          :reflection="gospel.reflection || ''"
-          :author="gospel.preacher"
         />
       </div>
     </div>

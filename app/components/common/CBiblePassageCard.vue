@@ -8,8 +8,8 @@ interface Props {
   book: string;
   reference: string;
   passage: string;
-  reflection: string;
-  author: string;
+  reflection?: string;
+  author?: string;
 }
 </script>
 
@@ -69,6 +69,7 @@ interface Props {
       </button>
 
       <div
+        v-if="reflection || author"
         class="mt-7 rounded-r-xl border-l-4 border-accent bg-secondary/50 px-5 py-5"
       >
 
