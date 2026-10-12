@@ -19,7 +19,7 @@ const initialForm = () => ({
 
 const form = reactive(initialForm());
 const purposes = ["Prayer Request", "Pastoral Care"];
-const locations = ["St Lukes Modbury", "ECH Ridgehaven", "None"];
+const locations = ["St Lukes Modbury", "Ridgehaven Rise", "None"];
 
 watch(open, (isOpen) => {
   if (!isOpen) return;

@@ -31,7 +31,7 @@ const nextSteps = [
     imageAlt: "Friends sharing a conversation together",
     icon: "i-lucide-message-circle",
     action: "Start a Conversation",
-    href: "mailto:stlukesmodbury@outlook.com",
+    href: "mailto:priest@stlukesmodbury.com.au",
   },
   {
     title: "Receive Prayer",
