@@ -68,7 +68,7 @@ const videoEmbedUrl = computed(() => {
 </script>
 
 <template>
-  <CSection id="about">
+  <CSection id="about" background-color="muted">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
       <div class="relative group">
         <div

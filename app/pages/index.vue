@@ -19,8 +19,8 @@ import WelcomeSection from "~/components/home/WelcomeSection.vue";
     <HeroSection />
     <Daily />
     <AboutUs />
-    <GospelSection />
     <WelcomeSection allow-create />
+    <GospelSection />
     <NextStep />
     <CGatheringSection
       reference="Matthew 18:20"

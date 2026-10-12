@@ -11,7 +11,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <CSection id="gospel" background-color="muted">
+  <CSection id="gospel">
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
       <div class="lg:col-span-2 flex flex-col">
         <CSectionHeading
