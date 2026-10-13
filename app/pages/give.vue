@@ -225,15 +225,10 @@ onUnmounted(() => clearTimeout(copiedTimer));
 
         <div class="grid grid-cols-1 gap-5 lg:col-span-3">
           <div
-            v-for="(option, index) in givingFore"
+            v-for="option in givingFore"
             :key="option.title"
             class="group relative flex items-start gap-5 overflow-hidden rounded-3xl bg-white p-6 shadow-[0_10px_40px_-18px_rgba(0,0,0,0.15)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_60px_-20px_rgba(0,0,0,0.22)] sm:p-7"
           >
-            <span
-              class="pointer-events-none absolute -right-2 -top-4 font-['Playfair_Display'] text-8xl font-bold leading-none text-primary/5 transition-colors duration-500 group-hover:text-primary/10"
-            >
-              {{ String(index + 1).padStart(2, "0") }}
-            </span>
 
             <div
               class="relative flex size-14 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-primary/15 to-primary/5 text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
