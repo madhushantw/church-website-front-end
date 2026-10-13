@@ -64,11 +64,11 @@ interface Props {
         />
 
         <div
-          class="relative overflow-hidden pl-1 pt-6 transition-all duration-500"
-          :class="isExpanded ? 'max-h-250' : 'max-h-44'"
+          class="relative overflow-auto pl-1 pt-6 transition-all duration-500"
+          :class="isExpanded ? 'max-h-250' : 'max-h-60'"
         >
           <p
-            class="whitespace-pre-line font-['Playfair_Display'] text-[19px] italic leading-8 text-foreground/85"
+            class="whitespace-pre-line text-[19px] leading-8 text-foreground/85"
           >
             {{ passage }}
           </p>

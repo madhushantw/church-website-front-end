@@ -57,7 +57,7 @@ const nextSteps = [
 
     <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
       <NuxtLink
-        v-for="(step, index) in nextSteps"
+        v-for="step in nextSteps"
         :key="step.title"
         :to="step.href"
         class="group relative isolate flex min-h-104 cursor-pointer flex-col justify-between overflow-hidden rounded-3xl border border-white/10 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-primary/25"
@@ -83,12 +83,6 @@ const nextSteps = [
           >
             <UIcon :name="step.icon" class="size-6" />
           </div>
-
-          <span
-            class="font-['Playfair_Display'] text-5xl font-bold leading-none text-white/20 transition-colors duration-500 group-hover:text-white/50"
-          >
-            {{ String(index + 1).padStart(2, '0') }}
-          </span>
         </div>
 
         <div class="p-3">

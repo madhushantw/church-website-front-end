@@ -36,11 +36,11 @@ const toFormData = (data: CreateTeamMember | UpdateTeamMember) => {
 };
 
 const getImageUrl = (imageUrl: string) => {
-  if (/^https?:\/\//i.test(imageUrl)) return imageUrl
+  if (/^https?:\/\//i.test(imageUrl)) return imageUrl;
 
-  const baseUrl = HTTP.defaults.baseURL
-  return baseUrl ? `${baseUrl.replace(/\/$/, '')}${imageUrl}` : imageUrl
-}
+  const baseUrl = HTTP.defaults.baseURL;
+  return baseUrl ? `${baseUrl.replace(/\/$/, "")}${imageUrl}` : imageUrl;
+};
 
 const normalizeTeamMember = (member: TeamMember): TeamMember => ({
   ...member,
@@ -97,6 +97,10 @@ export const TeamMembersService = {
       ...response.data,
       data: normalizeTeamMember(response.data.data),
     };
+  },
+
+  async reorder(ids: string[]): Promise<void> {
+    await HTTP.patch("/team-members/reorder", { ids });
   },
 
   delete(id: string) {
