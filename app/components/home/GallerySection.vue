@@ -33,10 +33,8 @@ type Filter = (typeof filters)[number];
 const activeFilter = ref<Filter>("All");
 
 const galleryParams = computed(() => ({
-  type: activeFilter.value === 'All'
-    ? undefined
-    : activeFilter.value,
-}))
+  type: activeFilter.value === "All" ? undefined : activeFilter.value,
+}));
 
 const {
   items: gallery,
@@ -51,6 +49,7 @@ const {
   GalleryService.getAll,
   "Failed to load gallery",
   galleryParams,
+  { limit: 10 },
 );
 
 const isGalleryDialogOpen = ref(false);
@@ -168,8 +167,8 @@ const onDelete = async () => {
 };
 
 watch(activeFilter, () => {
-  page.value = 1
-})
+  page.value = 1;
+});
 </script>
 
 <template>
@@ -233,19 +232,19 @@ watch(activeFilter, () => {
     </div>
     <div
       v-else-if="filteredGallery.length"
-      class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+      class="columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4"
     >
       <div
         v-for="(item, index) in filteredGallery"
         :key="item.id"
-        class="group relative cursor-pointer overflow-hidden rounded-lg"
-        :class="[index === 0 || index === 3 ? 'row-span-2' : '']"
+        class="group relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-lg"
         @click="openImage(index)"
       >
         <img
           :src="item.imageUrl"
           :alt="item.imageType"
-          class="h-full min-h-56 w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          loading="lazy"
+          class="block h-auto w-full transition-transform duration-700 group-hover:scale-105"
         >
         <div
           class="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/40"
@@ -297,7 +296,8 @@ watch(activeFilter, () => {
     transition
     :ui="{
       overlay: 'bg-black/80 backdrop-blur-sm',
-      content: 'h-dvh w-screen overflow-hidden bg-black/50 border-0 rounded-none shadow-none',
+      content:
+        'h-dvh w-screen overflow-hidden bg-black/50 border-0 rounded-none shadow-none',
     }"
   >
     <template #content>

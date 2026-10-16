@@ -31,6 +31,8 @@ const {
   "events",
   EventsService.getAll,
   "Failed to load events",
+  undefined,
+  { limit: 6 },
 );
 
 const canManageEvents = computed(

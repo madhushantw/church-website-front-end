@@ -4,6 +4,10 @@ import type {
   PaginationResponse,
 } from '~/services/interfaces/pagination.interface'
 
+interface UseApiPaginationOptions {
+  limit?: number
+}
+
 export function useApiPagination<T, P extends Record<string, unknown> = Record<string, never>>(
   key: string,
   fetcher: (
@@ -11,15 +15,17 @@ export function useApiPagination<T, P extends Record<string, unknown> = Record<s
   ) => Promise<PaginationResponse<T>>,
   errorMessage: string,
   params?: Ref<P>,
+  options: UseApiPaginationOptions = {},
 ) {
   const page = ref(1)
-  const limit = ref(5)
-  const items = ref<T[]>([])
+  const limit = ref(options.limit ?? 5)
+  const items = ref<T[]>([]) as Ref<T[]>
   const total = ref(0)
   const totalPages = ref(0)
 
   const { data, error, status, refresh } = useAsyncData(
-    key,
+    () =>
+      `${key}:${page.value}:${limit.value}:${JSON.stringify(params?.value ?? {})}`,
     () =>
       fetcher({
         ...params?.value,
@@ -29,7 +35,7 @@ export function useApiPagination<T, P extends Record<string, unknown> = Record<s
     {
       server: false,
     },
-  )
+  );
 
   watch(
     data,
@@ -43,8 +49,8 @@ export function useApiPagination<T, P extends Record<string, unknown> = Record<s
     { immediate: true },
   )
 
-  watch([() => page.value, () => limit.value, () => params?.value], () => {
-    refresh()
+  watch([limit, () => JSON.stringify(params?.value ?? {})], () => {
+    page.value = 1
   })
 
   return {
