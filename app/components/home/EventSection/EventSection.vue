@@ -36,7 +36,7 @@ const {
 );
 
 const canManageEvents = computed(
-  () => props.allowCreate && userStore.user?.role === UserRole.ROOT,
+  () => props.allowCreate && (userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN),
 );
 
 const openCreate = () => {

@@ -16,7 +16,7 @@ const currentImageIndex = ref(0);
 
 let heroInterval: ReturnType<typeof setInterval> | undefined;
 
-const canEdit = computed(() => userStore.user?.role === UserRole.ROOT);
+const canEdit = computed(() => (userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN));
 
 const currentHeroImage = computed(() => {
   const image = hero.value.images[currentImageIndex.value];

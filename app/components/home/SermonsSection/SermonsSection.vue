@@ -19,7 +19,7 @@ const sermonToDelete = ref<SermonItem | null>(null);
 const isDeleting = ref(false);
 const deleteError = ref('');
 const userStore = useUserStore();
-const canManageSermons = computed(() => userStore.user?.role === UserRole.ROOT && props.allowCreate);
+const canManageSermons = computed(() => (userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN) && props.allowCreate);
 
 const { items: sermons, loading, error, refresh, page, limit, total } = useApiPagination<SermonItem>(
   "sermons",

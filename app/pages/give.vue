@@ -73,7 +73,7 @@ const partnersError = ref("");
 const isMissionPartnerDialogOpen = ref(false);
 const selectedMissionPartner = ref<MissionPartner | null>(null);
 const canManageMissionPartners = computed(
-  () => userStore.user?.role === UserRole.ROOT,
+  () => (userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN),
 );
 const isBankTransferDialogOpen = ref(false);
 const bankTransferAccount = computed(() => ({

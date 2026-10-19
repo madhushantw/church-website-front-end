@@ -73,7 +73,7 @@ const selectedImage = computed(() => {
 });
 
 const canCreate = computed(
-  () => props.allowCreate && userStore.user?.role === UserRole.ROOT,
+  () => props.allowCreate && (userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN),
 );
 
 onMounted(() => {

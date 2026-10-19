@@ -102,7 +102,7 @@ const handleSaved = (updatedChurchInfo: typeof churchInfo.value) => {
           />
 
           <UButton
-            v-if="userStore.user?.role === UserRole.ROOT && allowCreate"
+            v-if="(userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN) && allowCreate"
             type="button"
             icon="i-lucide-pencil"
             label="Edit"

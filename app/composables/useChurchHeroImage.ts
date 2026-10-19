@@ -16,7 +16,7 @@ export type ChurchHeroImageField =
 export const useChurchHeroImage = (field: ChurchHeroImageField) => {
   const churchInfoStore = useChurchInfoStore();
   const userStore = useUserStore();
-  const canEdit = computed(() => userStore.user?.role === UserRole.ROOT);
+  const canEdit = computed(() => (userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN));
   const isSaving = ref(false);
   const error = ref("");
 

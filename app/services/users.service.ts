@@ -5,6 +5,7 @@ import type { CResponse } from "./interfaces/Response.interface";
 export enum UserRole {
   ROOT = "ROOT",
   USER = "USER",
+  ADMIN = "ADMIN"
 }
 
 export interface UserItem {
@@ -18,6 +19,7 @@ export interface CreateUser {
   name: string;
   email: string;
   password: string;
+  role: UserRole
 }
 
 export type UpdateUser = Partial<CreateUser>;

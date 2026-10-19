@@ -19,6 +19,12 @@ export interface LoginDataResponse {
   user: User
 }
 
+export interface ResetPassword {
+  email: string,
+  otp: string,
+  newPassword: string
+}
+
 export type LoginResponse = CResponse<LoginDataResponse>
 
 export const AuthService = {
@@ -29,6 +35,16 @@ export const AuthService = {
 
   async loginWithAccessToken(accessToken: string): Promise<LoginResponse> {
     const response = await HTTP.post<LoginResponse>('/auth/login/access-token', { accessToken })
+    return response.data
+  },
+
+  async forgotPassword(email: string) {
+    const response = await HTTP.post('/auth/forgot-password', { email })
+    return response.data
+  },
+
+  async resetPassword(data: ResetPassword) {
+    const response = await HTTP.post('/auth/reset-password', data)
     return response.data
   },
 }

@@ -15,7 +15,7 @@ const churchInfoStore = useChurchInfoStore();
 const userStore = useUserStore();
 const isEditOpen = ref(false);
 const canEdit = computed(
-  () => props.allowCreate && userStore.user?.role === UserRole.ROOT,
+  () => props.allowCreate && (userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN),
 );
 
 const churchInfo = computed(() => churchInfoStore.churchInfo);

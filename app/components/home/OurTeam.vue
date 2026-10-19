@@ -18,7 +18,7 @@ const liveMessage = ref("");
 const isTeamMemberDialogOpen = ref(false);
 const selectedMember = ref<TeamMember | null>(null);
 
-const canManageTeam = computed(() => userStore.user?.role === UserRole.ROOT);
+const canManageTeam = computed(() => userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN);
 
 const loadTeamMembers = async () => {
   isLoadingMembers.value = true;

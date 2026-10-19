@@ -20,7 +20,7 @@ const usersSidebarOpen = ref(false);
 const contactSidebarOpen = ref(false);
 const userStore = useUserStore();
 const isAuthenticated = computed(() => !!userStore.user);
-const canManageUsers = computed(() => userStore.user?.role === UserRole.ROOT);
+const canManageUsers = computed(() => userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN);
 const isHome = computed(() => route.path === "/");
 
 const openSignIn = () => {
@@ -144,7 +144,6 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <!-- Scroll progress bar -->
     <div
       class="pointer-events-none fixed left-0 right-0 top-0 z-60 h-0.75 bg-transparent"
     >

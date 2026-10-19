@@ -171,7 +171,7 @@ const deleteUser = async () => {
                 <span
                   class="mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
                   :class="
-                    user.role === UserRole.ROOT
+                    user.role === UserRole.ADMIN
                       ? 'bg-accent/15 text-accent'
                       : 'bg-primary/10 text-primary'
                   "

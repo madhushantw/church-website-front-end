@@ -1,70 +1,82 @@
 <script setup lang="ts">
-import axios from 'axios'
-import { UsersService, type CreateUser, type UserItem } from '~/services/users.service'
-import { CInput } from '~/components/common'
+import axios from "axios";
+import { useUserStore } from "~/stores/user.store";
+import {
+  UserRole,
+  UsersService,
+  type CreateUser,
+  type UserItem,
+} from "~/services/users.service";
+import { CInput } from "~/components/common";
 
-const open = defineModel<boolean>('open', { default: false })
+const open = defineModel<boolean>("open", { default: false });
 const props = defineProps<{
-  user?: UserItem | null
-}>()
+  user?: UserItem | null;
+}>();
 const emit = defineEmits<{
-  saved: [user: UserItem]
-}>()
+  saved: [user: UserItem];
+}>();
+
+const userStore = useUserStore();
+const isUserRoot = computed(() => userStore.user?.role === UserRole.ROOT);
 
 const form = ref<CreateUser>({
-  name: '',
-  email: '',
-  password: '',
-})
-const isLoading = ref(false)
-const error = ref('')
-const isEditing = computed(() => !!props.user)
+  name: "",
+  email: "",
+  password: "",
+  role: UserRole.USER
+});
+const isLoading = ref(false);
+const error = ref("");
+const isEditing = computed(() => !!props.user);
 
 watch(
   () => [open.value, props.user] as const,
   () => {
-    if (!open.value) return
+    if (!open.value || !props.user) return;
 
     form.value = {
-      name: props.user?.name || '',
-      email: props.user?.email || '',
-      password: '',
-    }
-    error.value = ''
+      name: props.user.name,
+      email: props.user.email,
+      role: props.user.role,
+      password: "",
+    };
+    error.value = "";
   },
   { immediate: true },
-)
+);
 
 const close = () => {
-  if (!isLoading.value) open.value = false
-}
+  if (!isLoading.value) open.value = false;
+};
 
 const saveUser = async () => {
-  error.value = ''
-  isLoading.value = true
+  error.value = "";
+  isLoading.value = true;
 
   try {
-    const response = isEditing.value && props.user
-      ? await UsersService.update(
-          props.user.id,
-          form.value.password
-            ? form.value
-            : { name: form.value.name, email: form.value.email }
-        )
-      : await UsersService.create(form.value)
+    const response =
+      isEditing.value && props.user
+        ? await UsersService.update(
+            props.user.id,
+            form.value.password
+              ? form.value
+              : { name: form.value.name, email: form.value.email },
+          )
+        : await UsersService.create(form.value);
 
-    emit('saved', response.data)
-    open.value = false
+    emit("saved", response.data);
+    open.value = false;
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      error.value = e.response?.data?.message?.[0] ?? 'Something went wrong'
+      error.value = e.response?.data?.message?.[0] ?? "Something went wrong";
     } else {
-      error.value = 'Something went wrong'
+      error.value = "Something went wrong";
     }
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 </script>
 
 <template>
@@ -72,7 +84,8 @@ const saveUser = async () => {
     v-model:open="open"
     :ui="{
       overlay: 'bg-foreground/30 backdrop-blur-sm',
-      content: 'w-full max-w-md overflow-hidden rounded-3xl border border-primary/10 bg-background shadow-2xl',
+      content:
+        'w-full max-w-md overflow-hidden rounded-3xl border border-primary/10 bg-background shadow-2xl',
     }"
   >
     <template #content>
@@ -80,16 +93,24 @@ const saveUser = async () => {
         class="flex max-h-[calc(100dvh-2rem)] flex-col sm:max-h-[calc(100dvh-4rem)]"
         @submit.prevent="saveUser"
       >
-        <div class="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 sm:px-8 sm:pt-8">
+        <div
+          class="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 sm:px-8 sm:pt-8"
+        >
           <div>
-            <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+            <p
+              class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent"
+            >
               User management
             </p>
             <h2 class="font-['Playfair_Display'] text-3xl text-foreground">
-              {{ isEditing ? 'Edit user' : 'Create a user' }}
+              {{ isEditing ? "Edit user" : "Create a user" }}
             </h2>
             <p class="mt-2 text-sm text-muted-foreground">
-              {{ isEditing ? 'Update this account details.' : 'Add a new account to St Lukes.' }}
+              {{
+                isEditing
+                  ? "Update this account details."
+                  : "Add a new account to St Lukes."
+              }}
             </p>
           </div>
           <UButton
@@ -103,34 +124,54 @@ const saveUser = async () => {
           />
         </div>
         <div class="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8">
+        <div v-if="!isEditing && isUserRoot" class="flex flex-col items-start gap-3">
+          <UCheckbox
+            :model-value="form.role === UserRole.ADMIN"
+            label="Administrator"
+            @update:model-value="
+              form.role = $event ? UserRole.ADMIN : UserRole.USER
+            "
+          />
+
+          <p class="text-sm text-gray-500">
+            Allow this user to manage church features. Administrators cannot
+            manage user accounts.
+          </p>
+        </div>
           <div class="space-y-4">
-          <CInput
-            v-model="form.name"
-            label="Name"
-            placeholder="Full name"
-            required
-            class="w-full"
-          />
-          <CInput
-            v-model="form.email"
-            label="Email"
-            type="email"
-            placeholder="Email address"
-            required
-            class="w-full"
-          />
-          <CInput
-            v-model="form.password"
-            label="Password"
-            type="password"
-            :placeholder="isEditing ? 'Leave blank to keep current password' : 'At least 6 characters'"
-            :required="!isEditing"
-            class="w-full"
-          />
+            <CInput
+              v-model="form.name"
+              label="Name"
+              placeholder="Full name"
+              required
+              class="w-full"
+            />
+            <CInput
+              v-model="form.email"
+              label="Email"
+              type="email"
+              placeholder="Email address"
+              required
+              class="w-full"
+            />
+            <CInput
+              v-model="form.password"
+              label="Password"
+              type="password"
+              :placeholder="
+                isEditing
+                  ? 'Leave blank to keep current password'
+                  : 'At least 6 characters'
+              "
+              :required="!isEditing"
+              class="w-full"
+            />
           </div>
           <p v-if="error" class="mt-4 text-sm text-red-600">{{ error }}</p>
         </div>
-        <div class="flex shrink-0 justify-end gap-3 border-t border-primary/10 px-6 py-4 sm:px-8">
+        <div
+          class="flex shrink-0 justify-end gap-3 border-t border-primary/10 px-6 py-4 sm:px-8"
+        >
           <UButton
             type="button"
             label="Cancel"

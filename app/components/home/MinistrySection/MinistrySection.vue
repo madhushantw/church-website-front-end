@@ -29,7 +29,7 @@ const { items: ministryItems, loading, error, page, total, limit } = useApiPagin
 const isMinistryDialogOpen = ref(false);
 
 const canCreateMinistry = computed(
-  () => props.allowCreate && userStore.user?.role === UserRole.ROOT,
+  () => props.allowCreate && (userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN),
 );
 
 const openCreateMinistry = () => {
