@@ -21,10 +21,12 @@ const isDeleting = ref(false);
 const deleteError = ref("");
 const selectedMinistry = ref<MinistryItem | null>(null);
 
-const { items: ministryItems, loading, error, page, total, limit } = useApiPagination<MinistryItem>(
+const { items: ministryItems, loading, error, page, total, limit, totalPages } = useApiPagination<MinistryItem>(
   "ministries",
   MinistriesService.getAll,
   "Failed to load ministries",
+  undefined,
+  { limit: 999 },
 );
 const isMinistryDialogOpen = ref(false);
 
@@ -123,7 +125,7 @@ const deleteMinistry = async () => {
       />
     </div>
     <div v-else class="py-8 text-center">No ministries found</div>
-    <UPagination v-if="total && hideNavigationButton" v-model:page="page" :items-per-page="limit" :total="total" class="my-4 mx-auto" />
+    <UPagination v-if="totalPages !== 1 && hideNavigationButton" v-model:page="page" :items-per-page="limit" :total="total" class="my-4 mx-auto" />
     <MinistryDialog
       v-if="canCreateMinistry"
       v-model:open="isMinistryDialogOpen"

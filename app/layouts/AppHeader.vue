@@ -18,6 +18,9 @@ const signInOpen = ref(false);
 const logoutOpen = ref(false);
 const usersSidebarOpen = ref(false);
 const contactSidebarOpen = ref(false);
+const isHeaderHidden = ref(false)
+let lastScrollY = 0
+
 const userStore = useUserStore();
 const isAuthenticated = computed(() => !!userStore.user);
 const canManageUsers = computed(() => userStore.user?.role === UserRole.ROOT || userStore.user?.role === UserRole.ADMIN);
@@ -101,10 +104,22 @@ const desktopItems = computed(() => buildItems("desktop"));
 const mobileItems = computed(() => buildItems("mobile"));
 
 const handleScroll = () => {
-  scrolled.value = window.scrollY > 20;
+  const currentScrollY = window.scrollY
+  scrolled.value = currentScrollY > 20;
 
   const max = document.documentElement.scrollHeight - window.innerHeight;
   scrollProgress.value = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+  
+  const scrollDifference = currentScrollY - lastScrollY
+    if (menuOpen.value || currentScrollY <= 80) {
+    isHeaderHidden.value = false
+  } else if (scrollDifference > 8) {
+    isHeaderHidden.value = true
+  } else if (scrollDifference < -8) {
+    isHeaderHidden.value = false
+  }
+
+  lastScrollY = currentScrollY
 };
 
 let observer: IntersectionObserver | null = null;
@@ -157,14 +172,17 @@ onUnmounted(() => {
       v-model:open="menuOpen"
       mode="slideover"
       :menu="{ inset: true }"
+      :ui="{
+        toggle: scrolled || menuOpen ? 'text-primary/60 hover:bg-neutral/80' : 'text-neutral/60 hover:text-primary/60 hover:bg-neutral/80',
+      }"
       class="fixed left-0 right-0 top-0 z-50 h-20 border-b-0! transition-all duration-500"
-      :class="
+      :class="[
         scrolled
           ? 'bg-white/95 text-primary shadow-[0_1px_0_0_rgba(0,0,0,0.06),0_8px_24px_-12px_rgba(0,0,0,0.12)] backdrop-blur-md'
-          : 'bg-transparent text-white'
-      "
+          : 'bg-transparent text-white',
+        isHeaderHidden ? '-translate-y-full' : 'translate-y-0',
+      ]"
     >
-      <!-- Brand -->
       <template #title>
         <div
           class="group flex items-center gap-3"
@@ -196,7 +214,6 @@ onUnmounted(() => {
         </div>
       </template>
 
-      <!-- Desktop nav -->
       <UNavigationMenu
         :items="desktopItems"
         variant="link"
@@ -205,7 +222,6 @@ onUnmounted(() => {
         }"
       />
 
-      <!-- Desktop actions -->
       <template #right>
         <div class="hidden items-center gap-1.5 lg:flex">
           <UButton
@@ -250,7 +266,6 @@ onUnmounted(() => {
         </div>
       </template>
 
-      <!-- Mobile menu -->
       <template #body>
         <UNavigationMenu
           :items="mobileItems"
@@ -261,7 +276,6 @@ onUnmounted(() => {
             link: 'rounded-2xl px-4 py-3 text-base font-medium transition-colors',
           }"
         />
-
         <div class="mt-4 flex flex-col gap-2 border-t border-primary/10 pt-4">
           <UButton
             v-if="canManageUsers"
